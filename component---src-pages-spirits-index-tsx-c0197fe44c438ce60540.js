@@ -1,0 +1,2 @@
+(self.webpackChunk_r_ichard_gatsby_starter_bootstrap_5=self.webpackChunk_r_ichard_gatsby_starter_bootstrap_5||[]).push([[326],{6562:function(t,r,a){"use strict";a.r(r);var e=a(5468),s=a(7294);r.default=function(){return s.createElement(e.Z,null,"Spirits")}}}]);
+//# sourceMappingURL=component---src-pages-spirits-index-tsx-c0197fe44c438ce60540.js.map
