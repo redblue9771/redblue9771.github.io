@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /bak/
+Disallow: /labs/
+Disallow: /fonts/
+Disallow: /img/
+Disallow: /static/
