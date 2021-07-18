@@ -35,3 +35,13 @@ export const useClientRect = (): [IRect, React.RefObject<HTMLElement>] => {
   }, [])
   return [rect, ref]
 }
+
+export function useSearchParams<T>(search: string): T {
+  const _search = new URLSearchParams(search)
+  const result: any = {}
+  _search.forEach((val, key) => {
+    result[key] = val
+  })
+
+  return result
+}
