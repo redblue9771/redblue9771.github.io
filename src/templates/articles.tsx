@@ -68,7 +68,7 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
               to={node.frontmatter.slug || "/"}
               key={node.id}
               component={Link}
-              data-sal="slide-down"
+            
             />
           ))}
         </TimeLine.Container>
