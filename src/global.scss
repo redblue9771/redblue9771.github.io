@@ -1,0 +1,136 @@
+//Here you can customize bootstrap
+$primary: #448aff;
+$primary-light: #2196f3;
+$secondary: #f44336;
+
+$shadow: rgba(0, 0, 0, 0.5);
+
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+html,
+body {
+  min-height: 100vh;
+}
+
+.container-lg {
+  max-width: 1024px;
+}
+
+.header {
+  //   width: 100%;
+  height: auto;
+  color: #fff;
+  filter: drop-shadow(0 0 10px $shadow);
+  margin-bottom: 1rem;
+
+  &__wrapper {
+    background: linear-gradient(to bottom, #448aff, #44aaff, $primary);
+
+    &__content {
+      margin: 0 auto;
+      padding: 5rem 2rem 1rem;
+      overflow: hidden;
+
+      & h1 {
+        font-size: 6rem;
+      }
+    }
+  }
+
+  &::after {
+    display: block;
+    content: "";
+    height: 8.75vw;
+    margin-top: -1px;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 100%);
+    background-color: $primary;
+  }
+}
+
+.footer {
+  filter: drop-shadow(0 0 10px $shadow);
+
+  &::before {
+    display: block;
+    content: "";
+    height: 8.75vw;
+    margin-bottom: -1px;
+    clip-path: polygon(100% 0, 0 100%, 100% 100%, 100% 100%);
+    background-color: $secondary;
+  }
+
+  &__wrapper {
+    background: linear-gradient(to bottom, #f44336, #ff5555, $secondary);
+    &__content {
+      padding: 2rem 1rem;
+
+      & p {
+        line-height: 1;
+        margin-bottom: 0.6rem;
+      }
+    }
+  }
+}
+
+.showcase-item {
+  filter: drop-shadow(0 0 6px $primary-light);
+  margin: 0 auto;
+  @media (max-width: 767.98px) {
+    filter: blur(2px);
+  }
+}
+
+.navScroll {
+  background-color: $primary;
+  box-shadow: 0 0 6px 0px $primary;
+}
+
+.navbar {
+  transition: all 0.5s;
+}
+
+.index-module-0 {
+  &__header {
+    width: 16rem;
+  }
+}
+
+.index-module-1 {
+  background: url(/img/bg-1.webp) 50% no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  margin-bottom: 6rem;
+  padding-top: 2rem;
+  filter: drop-shadow(0 0 10px $shadow);
+
+  &__content {
+    transform: translate3d(0, 4rem, 0);
+    &__block {
+      min-height: 22.25rem;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-origin: content-box;
+      background-color: #fff;
+      filter: drop-shadow(0 0 6px #f2f2f2);
+      padding: 1rem 1.4rem;
+      background-image: url(/img/undraw_developer_activity.svg);
+      & dl {
+        background-color: rgba(255, 255, 255, 0.618);
+      }
+      &:first-child,
+      &:last-child {
+        background-color: $primary-light;
+        filter: none;
+        background-image: url(/img/undraw_profile.svg);
+        & dl {
+          background-color: rgba(33, 150, 243, 0.618);
+        }
+      }
+
+      &:first-child {
+        background-image: url(/img/undraw_annotation.svg);
+      }
+    }
+  }
+}

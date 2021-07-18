@@ -2,7 +2,7 @@ import { graphql, PageProps } from "gatsby"
 import React from "react"
 import { Carousel, Col, Container, Figure, Row } from "react-bootstrap"
 import { IndexPageQuery } from "@/../typings/graphql-types"
-import MainLayout from "@/components/layouts/Main.layout"
+import MainLayout from "@/features/layouts/Main.layout"
 import carouselData from "@/data/carousel.json"
 
 export const query = graphql`
@@ -88,7 +88,7 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
                         // to={title}
                       >
                         {title}
-                      </a>{" "}
+                      </a>
                       <time className="d-block text-truncate">
                         {node.frontmatter?.date}
                       </time>

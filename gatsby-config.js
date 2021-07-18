@@ -15,15 +15,17 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `contents`,
-        path: `${__dirname}/src/contents`,
+        name: `assets`,
+        path: `${__dirname}/src/assets`,
       },
     },
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: `gatsby-transformer-yaml`,
       options: {
-        name: `images`,
-        path: `${__dirname}/src/images`,
+        typeName: ({ node, object, isArray }) => {
+          console.log(node)
+          return node.name
+        },
       },
     },
     `gatsby-transformer-sharp`,

@@ -1,0 +1,110 @@
+import { graphql, Link, useStaticQuery } from "gatsby"
+import React from "react"
+import {
+  AllCategoryForArticleCategoryNavQuery,
+  AllTagForArticleCategoryNavQuery,
+  AllSeriesForArticleCategoryNavQuery,
+} from "@/../typings/graphql-types"
+import {
+  Breadcrumb,
+  Col,
+  Container,
+  Row,
+  BreadcrumbItemProps,
+} from "react-bootstrap"
+import { LinkGetProps, useLocation } from "@reach/router"
+import { useSearchParams } from "@/utils/hooks"
+import { IArticleGroupProps, ISearchParams } from "@/templates/articles"
+
+const BreadcrumbItem = (props: BreadcrumbItemProps) => (
+  <Breadcrumb.Item linkAs={Link} {...props} />
+)
+
+function ArticleCategoryNav({ groupList }: IArticleGroupProps) {
+  const location = useLocation()
+  const search = useSearchParams<ISearchParams>(location.search)
+
+  return (
+    <Container fluid>
+      <Row className="justify-content-end flex-nowrap">
+        <Col className="col-auto">
+          <strong>📒 分组：</strong>
+        </Col>
+        <Col className="col-auto">
+          <Breadcrumb>
+            <BreadcrumbItem
+              linkProps={{
+                to: `?group=none`,
+              }}
+              active={
+                search.group === "none" || !search.group || search.group === ""
+              }
+            >
+              所有
+            </BreadcrumbItem>
+            <BreadcrumbItem
+              linkProps={{
+                to: `?group=categories`,
+              }}
+              active={search.group === "categories"}
+            >
+              按分类
+            </BreadcrumbItem>
+            <BreadcrumbItem
+              linkProps={{
+                to: `?group=series`,
+              }}
+              active={search.group === "series"}
+            >
+              按系列
+            </BreadcrumbItem>
+            <BreadcrumbItem
+              linkProps={{
+                to: `?group=tags`,
+              }}
+              active={search.group === "tags"}
+            >
+              按标签
+            </BreadcrumbItem>
+          </Breadcrumb>
+        </Col>
+      </Row>
+      <Row className="justify-content-end flex-nowrap">
+        <Col className="col-auto">
+          <strong>🔖 组别：</strong>
+        </Col>
+        <Col className="col-auto">
+          <Breadcrumb>
+            <BreadcrumbItem
+              linkProps={{
+                to: `?group=${search.group}&current=none`,
+              }}
+              active={
+                search.current === "none" ||
+                !search.current ||
+                search.current === ""
+              }
+            >
+              所有
+            </BreadcrumbItem>
+
+            {groupList?.[search.group]?.map(({ fieldValue }, idx) => (
+              <BreadcrumbItem
+                key={idx}
+                title={fieldValue}
+                linkProps={{
+                  to: `?group=${search.group}&current=${fieldValue}`,
+                }}
+                active={search.current === fieldValue}
+              >
+                {fieldValue}
+              </BreadcrumbItem>
+            ))}
+          </Breadcrumb>
+        </Col>
+      </Row>
+    </Container>
+  )
+}
+
+export default ArticleCategoryNav
