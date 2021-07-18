@@ -1,0 +1,2 @@
+(self.webpackChunk_r_ichard_gatsby_starter_bootstrap_5=self.webpackChunk_r_ichard_gatsby_starter_bootstrap_5||[]).push([[284],{8156:function(t,r,a){"use strict";a.r(r);var e=a(7294);r.default=function(){return e.createElement("div",null,"MarkdownRemarkFrontmatterSlug")}}}]);
+//# sourceMappingURL=component---src-pages-articles-markdown-remark-frontmatter-slug-index-tsx-ed1b4fca83d0582377d1.js.map
