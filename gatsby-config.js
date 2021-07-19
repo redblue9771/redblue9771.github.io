@@ -8,6 +8,12 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-typescript`,
+    {
+      resolve: `gatsby-plugin-layout`,
+      options: {
+        component: require.resolve(`./src/templates/main.layout.tsx`),
+      },
+    },
     `gatsby-plugin-react-helmet`,
     `gatsby-transformer-remark`,
     `gatsby-plugin-scroll-reveal`,
@@ -54,6 +60,10 @@ module.exports = {
       resolve: `gatsby-plugin-graphql-codegen`,
       options: {
         fileName: `./typings/graphql-types.ts`,
+        documentPaths: [
+          "./src/**/*.{ts,tsx}",
+          "./node_modules/gatsby-*/**/*.js",
+        ],
       },
     },
   ],

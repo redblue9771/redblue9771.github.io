@@ -1,9 +1,9 @@
 import "@/global.scss"
 import { useClientRect } from "@/utils/hooks"
 import React from "react"
-import Footer from "./Footer"
-import Header from "./Header"
-import Navbar from "./MainNavBar"
+import Footer from "../features/layouts/Footer"
+import Header from "../features/layouts/Header"
+import Navbar from "../features/layouts/MainNavBar"
 
 function LaunchLayout({ children }: { children: React.ReactNode }) {
   const [rect, headerRoot] = useClientRect()

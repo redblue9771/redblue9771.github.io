@@ -1,8 +1,8 @@
-import { graphql, PageProps } from "gatsby"
+import { graphql, Link, PageProps } from "gatsby"
 import React from "react"
 import { Carousel, Col, Container, Figure, Row } from "react-bootstrap"
 import { IndexPageQuery } from "@/../typings/graphql-types"
-import MainLayout from "@/features/layouts/Main.layout"
+import MainLayout from "@/templates/main.layout"
 import carouselData from "@/data/carousel.json"
 
 export const query = graphql`
@@ -10,17 +10,21 @@ export const query = graphql`
     allMarkdownRemark(
       sort: { fields: [frontmatter___date], order: DESC }
       limit: 5
+      filter: { frontmatter: { draft: { ne: true } } }
     ) {
-      edges {
-        node {
-          excerpt
-
-          frontmatter {
-            date(formatString: "MMMM DD, YYYY")
-            title
-            description
-          }
+      nodes {
+        fields {
+          slug
         }
+        frontmatter {
+          title
+          slug
+          description
+          author
+          date(formatString: "MMMM DD,YYYY")
+        }
+        id
+        excerpt(pruneLength: 100, truncate: true)
       }
     }
   }
@@ -30,7 +34,7 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
   const { allMarkdownRemark } = data
 
   return (
-    <MainLayout>
+    <React.Fragment>
       <Carousel variant="dark">
         {Object.values(carouselData).map(
           ({ title, link, cover, description }: any) => (
@@ -42,12 +46,12 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
               rel="noolopp"
             >
               <img
-                className="d-block w-50 showcase-item"
+                className="d-block w-100 showcase-item"
                 alt={title}
                 title={title}
                 src={cover}
               />
-              <Carousel.Caption>
+              <Carousel.Caption className="showcase-item-text">
                 <h4>{title}</h4>
                 <p>{description}</p>
               </Carousel.Caption>
@@ -79,22 +83,22 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
                 <dt>
                   <h4>·&nbsp;博文&nbsp;·</h4>
                 </dt>
-                {allMarkdownRemark?.edges?.map(({ node }) => {
-                  const title = node.frontmatter?.title || ""
-                  return (
-                    <dd key={title}>
-                      <a
-                        className="d-block text-truncate"
-                        // to={title}
-                      >
-                        {title}
-                      </a>
-                      <time className="d-block text-truncate">
-                        {node.frontmatter?.date}
-                      </time>
-                    </dd>
-                  )
-                })}
+                {allMarkdownRemark?.nodes?.map(node => (
+                  <dd key={node.id} className="text-light">
+                    <Link
+                      className="d-block text-truncate text-light"
+                      to={node?.frontmatter?.slug || node?.fields?.slug || ""}
+                      title={
+                        node?.frontmatter?.description || node.excerpt || ""
+                      }
+                    >
+                      {node?.frontmatter?.title}
+                    </Link>
+                    <small className="d-block text-truncate text-white">
+                      {node?.frontmatter?.author} - {node?.frontmatter?.date}
+                    </small>
+                  </dd>
+                ))}
               </dl>
             </Col>
             <Col
@@ -152,7 +156,7 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
           </Figure>
         </Container>
       </Container>
-    </MainLayout>
+    </React.Fragment>
   )
 }
 

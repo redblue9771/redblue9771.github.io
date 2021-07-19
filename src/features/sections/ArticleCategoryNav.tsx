@@ -1,26 +1,24 @@
-import { graphql, Link, useStaticQuery } from "gatsby"
+import { IArticleGroupProps, ISearchParams } from "@/templates/articles"
+import { useSearchParams } from "@/utils/hooks"
+import { useLocation } from "@reach/router"
+import { Link, PageProps } from "gatsby"
 import React from "react"
 import {
-  AllCategoryForArticleCategoryNavQuery,
-  AllTagForArticleCategoryNavQuery,
-  AllSeriesForArticleCategoryNavQuery,
-} from "@/../typings/graphql-types"
-import {
   Breadcrumb,
+  BreadcrumbItemProps,
   Col,
   Container,
   Row,
-  BreadcrumbItemProps,
 } from "react-bootstrap"
-import { LinkGetProps, useLocation } from "@reach/router"
-import { useSearchParams } from "@/utils/hooks"
-import { IArticleGroupProps, ISearchParams } from "@/templates/articles"
 
 const BreadcrumbItem = (props: BreadcrumbItemProps) => (
   <Breadcrumb.Item linkAs={Link} {...props} />
 )
 
-function ArticleCategoryNav({ groupList }: IArticleGroupProps) {
+function ArticleCategoryNav({
+  groupList,
+  groupBy,
+}: Partial<IArticleGroupProps>) {
   const location = useLocation()
   const search = useSearchParams<ISearchParams>(location.search)
 
@@ -88,18 +86,20 @@ function ArticleCategoryNav({ groupList }: IArticleGroupProps) {
               所有
             </BreadcrumbItem>
 
-            {groupList?.[search.group]?.map(({ fieldValue }, idx) => (
-              <BreadcrumbItem
-                key={idx}
-                title={fieldValue}
-                linkProps={{
-                  to: `?group=${search.group}&current=${fieldValue}`,
-                }}
-                active={search.current === fieldValue}
-              >
-                {fieldValue}
-              </BreadcrumbItem>
-            ))}
+            {groupList?.[search.group ?? ""]?.map(
+              ({ fieldValue, totalCount }, idx) => (
+                <BreadcrumbItem
+                  key={idx}
+                  title={fieldValue}
+                  linkProps={{
+                    to: `?group=${search.group}&current=${fieldValue}`,
+                  }}
+                  active={search.current === fieldValue}
+                >
+                  {fieldValue}({totalCount})
+                </BreadcrumbItem>
+              )
+            )}
           </Breadcrumb>
         </Col>
       </Row>

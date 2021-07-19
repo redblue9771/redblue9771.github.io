@@ -1,7 +1,8 @@
 {
   "include": [
     "src/**/*",
-    "typings/**/*"
+    "typings/**/*",
+    "configs/**/*"
   ],
   "exclude": [
     "node_modules",
@@ -25,12 +26,14 @@
     "noUnusedParameters": true,
     "removeComments": false,
     "preserveConstEnums": true,
+    "baseUrl": "./",
     "typeRoots": [
-      "./typings"
+      "typings",
+      "node_modules/@types"
     ],
     "paths": {
       "@/*": [
-        "./src/*"
+        "src/*"
       ]
     },
   }
