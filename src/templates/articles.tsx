@@ -5,6 +5,7 @@ import { useLocation } from "@reach/router"
 import { Link, PageProps } from "gatsby"
 import React from "react"
 import { Container } from "react-bootstrap"
+import { SiteMetadata } from "./main.layout"
 
 export interface ISearchParams {
   group?: string
@@ -41,8 +42,21 @@ export interface IArticleGroupProps {
 }
 
 function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
+  const { setMetadata } = React.useContext(SiteMetadata)
+  React.useEffect(() => {
+    setMetadata(prev => ({
+      ...prev,
+
+      title: "博文",
+      subTitle: "我非生而知之者",
+      description: "学而时习之",
+      date: "",
+    }))
+  }, [])
+
   const location = useLocation()
   const search = useSearchParams<ISearchParams>(location.search)
+
   console.log(search)
 
   const { groupList, groupBy } = pageContext
@@ -50,7 +64,7 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
     if (
       !(search.current && search.current !== "none" && search.current !== "")
     ) {
-      return groupBy.all.nodes
+      return groupBy.all?.edges?.map(item => item.node)
     }
     const current = groupBy?.[search.group]?.find(
       item => item.fieldValue === search.current
@@ -58,7 +72,7 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
     if (current) {
       return current.nodes
     }
-    return groupBy.all?.nodes
+    return groupBy.all?.edges?.map(item => item.node)
   }, [groupBy, search])
   console.log(groupBy)
   return (
