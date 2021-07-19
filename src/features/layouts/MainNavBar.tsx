@@ -1,7 +1,9 @@
+import { ISiteSiteMetadata } from "@/templates/main.layout"
 import clsx from "clsx"
-import { Link } from "gatsby"
+import { Link, useStaticQuery } from "gatsby"
 import React from "react"
 import { Container, Nav, Navbar } from "react-bootstrap"
+import { SiteSiteMetadata } from "typings/graphql-types"
 const routes = [
   { title: { cn: "主页" }, path: "/" },
   { title: { cn: "博文" }, path: "/articles" },
@@ -14,13 +16,27 @@ const routes = [
   },
 ]
 
-function MainNavBar({
-  title = "RedBlue | 赤琦",
-  styleName = "",
-  absElementTop = 0,
-}) {
+interface IMainNavBarProps {
+  context: ISiteSiteMetadata
+  absElementTop: number
+}
+
+const query = graphql`
+  query SEO {
+    site {
+      siteMetadata {
+        title
+        siteUrl
+        description
+        author
+      }
+    }
+  }
+`
+function MainNavBar({ absElementTop, context }: IMainNavBarProps) {
   const [isTopArea, setIsTopArea] = React.useState(false)
   const [toggleBar, setToggleBar] = React.useState(false)
+  const { site } = useStaticQuery(query)
 
   const handleScroll = React.useCallback(() => {
     requestAnimationFrame(() => {
@@ -46,55 +62,44 @@ function MainNavBar({
   }
 
   return (
-    // <Navbar className="mx-auto" expand="md" data-sal="slide-down">
-    //   <Navbar.Brand
-    //     as="a"
-    //     id="main-title"
-    //     className="flex-grow-1 text-truncate text-white"
-    //     onClick={() => {
-    //       navigate("#")
-    //     }}
-    //     style={{
-    //       maxWidth: "calc(100% - 3rem)",
-    //     }}
-    //   >
-    //     {title}
-    //   </Navbar.Brand>
-
-    //   <Navbar.Toggle
-    //     as="a"
-    //     className="border-0 text-white btn-menu"
-    //     onClick={handleToggle}
-    //   >
-    //     <span className="bar" />
-    //   </Navbar.Toggle>
-
-    //   <Navbar.Collapse className="overlay justify-content-end">
-    //     <Nav className="nav-justified ml-auto">{renderRouter}</Nav>
-    //   </Navbar.Collapse>
-    // </Navbar>
-
     <Navbar
       collapseOnSelect
       expand="lg"
       fixed="top"
       variant="dark"
-      className={clsx("navbar", isTopArea && "navScroll")}
+      className={clsx(
+        "navbar",
+        (isTopArea || toggleBar) && "navScroll",
+        toggleBar && "showBar"
+      )}
     >
-      <Container fluid="lg">
-        <Navbar.Brand href="#home" className="me-auto">
-          React-Bootstrap
+      <Container fluid="lg" className="gx-4">
+        <Navbar.Brand as={Link} to="/">
+          {isTopArea ? context.subTitle : site.siteMetadata.title}
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
+        <Navbar.Toggle
+          aria-controls="navbarScroll"
+          onClick={handleToggle}
+          as="div"
+        />
+        <Navbar.Collapse id="navbarScroll" className="flex-grow-0">
           <Nav navbarScroll>
             {routes.map(({ title, path, external }) =>
               external ? (
-                <Nav.Link key={path} href={path}>
+                <Nav.Link
+                  key={path}
+                  href={path}
+                  className="text-center text-light"
+                >
                   &nbsp;/ {title.cn} /&nbsp;
                 </Nav.Link>
               ) : (
-                <Nav.Link key={path} as={Link} to={path || "/404/"}>
+                <Nav.Link
+                  key={path}
+                  as={Link}
+                  to={path || "/404/"}
+                  className="text-center text-light"
+                >
                   &nbsp;/ {title.cn} /&nbsp;
                 </Nav.Link>
               )

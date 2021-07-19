@@ -11,15 +11,23 @@ function Footer() {
             Rights Reserved.
           </p>
           <p>
-            <a href="/index.xml" target="_blank">
+            <a href="/index.xml" target="_blank" className="text-light">
               <i className="bi bi-rss" /> RSS
             </a>
             丨
-            <a href="https://github.com/redblue9771" target="_blank">
+            <a
+              href="https://github.com/redblue9771"
+              target="_blank"
+              className="text-light"
+            >
               <i className="bi bi-github" /> GitHub
             </a>
             丨
-            <a href="mailto:***REMOVED***" target="_blank">
+            <a
+              href="mailto:***REMOVED***"
+              target="_blank"
+              className="text-light"
+            >
               <i className="bi bi-at" /> E-mail
             </a>
           </p>

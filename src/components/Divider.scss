@@ -1,0 +1,52 @@
+.divider {
+  display: table;
+  text-align: center;
+  margin: 0.4em auto;
+  & span {
+    display: table-cell;
+    position: relative;
+    padding: 0 0.2em;
+  }
+
+  & span:first-child,
+  & span:last-child {
+    width: 50%;
+    top: 10px;
+    background-size: 100% 1px;
+    background-position: 0 0, 0 100%;
+    background-repeat: no-repeat;
+  }
+
+  & span:first-child {
+    background-image: -o-linear-gradient(180deg, transparent, #000);
+    background-image: -o-linear-gradient(left, transparent, #000);
+    background-image: -webkit-gradient(
+      linear,
+      left top,
+      right top,
+      from(transparent),
+      to(#000)
+    );
+    background-image: linear-gradient(90deg, transparent, #000);
+  }
+
+  & span:nth-child(2) {
+    min-width: 1px;
+    color: #000;
+    width: auto;
+    white-space: nowrap;
+  }
+
+  & span:last-child {
+    background-image: -o-linear-gradient(180deg, #000, transparent);
+    background-image: -o-linear-gradient(left, #000, transparent);
+    background-image: -webkit-gradient(
+      linear,
+      left top,
+      right top,
+      from(#000),
+      to(transparent)
+    );
+    background-image: linear-gradient(90deg, #000, transparent);
+  }
+}

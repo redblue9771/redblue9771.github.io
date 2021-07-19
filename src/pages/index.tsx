@@ -1,5 +1,6 @@
 import { IndexPageQuery } from "@/../typings/graphql-types"
 import carouselData from "@/data/carousel.json"
+import { SiteMetadata } from "@/templates/main.layout"
 import { graphql, Link, PageProps } from "gatsby"
 import React from "react"
 import { Carousel, Col, Container, Figure, Row } from "react-bootstrap"
@@ -31,6 +32,15 @@ export const query = graphql`
 
 const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
   const { allMarkdownRemark } = data
+  const { setMetadata } = React.useContext(SiteMetadata)
+
+  React.useEffect(() => {
+    setMetadata(prev => ({
+      title: "RedBlue | 赤琦",
+      subTitle: "凡所有相，皆是虚妄",
+      description: "JUST FOR MAN FASHION NEWISM",
+    }))
+  }, [])
 
   return (
     <React.Fragment>
