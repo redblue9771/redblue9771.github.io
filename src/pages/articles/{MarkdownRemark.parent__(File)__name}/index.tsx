@@ -1,15 +1,16 @@
 import Article, { IArticlePageQuery } from "@/templates/article"
 import { graphql, PageProps } from "gatsby"
 import React from "react"
+import { MarkdownRemark } from "typings/graphql-types"
 
-function MarkdownRemarkFrontmatterSlug(props: PageProps<IArticlePageQuery>) {
+function MarkdownRemarkParentFileName(props: PageProps<IArticlePageQuery>) {
   return <Article {...props} />
 }
 
-export default MarkdownRemarkFrontmatterSlug
+export default MarkdownRemarkParentFileName
 
 export const query = graphql`
-  query articleById1($id: String) {
+  query articleById($id: String) {
     markdownRemark(id: { eq: $id }) {
       id
       tableOfContents

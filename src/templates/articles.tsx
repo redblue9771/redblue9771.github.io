@@ -22,8 +22,23 @@ interface IGroupList {
   [propsName: string]: IGroupItem[]
 }
 
+interface IGroupByItem {
+  nodes: any[]
+}
+interface IGroupBy {
+  [propsName: string]: IGroupByItem
+}
+
+interface IGroupByCurrent {
+  all: IGroupByItem
+  categories: IGroupBy
+  tags: IGroupBy
+  series: IGroupBy
+}
+
 export interface IArticleGroupProps {
   groupList: IGroupList
+  groupBy: IGroupByCurrent
 }
 
 function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
@@ -32,48 +47,39 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
   console.log(search)
 
   const { groupList, groupBy } = pageContext
-
-  const articleList: IGroupList[] = React.useMemo(() => {
+  const articleList = React.useMemo(() => {
     if (
       !(search.current && search.current !== "none" && search.current !== "")
     ) {
-      return groupBy.articles.nodes
+      return groupBy.all.nodes
     }
-    switch (search.group) {
-      case "categories":
-        return groupBy.articlesByCategory[search.current].nodes
-      case "tags":
-        return groupBy.articlesByTag[search.current].nodes
-
-      case "series":
-        return groupBy.articlesBySeries[search.current].nodes
-
-      default:
-        return groupBy.articles.nodes
+    const current = groupBy?.[search.group]?.find(
+      item => item.fieldValue === search.current
+    )
+    if (current) {
+      return current.nodes
     }
+    return groupBy.all?.nodes
   }, [groupBy, search])
-  console.log(articleList)
+  console.log(groupBy)
   return (
-    <MainLayout>
-      <Container fluid="lg" className="text-dark">
-        <ArticleCategoryNav groupList={groupList} />
-        <TimeLine.Container>
-          {articleList?.map((node: any) => (
-            <TimeLine.Item
-              date={`${node.frontmatter.author} - ${
-                node.frontmatter.date || new Date().toLocaleDateString()
-              }`}
-              title={node.frontmatter.title || node.frontmatter.slug}
-              description={node.frontmatter.description || node.excerpt}
-              to={node.frontmatter.slug || "/"}
-              key={node.id}
-              component={Link}
-            
-            />
-          ))}
-        </TimeLine.Container>
-      </Container>
-    </MainLayout>
+    <Container fluid="lg" className="text-dark">
+      <ArticleCategoryNav groupList={groupBy} />
+      <TimeLine.Container>
+        {articleList?.map((node: any) => (
+          <TimeLine.Item
+            date={`${node.frontmatter.author} - ${
+              node.frontmatter.date || new Date().toLocaleDateString()
+            }`}
+            title={node.frontmatter.title || node.frontmatter.slug}
+            description={node.frontmatter.description || node.excerpt}
+            to={node.frontmatter.slug || node.fields.slug}
+            key={node.id}
+            component={Link}
+          />
+        ))}
+      </TimeLine.Container>
+    </Container>
   )
 }
 

@@ -4,6 +4,7 @@ $primary-light: #2196f3;
 $secondary: #f44336;
 
 $shadow: rgba(0, 0, 0, 0.5);
+$max-width: 1024px;
 
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
@@ -13,7 +14,7 @@ body {
 }
 
 .container-lg {
-  max-width: 1024px;
+  max-width: $max-width;
 }
 
 .header {
@@ -73,10 +74,14 @@ body {
 }
 
 .showcase-item {
+  max-width: $max-width;
   filter: drop-shadow(0 0 6px $primary-light);
   margin: 0 auto;
   @media (max-width: 767.98px) {
-    filter: blur(2px);
+    filter: blur(1px);
+    &-text {
+      text-shadow: 0 0 2px white;
+    }
   }
 }
 
@@ -131,6 +136,24 @@ body {
       &:first-child {
         background-image: url(/img/undraw_annotation.svg);
       }
+    }
+  }
+}
+
+.copyright {
+  color: #6c757d;
+  margin: 2em 0;
+
+  & tbody tr {
+    border-left: 4px solid #00f7de;
+    & td:first-child {
+      white-space: nowrap;
+      padding: 0 0.4em;
+      font-weight: 600;
+    }
+    & td:last-child {
+      font-size: 14px;
+      word-break: break-all;
     }
   }
 }

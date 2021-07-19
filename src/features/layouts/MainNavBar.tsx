@@ -1,4 +1,5 @@
 import clsx from "clsx"
+import { Link } from "gatsby"
 import React from "react"
 import { Container, Nav, Navbar } from "react-bootstrap"
 const routes = [
@@ -44,17 +45,6 @@ function MainNavBar({
     setToggleBar(!toggleBar)
   }
 
-  const renderRouter = routes.map(({ title, path, external }) =>
-    external ? (
-      <Nav.Link key={path} href={path}>
-        &nbsp;/ {title.cn} /&nbsp;
-      </Nav.Link>
-    ) : (
-      <Nav.Link key={path} href={path || "/404/"}>
-        &nbsp;/ {title.cn} /&nbsp;
-      </Nav.Link>
-    )
-  )
   return (
     // <Navbar className="mx-auto" expand="md" data-sal="slide-down">
     //   <Navbar.Brand
@@ -97,7 +87,19 @@ function MainNavBar({
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
-          <Nav navbarScroll>{renderRouter}</Nav>
+          <Nav navbarScroll>
+            {routes.map(({ title, path, external }) =>
+              external ? (
+                <Nav.Link key={path} href={path}>
+                  &nbsp;/ {title.cn} /&nbsp;
+                </Nav.Link>
+              ) : (
+                <Nav.Link key={path} as={Link} to={path || "/404/"}>
+                  &nbsp;/ {title.cn} /&nbsp;
+                </Nav.Link>
+              )
+            )}
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
