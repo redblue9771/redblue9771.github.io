@@ -1,9 +1,8 @@
 import { ISiteSiteMetadata } from "@/templates/main.layout"
 import clsx from "clsx"
-import { Link, useStaticQuery } from "gatsby"
+import { graphql, Link, useStaticQuery } from "gatsby"
 import React from "react"
 import { Container, Nav, Navbar } from "react-bootstrap"
-import { SiteSiteMetadata } from "typings/graphql-types"
 const routes = [
   { title: { cn: "主页" }, path: "/" },
   { title: { cn: "博文" }, path: "/articles" },
@@ -22,7 +21,7 @@ interface IMainNavBarProps {
 }
 
 const query = graphql`
-  query SEO {
+  query siteMeta {
     site {
       siteMetadata {
         title
