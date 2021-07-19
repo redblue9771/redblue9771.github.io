@@ -1,11 +1,10 @@
 import { TimeLine } from "@/components"
-import { MainLayout } from "@/features/layouts"
 import { ArticleCategoryNav } from "@/features/sections"
 import { useSearchParams } from "@/utils/hooks"
+import { useLocation } from "@reach/router"
 import { Link, PageProps } from "gatsby"
 import React from "react"
 import { Container } from "react-bootstrap"
-import { LinkGetProps, useLocation } from "@reach/router"
 
 export interface ISearchParams {
   group?: string

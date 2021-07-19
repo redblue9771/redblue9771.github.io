@@ -1,9 +1,8 @@
+import { IndexPageQuery } from "@/../typings/graphql-types"
+import carouselData from "@/data/carousel.json"
 import { graphql, Link, PageProps } from "gatsby"
 import React from "react"
 import { Carousel, Col, Container, Figure, Row } from "react-bootstrap"
-import { IndexPageQuery } from "@/../typings/graphql-types"
-import MainLayout from "@/templates/main.layout"
-import carouselData from "@/data/carousel.json"
 
 export const query = graphql`
   query IndexPage {

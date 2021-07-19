@@ -1,4 +1,4 @@
-import { graphql, PageProps } from "gatsby"
+import { PageProps } from "gatsby"
 import React from "react"
 import { Col, Container, Row } from "react-bootstrap"
 import { MarkdownRemark } from "typings/graphql-types"
