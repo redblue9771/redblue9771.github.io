@@ -59,11 +59,32 @@ function Article({
   React.useEffect(() => {
     setMetadata(prev => ({
       ...prev,
+      title: frontmatter?.title,
       subTitle: frontmatter?.title,
       description: frontmatter?.description,
       date: frontmatter?.date,
     }))
   }, [frontmatter])
+
+  const commentRef = React.useRef(null)
+
+  React.useEffect(() => {
+    const commentScript = document.createElement("script")
+    commentScript.async = true
+    commentScript.src = "https://utteranc.es/client.js"
+    commentScript.setAttribute("repo", "redblue9771/comments-for-redblue") // PLEASE CHANGE THIS TO YOUR REPO
+    commentScript.setAttribute("issue-term", "url")
+    commentScript.setAttribute("id", "utterances")
+    commentScript.setAttribute("theme", "github-light")
+    commentScript.setAttribute("crossorigin", "anonymous")
+    commentScript.setAttribute("label", "comment")
+
+    if (commentRef && commentRef.current) {
+      commentRef?.current.appendChild(commentScript)
+    } else {
+      console.log(`Error adding utterances comments on: ${commentRef}`)
+    }
+  }, [commentRef])
 
   console.log(location)
   return (
@@ -141,10 +162,7 @@ function Article({
         />
         <p>（完）</p>
         <Divider>🙋 评论</Divider>
-        <div
-          // ref={commentRef}
-          className="comment"
-        />
+        <div ref={commentRef} className="comment" />
       </Col>
       <Col xs={12} lg={3}>
         <aside className="article-aside sticky-md-top">

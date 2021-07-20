@@ -3,10 +3,12 @@ import clsx from "clsx"
 import { graphql, Link, useStaticQuery } from "gatsby"
 import React from "react"
 import { Container, Nav, Navbar } from "react-bootstrap"
+import { useLocation } from "@reach/router"
+
 const routes = [
   { title: { cn: "主页" }, path: "/" },
   { title: { cn: "博文" }, path: "/articles" },
-  { title: { cn: "藏经" }, path: "/libraries" },
+  { title: { cn: "藏经" }, path: "/library" },
   { title: { cn: "项目" }, path: "/repositories" },
   {
     title: { cn: "状态" },
@@ -36,6 +38,7 @@ function MainNavBar({ absElementTop, context }: IMainNavBarProps) {
   const [isTopArea, setIsTopArea] = React.useState(false)
   const [toggleBar, setToggleBar] = React.useState(false)
   const { site } = useStaticQuery(query)
+  const location = useLocation()
 
   const handleScroll = React.useCallback(() => {
     requestAnimationFrame(() => {
@@ -65,15 +68,14 @@ function MainNavBar({ absElementTop, context }: IMainNavBarProps) {
       collapseOnSelect
       expand="lg"
       fixed="top"
-      variant="dark"
       className={clsx(
         "navbar",
-        (isTopArea || toggleBar) && "navScroll",
-        toggleBar && "showBar"
+        "text-light",
+        (isTopArea || toggleBar) && "navScroll"
       )}
     >
-      <Container fluid="lg" className="gx-4">
-        <Navbar.Brand as={Link} to="/">
+      <Container fluid="lg" className={clsx("gx-4", toggleBar && "showBar")}>
+        <Navbar.Brand as={Link} to="/" className="text-truncate text-reset">
           {isTopArea ? context.subTitle : site.siteMetadata.title}
         </Navbar.Brand>
         <Navbar.Toggle
@@ -88,7 +90,7 @@ function MainNavBar({ absElementTop, context }: IMainNavBarProps) {
                 <Nav.Link
                   key={path}
                   href={path}
-                  className="text-center text-light"
+                  className="text-center text-reset"
                 >
                   &nbsp;/ {title.cn} /&nbsp;
                 </Nav.Link>
@@ -97,7 +99,8 @@ function MainNavBar({ absElementTop, context }: IMainNavBarProps) {
                   key={path}
                   as={Link}
                   to={path || "/404/"}
-                  className="text-center text-light"
+                  className="text-center text-reset"
+                  active={location.pathname === "path"}
                 >
                   &nbsp;/ {title.cn} /&nbsp;
                 </Nav.Link>

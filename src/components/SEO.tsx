@@ -7,6 +7,7 @@ import { SiteSiteMetadata } from "typings/graphql-types"
 const SEO = ({ title, description }: SiteSiteMetadata) => {
   const { pathname } = useLocation()
   const { site } = useStaticQuery(query)
+  const location = useLocation()
   console.log(site)
   const {
     title: defaultTitle,
@@ -28,7 +29,11 @@ const SEO = ({ title, description }: SiteSiteMetadata) => {
   return (
     <Helmet
       title={seo.title}
-      titleTemplate={`%s - ${site.siteMetadata.title}`}
+      titleTemplate={`%s - ${
+        location.pathname === "" || location.pathname === "/"
+          ? "其实你知的我是那面"
+          : site.siteMetadata.title
+      }`}
       htmlAttributes={{
         lang: "zh-cmn-Hans",
       }}
