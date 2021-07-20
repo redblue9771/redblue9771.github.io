@@ -1,12 +1,21 @@
 import { IndexPageQuery } from "@/../typings/graphql-types"
-import carouselData from "@/data/carousel.json"
 import { SiteMetadata } from "@/templates/main.layout"
 import { graphql, Link, PageProps } from "gatsby"
 import React from "react"
 import { Carousel, Col, Container, Figure, Row } from "react-bootstrap"
+import { ViewerHovercardContext } from "typings/schemas"
 
 export const query = graphql`
   query IndexPage {
+    allCarousel(filter: { for: { eq: "homePage" } }) {
+      nodes {
+        id
+        description
+        cover
+        link
+        title
+      }
+    }
     allMarkdownRemark(
       sort: { fields: [frontmatter___date], order: DESC }
       limit: 5
@@ -31,8 +40,12 @@ export const query = graphql`
 `
 
 const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
-  const { allMarkdownRemark } = data
+  const { allMarkdownRemark, allCarousel } = data
   const { setMetadata } = React.useContext(SiteMetadata)
+
+  const [repo, setRepo] = React.useState<
+    NonNullable<ViewerHovercardContext["viewer"]["repositories"]["nodes"]>
+  >([])
 
   React.useEffect(() => {
     setMetadata(prev => ({
@@ -42,31 +55,63 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
     }))
   }, [])
 
+  React.useEffect(() => {
+    fetch("https://api.github.com/graphql", {
+      method: "POST",
+      body: JSON.stringify({
+        query: `
+          query {
+            viewer {
+              repositories(
+                privacy: PUBLIC
+                isFork: false
+                first: 5
+                orderBy: { field: UPDATED_AT, direction: DESC }
+              ) {
+                nodes {
+                  name
+                  description
+                  url
+                }
+              }
+            }
+          }
+      `,
+      }),
+      headers: {
+        Authorization: `bearer ${process.env.GATSBY_GITHUB_TOKEN}`,
+      },
+    })
+      .then(res => res.json())
+      .then(res => {
+        setRepo(res?.data?.viewer?.repositories?.nodes ?? [])
+      })
+    console.log(process.env)
+  }, [])
+
   return (
     <React.Fragment>
       <Carousel variant="dark">
-        {Object.values(carouselData).map(
-          ({ title, link, cover, description }: any) => (
-            <Carousel.Item
-              key={link}
-              as="a"
-              href={link}
-              target="_blank"
-              rel="noolopp"
-            >
-              <img
-                className="d-block w-100 showcase-item"
-                alt={title}
-                title={title}
-                src={cover}
-              />
-              <Carousel.Caption className="showcase-item-text">
-                <h4>{title}</h4>
-                <p>{description}</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-          )
-        )}
+        {allCarousel.nodes.map(({ id, title, link, cover, description }) => (
+          <Carousel.Item
+            key={id}
+            as="a"
+            href={link}
+            target="_blank"
+            rel="noolopp"
+          >
+            <img
+              className="d-block w-100 showcase-item"
+              alt={title}
+              title={title}
+              src={cover}
+            />
+            <Carousel.Caption className="showcase-item-text">
+              <h4>{title}</h4>
+              <p>{description}</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+        ))}
       </Carousel>
 
       <Container fluid>
@@ -92,20 +137,21 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
                 <dt>
                   <h4>·&nbsp;博文&nbsp;·</h4>
                 </dt>
-                {allMarkdownRemark?.nodes?.map(node => (
+                {allMarkdownRemark?.nodes?.map((node: any) => (
                   <dd key={node.id} className="text-light">
                     <Link
-                      className="d-block text-truncate text-light"
+                      className="d-block text-truncate text-reset text-decoration-none"
                       to={node?.frontmatter?.slug || node?.fields?.slug || ""}
                       title={
                         node?.frontmatter?.description || node.excerpt || ""
                       }
                     >
                       {node?.frontmatter?.title}
+
+                      <small className="d-block text-truncate">
+                        {node?.frontmatter?.author} - {node?.frontmatter?.date}
+                      </small>
                     </Link>
-                    <small className="d-block text-truncate text-white">
-                      {node?.frontmatter?.author} - {node?.frontmatter?.date}
-                    </small>
                   </dd>
                 ))}
               </dl>
@@ -119,6 +165,28 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
                 <dt>
                   <h4>·&nbsp;项目&nbsp;·</h4>
                 </dt>
+                {repo.length === 0 && (
+                  <dd>
+                    <p className="masked">
+                      🏃‍♂️ 从 github.com/redblue9771 拉取中…
+                    </p>
+                  </dd>
+                )}
+                {repo.map(({ name, description, url }) => (
+                  <dd key={name}>
+                    <a
+                      href={url}
+                      className="d-block text-truncate text-reset text-decoration-none"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {name}
+                      <small className="d-block text-truncate">
+                        {description || "No Description"}
+                      </small>
+                    </a>
+                  </dd>
+                ))}
               </dl>
             </Col>
             <Col className="index-module-1__content__block" sm={12} md={4}>

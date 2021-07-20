@@ -1,3 +1,7 @@
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+
 module.exports = {
   siteMetadata: {
     title: `RedBlue | 赤琦`,
@@ -34,7 +38,6 @@ module.exports = {
       resolve: `gatsby-transformer-yaml`,
       options: {
         typeName: ({ node, object, isArray }) => {
-          console.log(node)
           return node.name
         },
       },
@@ -52,13 +55,13 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-bootstrap-5`,
-        short_name: `gb5-starter`,
+        name: `RedBlue | 赤琦`,
+        short_name: `RedBlue | 赤琦`,
         start_url: `/`,
         background_color: `#663399`,
         theme_color: `#663399`,
         display: `standalone`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `static/img/golang2.png`, // This path is relative to the root of the site.
       },
     },
     {

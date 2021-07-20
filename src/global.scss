@@ -23,7 +23,7 @@ body {
   color: #fff;
   filter: drop-shadow(0 0 10px $shadow);
   margin-bottom: 1rem;
-
+  z-index: 1;
   &__wrapper {
     background: linear-gradient(to bottom, #448aff, #44aaff, $primary);
 
@@ -108,6 +108,9 @@ body {
 
 .navbar {
   transition: all 0.5s;
+  .navbar-brand {
+    max-width: calc(100% - 3rem);
+  }
   .navbar-toggler {
     position: relative;
     width: 2rem;
@@ -263,6 +266,19 @@ article h6 {
   }
 }
 
-button {
-  box-shadow: none;
+.masked {
+  background-image: -webkit-linear-gradient(left, red, blue, red, blue, red);
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 100%;
+  animation: masked-animation 4s infinite linear;
+}
+
+@keyframes masked-animation {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
 }

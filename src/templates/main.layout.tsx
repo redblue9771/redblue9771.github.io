@@ -1,6 +1,7 @@
 import { SEO } from "@/components"
 import "@/global.scss"
 import { useClientRect } from "@/utils/hooks"
+import { graphql } from "gatsby"
 import React, { Dispatch, SetStateAction } from "react"
 import { SiteSiteMetadata } from "typings/graphql-types"
 import Footer from "../features/layouts/Footer"
