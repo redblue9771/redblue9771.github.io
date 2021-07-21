@@ -18,7 +18,7 @@ function Repositories() {
     setMetadata(prev => ({
       title: "项目",
       subTitle: "吾与徐工孰娴编码之技",
-      description: "One great project can change the world",
+      description: "Talk is cheap. Show me the code.",
     }))
   }, [])
 

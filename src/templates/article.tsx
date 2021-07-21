@@ -11,6 +11,8 @@ import {
   Maybe,
 } from "typings/graphql-types"
 import { SiteMetadata } from "./main.layout"
+import "katex/dist/katex.min.css"
+import "prismjs/themes/prism-tomorrow.css"
 
 export type MarkdownRemarkFragmentFragment = Pick<
   MarkdownRemark,
@@ -66,7 +68,7 @@ function Article({
     }))
   }, [frontmatter])
 
-  const commentRef = React.useRef(null)
+  const commentRef = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {
     const commentScript = document.createElement("script")
@@ -86,7 +88,6 @@ function Article({
     }
   }, [commentRef])
 
-  console.log(location)
   return (
     <Container fluid="lg" as={Row} className="mx-auto">
       <Col xs={12} lg={9}>
