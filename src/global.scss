@@ -13,6 +13,22 @@ body {
   min-height: 100vh;
 }
 
+a {
+  color: $primary;
+  transition: all 0.3s;
+  &:hover {
+    color: $secondary;
+  }
+}
+
+.text-new {
+  color: $primary;
+  transition: all 0.3s;
+  &:hover {
+    color: $secondary;
+  }
+}
+
 .container-lg {
   max-width: $max-width;
 }
@@ -227,6 +243,10 @@ article h6:before {
   height: 3em;
   margin-top: -3em;
   visibility: hidden;
+}
+
+article img {
+  max-width: 100%;
 }
 
 article h1,

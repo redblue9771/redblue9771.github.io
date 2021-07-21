@@ -1,7 +1,7 @@
 import { IArticleGroupProps, ISearchParams } from "@/templates/articles"
 import { useSearchParams } from "@/utils/hooks"
 import { useLocation } from "@reach/router"
-import { Link, PageProps } from "gatsby"
+import { Link } from "gatsby"
 import React from "react"
 import {
   Breadcrumb,
@@ -9,16 +9,15 @@ import {
   Col,
   Container,
   Row,
+  Tab,
+  Tabs,
 } from "react-bootstrap"
 
 const BreadcrumbItem = (props: BreadcrumbItemProps) => (
   <Breadcrumb.Item linkAs={Link} {...props} />
 )
 
-function ArticleCategoryNav({
-  groupList,
-  groupBy,
-}: Partial<IArticleGroupProps>) {
+function ArticleCategoryNav({ groupBy }: Partial<IArticleGroupProps>) {
   const location = useLocation()
   const search = useSearchParams<ISearchParams>(location.search)
 
@@ -86,20 +85,18 @@ function ArticleCategoryNav({
               所有
             </BreadcrumbItem>
 
-            {groupList?.[search.group ?? ""]?.map(
-              ({ fieldValue, totalCount }, idx) => (
-                <BreadcrumbItem
-                  key={idx}
-                  title={fieldValue}
-                  linkProps={{
-                    to: `?group=${search.group}&current=${fieldValue}`,
-                  }}
-                  active={search.current === fieldValue}
-                >
-                  {fieldValue}({totalCount})
-                </BreadcrumbItem>
-              )
-            )}
+            {groupBy?.[search.group]?.map(({ fieldValue, totalCount }, idx) => (
+              <BreadcrumbItem
+                key={idx}
+                title={fieldValue}
+                linkProps={{
+                  to: `?group=${search.group}&current=${fieldValue}`,
+                }}
+                active={search.current === fieldValue}
+              >
+                {fieldValue}({totalCount})
+              </BreadcrumbItem>
+            ))}
           </Breadcrumb>
         </Col>
       </Row>

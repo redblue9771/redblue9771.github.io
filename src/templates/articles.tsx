@@ -5,6 +5,7 @@ import { useLocation } from "@reach/router"
 import { Link, PageProps } from "gatsby"
 import React from "react"
 import { Container } from "react-bootstrap"
+import { MarkdownRemarkConnection } from "typings/graphql-types"
 import { SiteMetadata } from "./main.layout"
 
 export interface ISearchParams {
@@ -30,10 +31,10 @@ interface IGroupBy {
 }
 
 interface IGroupByCurrent {
-  all: IGroupByItem
-  categories: IGroupBy
-  tags: IGroupBy
-  series: IGroupBy
+  all: MarkdownRemarkConnection
+  categories: MarkdownRemarkConnection
+  tags: MarkdownRemarkConnection
+  series: MarkdownRemarkConnection
 }
 
 export interface IArticleGroupProps {
@@ -59,14 +60,19 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
 
   console.log(search)
 
-  const { groupList, groupBy } = pageContext
+  const { groupBy } = pageContext
   const articleList = React.useMemo(() => {
     if (
-      !(search.current && search.current !== "none" && search.current !== "")
+      !(
+        search.current &&
+        search.group &&
+        search.current !== "none" &&
+        search.current !== ""
+      )
     ) {
       return groupBy.all?.edges?.map(item => item.node)
     }
-    const current = groupBy?.[search.group]?.find(
+    const current: MarkdownRemarkConnection = groupBy?.[search.group]?.find(
       item => item.fieldValue === search.current
     )
     if (current) {
@@ -77,7 +83,7 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
   console.log(groupBy)
   return (
     <Container fluid="lg" className="text-dark">
-      <ArticleCategoryNav groupList={groupBy} />
+      <ArticleCategoryNav groupBy={groupBy} />
       <TimeLine.Container>
         {articleList?.map((node: any) => (
           <TimeLine.Item
