@@ -89,7 +89,7 @@ function Article({
   }, [commentRef])
 
   return (
-    <Container fluid="lg" as={Row} className="mx-auto">
+    <Container fluid="lg" as={Row} className="mx-auto px-1">
       <Col xs={12} lg={9}>
         <address>
           <table className="copyright">

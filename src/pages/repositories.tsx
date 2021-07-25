@@ -130,29 +130,31 @@ function Repositories() {
               header={
                 <React.Fragment>
                   <h5 className="d-inline-block">{name}</h5>
-                  <small>
-                    <span>
-                      <i className="bi bi-code-slash" />
-                      {primaryLanguage ? primaryLanguage.name : ""}
-                    </span>
-                    &nbsp;&nbsp;&nbsp;
-                    <span>
-                      <i className="bi bi-star" />
-                      {starCount}
-                    </span>
-                    &nbsp;&nbsp;&nbsp;
-                    <span>
-                      <i className="bi bi-bezier2" />
-                      {forkCount}
-                    </span>
-                    &nbsp;&nbsp;&nbsp;
-                    {licenseInfo && (
+                  <div>
+                    <small>
                       <span>
-                        <i className="bi bi-book-half" />
-                        {licenseInfo.name}
+                        <i className="bi bi-code-slash" />
+                        {primaryLanguage ? primaryLanguage.name : ""}
                       </span>
-                    )}
-                  </small>
+                      &nbsp;&nbsp;&nbsp;
+                      <span>
+                        <i className="bi bi-star" />
+                        {starCount}
+                      </span>
+                      &nbsp;&nbsp;&nbsp;
+                      <span>
+                        <i className="bi bi-bezier2" />
+                        {forkCount}
+                      </span>
+                      &nbsp;&nbsp;&nbsp;
+                      {licenseInfo && (
+                        <span>
+                          <i className="bi bi-book-half" />
+                          {licenseInfo.name}
+                        </span>
+                      )}
+                    </small>
+                  </div>
                 </React.Fragment>
               }
               body={
