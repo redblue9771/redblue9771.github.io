@@ -71,10 +71,10 @@ module.exports = {
         name: `RedBlue | 赤琦`,
         short_name: `RedBlue | 赤琦`,
         start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
+        background_color: `#448aff`,
+        theme_color: `#2196f3`,
         display: `standalone`,
-        icon: `static/img/golang2.png`, // This path is relative to the root of the site.
+        icon: `static/logo.svg`, // This path is relative to the root of the site.
       },
     },
     {
