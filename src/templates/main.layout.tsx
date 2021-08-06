@@ -29,8 +29,6 @@ function LaunchLayout({ children }: { children: React.ReactNode }) {
   const [rect, headerRoot] = useClientRect()
   const [metadata, setMetadata] = React.useState(defaultContextValue.metadata)
 
-  console.log(metadata)
-
   return (
     <React.Fragment>
       <SEO {...metadata} />

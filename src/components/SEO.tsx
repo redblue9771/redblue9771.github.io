@@ -8,7 +8,7 @@ const SEO = ({ title, description }: SiteSiteMetadata) => {
   const { pathname } = useLocation()
   const { site } = useStaticQuery(query)
   const location = useLocation()
-  console.log(site)
+
   const {
     title: defaultTitle,
     titleTemplate,
