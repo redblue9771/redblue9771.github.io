@@ -58,8 +58,6 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
   const location = useLocation()
   const search = useSearchParams<ISearchParams>(location.search)
 
-  console.log(search)
-
   const { groupBy } = pageContext
   const articleList = React.useMemo(() => {
     if (
@@ -80,7 +78,7 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
     }
     return groupBy.all?.edges?.map(item => item.node)
   }, [groupBy, search])
-  console.log(groupBy)
+
   return (
     <Container fluid="lg" className="text-dark">
       <ArticleCategoryNav groupBy={groupBy} />

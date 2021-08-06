@@ -52,7 +52,6 @@ function Article({
   location,
   ...props
 }: PageProps<null, ArticleByIdQuery>) {
-  console.log(pageContext)
   const { setMetadata } = React.useContext(SiteMetadata)
 
   const { node, next, previous } = pageContext

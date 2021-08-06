@@ -86,7 +86,6 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
       .then(res => {
         setRepo(res?.data?.viewer?.repositories?.nodes ?? [])
       })
-    console.log(process.env)
   }, [])
 
   return (
