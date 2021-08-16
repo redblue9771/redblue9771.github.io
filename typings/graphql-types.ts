@@ -981,10 +981,10 @@ export type MarkdownRemarkFrontmatter = {
   author?: Maybe<Scalars['String']>;
   date?: Maybe<Scalars['Date']>;
   description?: Maybe<Scalars['String']>;
-  draft?: Maybe<Scalars['Boolean']>;
   original?: Maybe<Scalars['String']>;
-  categories?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  categories?: Maybe<Array<Maybe<Scalars['String']>>>;
+  draft?: Maybe<Scalars['Boolean']>;
   series?: Maybe<Array<Maybe<Scalars['String']>>>;
   slug?: Maybe<Scalars['String']>;
 };
@@ -1178,6 +1178,7 @@ export type SitePluginPackageJson = {
   description?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
   main?: Maybe<Scalars['String']>;
+  author?: Maybe<Scalars['String']>;
   license?: Maybe<Scalars['String']>;
   dependencies?: Maybe<Array<Maybe<SitePluginPackageJsonDependencies>>>;
   devDependencies?: Maybe<Array<Maybe<SitePluginPackageJsonDevDependencies>>>;
@@ -1745,10 +1746,10 @@ export type MarkdownRemarkFrontmatterFilterInput = {
   author?: Maybe<StringQueryOperatorInput>;
   date?: Maybe<DateQueryOperatorInput>;
   description?: Maybe<StringQueryOperatorInput>;
-  draft?: Maybe<BooleanQueryOperatorInput>;
   original?: Maybe<StringQueryOperatorInput>;
-  categories?: Maybe<StringQueryOperatorInput>;
   tags?: Maybe<StringQueryOperatorInput>;
+  categories?: Maybe<StringQueryOperatorInput>;
+  draft?: Maybe<BooleanQueryOperatorInput>;
   series?: Maybe<StringQueryOperatorInput>;
   slug?: Maybe<StringQueryOperatorInput>;
 };
@@ -2066,10 +2067,10 @@ export type FileFieldsEnum =
   | 'childrenMarkdownRemark___frontmatter___author'
   | 'childrenMarkdownRemark___frontmatter___date'
   | 'childrenMarkdownRemark___frontmatter___description'
-  | 'childrenMarkdownRemark___frontmatter___draft'
   | 'childrenMarkdownRemark___frontmatter___original'
-  | 'childrenMarkdownRemark___frontmatter___categories'
   | 'childrenMarkdownRemark___frontmatter___tags'
+  | 'childrenMarkdownRemark___frontmatter___categories'
+  | 'childrenMarkdownRemark___frontmatter___draft'
   | 'childrenMarkdownRemark___frontmatter___series'
   | 'childrenMarkdownRemark___frontmatter___slug'
   | 'childrenMarkdownRemark___excerpt'
@@ -2130,10 +2131,10 @@ export type FileFieldsEnum =
   | 'childMarkdownRemark___frontmatter___author'
   | 'childMarkdownRemark___frontmatter___date'
   | 'childMarkdownRemark___frontmatter___description'
-  | 'childMarkdownRemark___frontmatter___draft'
   | 'childMarkdownRemark___frontmatter___original'
-  | 'childMarkdownRemark___frontmatter___categories'
   | 'childMarkdownRemark___frontmatter___tags'
+  | 'childMarkdownRemark___frontmatter___categories'
+  | 'childMarkdownRemark___frontmatter___draft'
   | 'childMarkdownRemark___frontmatter___series'
   | 'childMarkdownRemark___frontmatter___slug'
   | 'childMarkdownRemark___excerpt'
@@ -3694,6 +3695,7 @@ export type SitePluginPackageJsonFilterInput = {
   description?: Maybe<StringQueryOperatorInput>;
   version?: Maybe<StringQueryOperatorInput>;
   main?: Maybe<StringQueryOperatorInput>;
+  author?: Maybe<StringQueryOperatorInput>;
   license?: Maybe<StringQueryOperatorInput>;
   dependencies?: Maybe<SitePluginPackageJsonDependenciesFilterListInput>;
   devDependencies?: Maybe<SitePluginPackageJsonDevDependenciesFilterListInput>;
@@ -4064,6 +4066,7 @@ export type SitePageFieldsEnum =
   | 'pluginCreator___packageJson___description'
   | 'pluginCreator___packageJson___version'
   | 'pluginCreator___packageJson___main'
+  | 'pluginCreator___packageJson___author'
   | 'pluginCreator___packageJson___license'
   | 'pluginCreator___packageJson___dependencies'
   | 'pluginCreator___packageJson___dependencies___name'
@@ -4337,10 +4340,10 @@ export type MarkdownRemarkFieldsEnum =
   | 'frontmatter___author'
   | 'frontmatter___date'
   | 'frontmatter___description'
-  | 'frontmatter___draft'
   | 'frontmatter___original'
-  | 'frontmatter___categories'
   | 'frontmatter___tags'
+  | 'frontmatter___categories'
+  | 'frontmatter___draft'
   | 'frontmatter___series'
   | 'frontmatter___slug'
   | 'excerpt'
@@ -5149,6 +5152,7 @@ export type SitePluginFieldsEnum =
   | 'packageJson___description'
   | 'packageJson___version'
   | 'packageJson___main'
+  | 'packageJson___author'
   | 'packageJson___license'
   | 'packageJson___dependencies'
   | 'packageJson___dependencies___name'
