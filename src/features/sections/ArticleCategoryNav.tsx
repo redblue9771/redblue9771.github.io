@@ -2,25 +2,22 @@ import { IArticleGroupProps, ISearchParams } from "@/templates/articles"
 import { useSearchParams } from "@/utils/hooks"
 import { useLocation } from "@reach/router"
 import { Link } from "gatsby"
-import React from "react"
 import {
   Breadcrumb,
   BreadcrumbItemProps,
   Col,
   Container,
   Row,
-  Tab,
-  Tabs,
 } from "react-bootstrap"
 
 const BreadcrumbItem = (props: BreadcrumbItemProps) => (
   <Breadcrumb.Item linkAs={Link} {...props} />
 )
 
-function ArticleCategoryNav({ groupBy }: Partial<IArticleGroupProps>) {
+function ArticleCategoryNav({ articles }: IArticleGroupProps) {
   const location = useLocation()
   const search = useSearchParams<ISearchParams>(location.search)
-
+  const groupByKeys = Object.keys(articles.groupBy)
   return (
     <Container fluid>
       <Row className="justify-content-end flex-nowrap">
@@ -31,11 +28,9 @@ function ArticleCategoryNav({ groupBy }: Partial<IArticleGroupProps>) {
           <Breadcrumb>
             <BreadcrumbItem
               linkProps={{
-                to: `?group=none`,
+                to: ``,
               }}
-              active={
-                search.group === "none" || !search.group || search.group === ""
-              }
+              active={!search.group || !groupByKeys.includes(search.group)}
             >
               所有
             </BreadcrumbItem>
@@ -68,35 +63,40 @@ function ArticleCategoryNav({ groupBy }: Partial<IArticleGroupProps>) {
       </Row>
       <Row className="justify-content-end flex-nowrap">
         <Col className="col-auto">
-          <strong>🔖 组别：</strong>
+          <strong>🔖 标签：</strong>
         </Col>
         <Col className="col-auto">
           <Breadcrumb>
             <BreadcrumbItem
               linkProps={{
-                to: `?group=${search.group}&current=none`,
+                to: `?group=${search.group}`,
               }}
               active={
-                search.current === "none" ||
                 !search.current ||
-                search.current === ""
+                (search.group &&
+                  articles.groupBy?.[search.group]?.findIndex(
+                    item => item.fieldValue === search.current
+                  ) == -1)
               }
             >
               所有
             </BreadcrumbItem>
 
-            {groupBy?.[search.group]?.map(({ fieldValue, totalCount }, idx) => (
-              <BreadcrumbItem
-                key={idx}
-                title={fieldValue}
-                linkProps={{
-                  to: `?group=${search.group}&current=${fieldValue}`,
-                }}
-                active={search.current === fieldValue}
-              >
-                {fieldValue}({totalCount})
-              </BreadcrumbItem>
-            ))}
+            {search.group &&
+              articles.groupBy?.[search.group]?.map(
+                ({ fieldValue, totalCount }, idx) => (
+                  <BreadcrumbItem
+                    key={idx}
+                    title={fieldValue}
+                    linkProps={{
+                      to: `?group=${search.group}&current=${fieldValue}`,
+                    }}
+                    active={search.current === fieldValue}
+                  >
+                    {fieldValue}({totalCount})
+                  </BreadcrumbItem>
+                )
+              )}
           </Breadcrumb>
         </Col>
       </Row>

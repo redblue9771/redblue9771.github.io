@@ -1,7 +1,7 @@
 import { SiteMetadata } from "@/templates/main.layout"
 import { graphql, PageProps } from "gatsby"
 import React from "react"
-import { Container, Button } from "react-bootstrap"
+import { Container, Button, ButtonGroup } from "react-bootstrap"
 import { AllBookQuery } from "@/../typings/graphql-types"
 
 export const query = graphql`
@@ -26,11 +26,11 @@ export const query = graphql`
   }
 `
 
-function Library({ data, location }: PageProps<AllBookQuery>) {
+function Library({ data }: PageProps<AllBookQuery>) {
   const { setMetadata } = React.useContext(SiteMetadata)
 
   React.useEffect(() => {
-    setMetadata(prev => ({
+    setMetadata(() => ({
       title: "藏经",
       subTitle: "博采众长",
       description: "君知其难，则自能旁搜博采",
@@ -43,9 +43,9 @@ function Library({ data, location }: PageProps<AllBookQuery>) {
           <h3 className="text-new">{series}</h3>
           <ul>
             {edges.map(({ node }) => {
-              const { name, author, slug, description, keywords } = node
+              const { id, name, author, slug, description, keywords } = node
               return (
-                <li id={name} className="mb-3 " key={name}>
+                <li id={id} className="mb-3 " key={name}>
                   <div>
                     {name} - {author}
                   </div>
@@ -54,18 +54,28 @@ function Library({ data, location }: PageProps<AllBookQuery>) {
                   )}
 
                   <div className="text-muted tags mb-3">
-                    关键词：{keywords.join("、")}
+                    关键词：{keywords?.join("、")}
                   </div>
-
-                  <Button
-                    href={`${slug}`}
-                    target="_blank"
-                    rel="contents noopener noreferrer"
-                    download
-                    variant="outline-primary"
-                  >
-                    📥 Download / Read
-                  </Button>
+                  <ButtonGroup>
+                    <Button
+                      as="a"
+                      href={`${slug}`}
+                      target="_blank"
+                      rel="contents noopener noreferrer"
+                      variant="outline-primary"
+                      download
+                    >
+                      📥 下载 / Download
+                    </Button>
+                    <Button
+                      href={`${slug}`}
+                      target="_blank"
+                      rel="contents noopener noreferrer"
+                      variant="outline-primary"
+                    >
+                      📖 阅读 / Read
+                    </Button>
+                  </ButtonGroup>
                 </li>
               )
             })}

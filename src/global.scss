@@ -8,6 +8,7 @@ $max-width: 1024px;
 
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
+
 html,
 body {
   min-height: 100vh;
@@ -48,9 +49,15 @@ a {
       padding: 5rem 2rem 1rem;
       overflow: hidden;
 
-      & h1 {
+      &__title {
         font-size: 5em;
-
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-image: linear-gradient(
+          to right top,
+          #92fe9d 0%,
+          #00c9ff 100%
+        );
         @media (max-width: 767.98px) {
           font-size: 3.2rem;
         }
@@ -89,21 +96,40 @@ a {
       padding: 2rem 1rem;
 
       & p {
-        line-height: 1;
         margin-bottom: 0.6rem;
       }
     }
   }
 }
 
-.showcase-item {
-  max-width: $max-width;
-  filter: drop-shadow(0 0 6px $primary-light);
-  margin: 0 auto;
-  @media (max-width: 767.98px) {
-    filter: blur(1px);
+.showcase {
+  & .carousel-indicators {
+    @media (max-width: 767.98px) {
+      position: static;
+    }
+  }
+  &-item {
+    cursor: pointer;
+    max-width: $max-width;
+    padding: 0 24px;
+    margin: 0 auto;
     &-text {
-      text-shadow: 0 0 2px white;
+      padding: 0 24px;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-image: linear-gradient(
+        to top,
+        #fcc5e4 0%,
+        #fda34b 15%,
+        #ff7882 35%,
+        #c8699e 52%,
+        #7046aa 71%,
+        #0c1db8 87%,
+        #020f75 100%
+      );
+      @media (max-width: 767.98px) {
+        position: static;
+      }
     }
   }
 }
@@ -223,10 +249,9 @@ a {
     & td:first-child {
       white-space: nowrap;
       padding: 0 0.4em;
-      font-weight: 600;
+      font-weight: 500;
     }
     & td:last-child {
-      font-size: 14px;
       word-break: break-all;
     }
   }

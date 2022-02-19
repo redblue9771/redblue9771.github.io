@@ -3,6 +3,7 @@ require("dotenv").config({
 })
 
 module.exports = {
+  jsxRuntime: "automatic",
   siteMetadata: {
     title: `RedBlue | 赤琦`,
     author: `RedBlue`,

@@ -48,10 +48,10 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
   >([])
 
   React.useEffect(() => {
-    setMetadata(prev => ({
+    setMetadata(_prev => ({
       title: "RedBlue | 赤琦",
       subTitle: "凡所有相，皆是虚妄",
-      description: "JUST FOR MAN FASHION NEWISM",
+      description: "JUST FOR MAN FASHION NEWISM.",
     }))
   }, [])
 
@@ -88,22 +88,20 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
       })
   }, [])
 
+  const handlePush = (link: string) => () => {
+    window.open(link, "_blank")
+  }
+
   return (
     <React.Fragment>
-      <Carousel variant="dark">
+      <Carousel variant="dark" className="showcase">
         {allCarousel.nodes.map(({ id, title, link, cover, description }) => (
-          <Carousel.Item
-            key={id}
-            as="a"
-            href={link}
-            target="_blank"
-            rel="noolopp"
-          >
+          <Carousel.Item key={id} onClick={handlePush(link || "")}>
             <img
               className="d-block w-100 showcase-item"
-              alt={title}
-              title={title}
-              src={cover}
+              alt={title || ""}
+              title={title || ""}
+              src={cover || ""}
             />
             <Carousel.Caption className="showcase-item-text">
               <h4>{title}</h4>
@@ -123,8 +121,8 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
         </Row>
         <Row className="index-module-1 text-center text-white">
           <Col sm={12}>
-            <h2>I'm RedBlue</h2>
-            <h3>你好，我是赤琦</h3>
+            <h2>I'm RedBlue.</h2>
+            <h3>你好，我是赤琦。</h3>
           </Col>
           <Container
             as={Row}
