@@ -1,14 +1,12 @@
-import React from "react"
-
 function Footer() {
+  const currentYear = new Date().getFullYear()
   return (
     <footer className="footer">
       <div className="footer__wrapper" id="fl">
         <div className="footer__wrapper__content text-white text-center">
-          <p>版权所有 &copy; 2017 - {new Date().getFullYear()} 赤琦</p>
+          <p>版权所有 &copy; 2017 - {currentYear} 赤琦</p>
           <p>
-            Copyright &copy; 2017 - {new Date().getFullYear()} RedBlue. All
-            Rights Reserved.丨(CC BY-SA 4.0)
+            Copyright &copy; 2017 - {currentYear} RedBlue. All Rights Reserved.
           </p>
           <p>
             <a href="/index.xml" target="_blank" className="text-light">
@@ -19,6 +17,7 @@ function Footer() {
               href="https://github.com/redblue9771"
               target="_blank"
               className="text-light"
+              rel="noopener noreferrer"
             >
               <i className="bi bi-github" /> GitHub
             </a>

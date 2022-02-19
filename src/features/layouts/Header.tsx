@@ -1,6 +1,5 @@
-import React from "react"
+import { ISiteSiteMetadata } from "@/templates/main.layout"
 import { Container } from "react-bootstrap"
-import { SiteSiteMetadata } from "typings/graphql-types"
 
 interface IMainNavBarProps {
   context: ISiteSiteMetadata
@@ -12,7 +11,9 @@ const Header = ({ context }: IMainNavBarProps) => {
       {/* {renderTitle()} */}
       <div className="header__wrapper">
         <Container className="header__wrapper__content" fluid="lg">
-          <h1>{context.subTitle}</h1>
+          <h1 className="header__wrapper__content__title">
+            {context.subTitle}
+          </h1>
           <h2>{context.description}</h2>
           <h3> {context.date}</h3>
         </Container>

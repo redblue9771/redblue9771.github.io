@@ -5,49 +5,42 @@ import { useLocation } from "@reach/router"
 import { Link, PageProps } from "gatsby"
 import React from "react"
 import { Container } from "react-bootstrap"
-import { MarkdownRemarkConnection } from "typings/graphql-types"
+import {
+  MarkdownRemarkGroupConnection,
+  SitePageGroupConnection,
+} from "typings/graphql-types"
 import { SiteMetadata } from "./main.layout"
 
 export interface ISearchParams {
-  group?: string
+  group?: IArticleGroupByKeys
   current?: string
   page?: string
   search?: string
 }
 
-interface IGroupItem {
-  fieldValue: string
+type IArticleGroupByKeys = keyof IArticleGroupBy
+
+interface IArticleGroupBy {
+  categories: MarkdownRemarkGroupConnection[]
+  tags: MarkdownRemarkGroupConnection[]
+  series: MarkdownRemarkGroupConnection[]
 }
 
-interface IGroupList {
-  [propsName: string]: IGroupItem[]
-}
-
-interface IGroupByItem {
-  nodes: any[]
-}
-interface IGroupBy {
-  [propsName: string]: IGroupByItem
-}
-
-interface IGroupByCurrent {
-  all: MarkdownRemarkConnection
-  categories: MarkdownRemarkConnection
-  tags: MarkdownRemarkConnection
-  series: MarkdownRemarkConnection
+interface IArticles {
+  list: SitePageGroupConnection
+  groupBy: IArticleGroupBy
 }
 
 export interface IArticleGroupProps {
-  groupList: IGroupList
-  groupBy: IGroupByCurrent
+  articles: IArticles
 }
 
 function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
+  const { articles } = pageContext
   const { setMetadata } = React.useContext(SiteMetadata)
   React.useEffect(() => {
     setMetadata(prev => ({
       ...prev,
-
       title: "博文",
       subTitle: "我非生而知之者",
       description: "学而时习之",
@@ -58,30 +51,21 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
   const location = useLocation()
   const search = useSearchParams<ISearchParams>(location.search)
 
-  const { groupBy } = pageContext
   const articleList = React.useMemo(() => {
-    if (
-      !(
-        search.current &&
-        search.group &&
-        search.current !== "none" &&
-        search.current !== ""
+    const current =
+      search.group &&
+      articles.groupBy?.[search.group]?.find(
+        item => item.fieldValue === search.current
       )
-    ) {
-      return groupBy.all?.edges?.map(item => item.node)
-    }
-    const current: MarkdownRemarkConnection = groupBy?.[search.group]?.find(
-      item => item.fieldValue === search.current
-    )
     if (current) {
       return current.nodes
     }
-    return groupBy.all?.edges?.map(item => item.node)
-  }, [groupBy, search])
+    return articles.list?.edges?.map(item => item.node)
+  }, [articles, search])
 
   return (
     <Container fluid="lg" className="text-dark">
-      <ArticleCategoryNav groupBy={groupBy} />
+      <ArticleCategoryNav articles={articles} />
       <TimeLine.Container>
         {articleList?.map((node: any) => (
           <TimeLine.Item

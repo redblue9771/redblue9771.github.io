@@ -261,9 +261,10 @@ export type Site = Node & {
   siteMetadata?: Maybe<SiteSiteMetadata>;
   port?: Maybe<Scalars['Int']>;
   host?: Maybe<Scalars['String']>;
+  jsxRuntime?: Maybe<Scalars['String']>;
   polyfill?: Maybe<Scalars['Boolean']>;
   pathPrefix?: Maybe<Scalars['String']>;
-  jsxRuntime?: Maybe<Scalars['String']>;
+  trailingSlash?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   parent?: Maybe<Node>;
   children: Array<Node>;
@@ -688,11 +689,11 @@ export type MarkdownRemarkFrontmatter = {
   author?: Maybe<Scalars['String']>;
   date?: Maybe<Scalars['Date']>;
   original?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  series?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   categories?: Maybe<Array<Maybe<Scalars['String']>>>;
+  description?: Maybe<Scalars['String']>;
   draft?: Maybe<Scalars['Boolean']>;
+  series?: Maybe<Array<Maybe<Scalars['String']>>>;
   slug?: Maybe<Scalars['String']>;
 };
 
@@ -752,12 +753,12 @@ export type Book = Node & {
   children: Array<Node>;
   internal: Internal;
   name?: Maybe<Scalars['String']>;
-  series?: Maybe<Array<Maybe<Scalars['String']>>>;
-  categories?: Maybe<Array<Maybe<Scalars['String']>>>;
   author?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   keywords?: Maybe<Array<Maybe<Scalars['String']>>>;
+  series?: Maybe<Array<Maybe<Scalars['String']>>>;
+  categories?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type Query = {
@@ -900,9 +901,10 @@ export type QuerySiteArgs = {
   siteMetadata?: InputMaybe<SiteSiteMetadataFilterInput>;
   port?: InputMaybe<IntQueryOperatorInput>;
   host?: InputMaybe<StringQueryOperatorInput>;
+  jsxRuntime?: InputMaybe<StringQueryOperatorInput>;
   polyfill?: InputMaybe<BooleanQueryOperatorInput>;
   pathPrefix?: InputMaybe<StringQueryOperatorInput>;
-  jsxRuntime?: InputMaybe<StringQueryOperatorInput>;
+  trailingSlash?: InputMaybe<StringQueryOperatorInput>;
   id?: InputMaybe<StringQueryOperatorInput>;
   parent?: InputMaybe<NodeFilterInput>;
   children?: InputMaybe<NodeFilterListInput>;
@@ -1103,12 +1105,12 @@ export type QueryBookArgs = {
   children?: InputMaybe<NodeFilterListInput>;
   internal?: InputMaybe<InternalFilterInput>;
   name?: InputMaybe<StringQueryOperatorInput>;
-  series?: InputMaybe<StringQueryOperatorInput>;
-  categories?: InputMaybe<StringQueryOperatorInput>;
   author?: InputMaybe<StringQueryOperatorInput>;
   slug?: InputMaybe<StringQueryOperatorInput>;
   description?: InputMaybe<StringQueryOperatorInput>;
   keywords?: InputMaybe<StringQueryOperatorInput>;
+  series?: InputMaybe<StringQueryOperatorInput>;
+  categories?: InputMaybe<StringQueryOperatorInput>;
 };
 
 
@@ -1286,11 +1288,11 @@ export type MarkdownRemarkFrontmatterFilterInput = {
   author?: InputMaybe<StringQueryOperatorInput>;
   date?: InputMaybe<DateQueryOperatorInput>;
   original?: InputMaybe<StringQueryOperatorInput>;
-  description?: InputMaybe<StringQueryOperatorInput>;
-  series?: InputMaybe<StringQueryOperatorInput>;
   tags?: InputMaybe<StringQueryOperatorInput>;
   categories?: InputMaybe<StringQueryOperatorInput>;
+  description?: InputMaybe<StringQueryOperatorInput>;
   draft?: InputMaybe<BooleanQueryOperatorInput>;
+  series?: InputMaybe<StringQueryOperatorInput>;
   slug?: InputMaybe<StringQueryOperatorInput>;
 };
 
@@ -1362,12 +1364,12 @@ export type BookFilterInput = {
   children?: InputMaybe<NodeFilterListInput>;
   internal?: InputMaybe<InternalFilterInput>;
   name?: InputMaybe<StringQueryOperatorInput>;
-  series?: InputMaybe<StringQueryOperatorInput>;
-  categories?: InputMaybe<StringQueryOperatorInput>;
   author?: InputMaybe<StringQueryOperatorInput>;
   slug?: InputMaybe<StringQueryOperatorInput>;
   description?: InputMaybe<StringQueryOperatorInput>;
   keywords?: InputMaybe<StringQueryOperatorInput>;
+  series?: InputMaybe<StringQueryOperatorInput>;
+  categories?: InputMaybe<StringQueryOperatorInput>;
 };
 
 export type FileConnection = {
@@ -1607,11 +1609,11 @@ export type FileFieldsEnum =
   | 'childrenMarkdownRemark___frontmatter___author'
   | 'childrenMarkdownRemark___frontmatter___date'
   | 'childrenMarkdownRemark___frontmatter___original'
-  | 'childrenMarkdownRemark___frontmatter___description'
-  | 'childrenMarkdownRemark___frontmatter___series'
   | 'childrenMarkdownRemark___frontmatter___tags'
   | 'childrenMarkdownRemark___frontmatter___categories'
+  | 'childrenMarkdownRemark___frontmatter___description'
   | 'childrenMarkdownRemark___frontmatter___draft'
+  | 'childrenMarkdownRemark___frontmatter___series'
   | 'childrenMarkdownRemark___frontmatter___slug'
   | 'childrenMarkdownRemark___excerpt'
   | 'childrenMarkdownRemark___rawMarkdownBody'
@@ -1671,11 +1673,11 @@ export type FileFieldsEnum =
   | 'childMarkdownRemark___frontmatter___author'
   | 'childMarkdownRemark___frontmatter___date'
   | 'childMarkdownRemark___frontmatter___original'
-  | 'childMarkdownRemark___frontmatter___description'
-  | 'childMarkdownRemark___frontmatter___series'
   | 'childMarkdownRemark___frontmatter___tags'
   | 'childMarkdownRemark___frontmatter___categories'
+  | 'childMarkdownRemark___frontmatter___description'
   | 'childMarkdownRemark___frontmatter___draft'
+  | 'childMarkdownRemark___frontmatter___series'
   | 'childMarkdownRemark___frontmatter___slug'
   | 'childMarkdownRemark___excerpt'
   | 'childMarkdownRemark___rawMarkdownBody'
@@ -1948,12 +1950,12 @@ export type FileFieldsEnum =
   | 'childrenBook___internal___owner'
   | 'childrenBook___internal___type'
   | 'childrenBook___name'
-  | 'childrenBook___series'
-  | 'childrenBook___categories'
   | 'childrenBook___author'
   | 'childrenBook___slug'
   | 'childrenBook___description'
   | 'childrenBook___keywords'
+  | 'childrenBook___series'
+  | 'childrenBook___categories'
   | 'childBook___id'
   | 'childBook___parent___id'
   | 'childBook___parent___parent___id'
@@ -1993,12 +1995,12 @@ export type FileFieldsEnum =
   | 'childBook___internal___owner'
   | 'childBook___internal___type'
   | 'childBook___name'
-  | 'childBook___series'
-  | 'childBook___categories'
   | 'childBook___author'
   | 'childBook___slug'
   | 'childBook___description'
   | 'childBook___keywords'
+  | 'childBook___series'
+  | 'childBook___categories'
   | 'id'
   | 'parent___id'
   | 'parent___parent___id'
@@ -2495,9 +2497,10 @@ export type SiteFieldsEnum =
   | 'siteMetadata___siteUrl'
   | 'port'
   | 'host'
+  | 'jsxRuntime'
   | 'polyfill'
   | 'pathPrefix'
-  | 'jsxRuntime'
+  | 'trailingSlash'
   | 'id'
   | 'parent___id'
   | 'parent___parent___id'
@@ -2631,9 +2634,10 @@ export type SiteFilterInput = {
   siteMetadata?: InputMaybe<SiteSiteMetadataFilterInput>;
   port?: InputMaybe<IntQueryOperatorInput>;
   host?: InputMaybe<StringQueryOperatorInput>;
+  jsxRuntime?: InputMaybe<StringQueryOperatorInput>;
   polyfill?: InputMaybe<BooleanQueryOperatorInput>;
   pathPrefix?: InputMaybe<StringQueryOperatorInput>;
-  jsxRuntime?: InputMaybe<StringQueryOperatorInput>;
+  trailingSlash?: InputMaybe<StringQueryOperatorInput>;
   id?: InputMaybe<StringQueryOperatorInput>;
   parent?: InputMaybe<NodeFilterInput>;
   children?: InputMaybe<NodeFilterListInput>;
@@ -3745,11 +3749,11 @@ export type MarkdownRemarkFieldsEnum =
   | 'frontmatter___author'
   | 'frontmatter___date'
   | 'frontmatter___original'
-  | 'frontmatter___description'
-  | 'frontmatter___series'
   | 'frontmatter___tags'
   | 'frontmatter___categories'
+  | 'frontmatter___description'
   | 'frontmatter___draft'
+  | 'frontmatter___series'
   | 'frontmatter___slug'
   | 'excerpt'
   | 'rawMarkdownBody'
@@ -4402,12 +4406,12 @@ export type BookFieldsEnum =
   | 'internal___owner'
   | 'internal___type'
   | 'name'
-  | 'series'
-  | 'categories'
   | 'author'
   | 'slug'
   | 'description'
-  | 'keywords';
+  | 'keywords'
+  | 'series'
+  | 'categories';
 
 export type BookGroupConnection = {
   totalCount: Scalars['Int'];
@@ -4458,50 +4462,50 @@ export type BookSortInput = {
 export type SeoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SeoQuery = { site?: { siteMetadata?: { title?: string | null | undefined, siteUrl?: string | null | undefined, description?: string | null | undefined, author?: string | null | undefined } | null | undefined } | null | undefined };
+export type SeoQuery = { site?: { siteMetadata?: { title?: string | null, siteUrl?: string | null, description?: string | null, author?: string | null } | null } | null };
 
 export type SiteMetaQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SiteMetaQuery = { site?: { siteMetadata?: { title?: string | null | undefined, siteUrl?: string | null | undefined, description?: string | null | undefined, author?: string | null | undefined } | null | undefined } | null | undefined };
+export type SiteMetaQuery = { site?: { siteMetadata?: { title?: string | null, siteUrl?: string | null, description?: string | null, author?: string | null } | null } | null };
 
 export type NotFoundPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NotFoundPageQuery = { allCarousel: { nodes: Array<{ id: string, description?: string | null | undefined, cover?: string | null | undefined, link?: string | null | undefined, title?: string | null | undefined }> } };
+export type NotFoundPageQuery = { allCarousel: { nodes: Array<{ id: string, description?: string | null, cover?: string | null, link?: string | null, title?: string | null }> } };
 
 export type IndexPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type IndexPageQuery = { allCarousel: { nodes: Array<{ id: string, description?: string | null | undefined, cover?: string | null | undefined, link?: string | null | undefined, title?: string | null | undefined }> }, allMarkdownRemark: { nodes: Array<{ id: string, excerpt?: string | null | undefined, fields?: { slug?: string | null | undefined } | null | undefined, frontmatter?: { title?: string | null | undefined, slug?: string | null | undefined, description?: string | null | undefined, author?: string | null | undefined, date?: any | null | undefined } | null | undefined }> } };
+export type IndexPageQuery = { allCarousel: { nodes: Array<{ id: string, description?: string | null, cover?: string | null, link?: string | null, title?: string | null }> }, allMarkdownRemark: { nodes: Array<{ id: string, excerpt?: string | null, fields?: { slug?: string | null } | null, frontmatter?: { title?: string | null, slug?: string | null, description?: string | null, author?: string | null, date?: any | null } | null }> } };
 
 export type AllBookQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllBookQuery = { allBook: { group: Array<{ fieldValue?: string | null | undefined, edges: Array<{ node: { id: string, name?: string | null | undefined, series?: Array<string | null | undefined> | null | undefined, slug?: string | null | undefined, keywords?: Array<string | null | undefined> | null | undefined, author?: string | null | undefined, categories?: Array<string | null | undefined> | null | undefined, description?: string | null | undefined } }> }> } };
+export type AllBookQuery = { allBook: { group: Array<{ fieldValue?: string | null, edges: Array<{ node: { id: string, name?: string | null, series?: Array<string | null> | null, slug?: string | null, keywords?: Array<string | null> | null, author?: string | null, categories?: Array<string | null> | null, description?: string | null } }> }> } };
 
-export type GatsbyImageSharpFixedFragment = { base64?: string | null | undefined, width: number, height: number, src: string, srcSet: string };
+export type GatsbyImageSharpFixedFragment = { base64?: string | null, width: number, height: number, src: string, srcSet: string };
 
-export type GatsbyImageSharpFixed_TracedSvgFragment = { tracedSVG?: string | null | undefined, width: number, height: number, src: string, srcSet: string };
+export type GatsbyImageSharpFixed_TracedSvgFragment = { tracedSVG?: string | null, width: number, height: number, src: string, srcSet: string };
 
-export type GatsbyImageSharpFixed_WithWebpFragment = { base64?: string | null | undefined, width: number, height: number, src: string, srcSet: string, srcWebp?: string | null | undefined, srcSetWebp?: string | null | undefined };
+export type GatsbyImageSharpFixed_WithWebpFragment = { base64?: string | null, width: number, height: number, src: string, srcSet: string, srcWebp?: string | null, srcSetWebp?: string | null };
 
-export type GatsbyImageSharpFixed_WithWebp_TracedSvgFragment = { tracedSVG?: string | null | undefined, width: number, height: number, src: string, srcSet: string, srcWebp?: string | null | undefined, srcSetWebp?: string | null | undefined };
+export type GatsbyImageSharpFixed_WithWebp_TracedSvgFragment = { tracedSVG?: string | null, width: number, height: number, src: string, srcSet: string, srcWebp?: string | null, srcSetWebp?: string | null };
 
 export type GatsbyImageSharpFixed_NoBase64Fragment = { width: number, height: number, src: string, srcSet: string };
 
-export type GatsbyImageSharpFixed_WithWebp_NoBase64Fragment = { width: number, height: number, src: string, srcSet: string, srcWebp?: string | null | undefined, srcSetWebp?: string | null | undefined };
+export type GatsbyImageSharpFixed_WithWebp_NoBase64Fragment = { width: number, height: number, src: string, srcSet: string, srcWebp?: string | null, srcSetWebp?: string | null };
 
-export type GatsbyImageSharpFluidFragment = { base64?: string | null | undefined, aspectRatio: number, src: string, srcSet: string, sizes: string };
+export type GatsbyImageSharpFluidFragment = { base64?: string | null, aspectRatio: number, src: string, srcSet: string, sizes: string };
 
 export type GatsbyImageSharpFluidLimitPresentationSizeFragment = { maxHeight: number, maxWidth: number };
 
-export type GatsbyImageSharpFluid_TracedSvgFragment = { tracedSVG?: string | null | undefined, aspectRatio: number, src: string, srcSet: string, sizes: string };
+export type GatsbyImageSharpFluid_TracedSvgFragment = { tracedSVG?: string | null, aspectRatio: number, src: string, srcSet: string, sizes: string };
 
-export type GatsbyImageSharpFluid_WithWebpFragment = { base64?: string | null | undefined, aspectRatio: number, src: string, srcSet: string, srcWebp?: string | null | undefined, srcSetWebp?: string | null | undefined, sizes: string };
+export type GatsbyImageSharpFluid_WithWebpFragment = { base64?: string | null, aspectRatio: number, src: string, srcSet: string, srcWebp?: string | null, srcSetWebp?: string | null, sizes: string };
 
-export type GatsbyImageSharpFluid_WithWebp_TracedSvgFragment = { tracedSVG?: string | null | undefined, aspectRatio: number, src: string, srcSet: string, srcWebp?: string | null | undefined, srcSetWebp?: string | null | undefined, sizes: string };
+export type GatsbyImageSharpFluid_WithWebp_TracedSvgFragment = { tracedSVG?: string | null, aspectRatio: number, src: string, srcSet: string, srcWebp?: string | null, srcSetWebp?: string | null, sizes: string };
 
 export type GatsbyImageSharpFluid_NoBase64Fragment = { aspectRatio: number, src: string, srcSet: string, sizes: string };
 
-export type GatsbyImageSharpFluid_WithWebp_NoBase64Fragment = { aspectRatio: number, src: string, srcSet: string, srcWebp?: string | null | undefined, srcSetWebp?: string | null | undefined, sizes: string };
+export type GatsbyImageSharpFluid_WithWebp_NoBase64Fragment = { aspectRatio: number, src: string, srcSet: string, srcWebp?: string | null, srcSetWebp?: string | null, sizes: string };

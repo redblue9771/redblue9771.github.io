@@ -47,15 +47,11 @@ export type ArticleByIdQuery = {
   previous?: Maybe<MarkdownRemarkFragmentFragment>
 }
 
-function Article({
-  pageContext,
-  location,
-  ...props
-}: PageProps<null, ArticleByIdQuery>) {
+function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
   const { setMetadata } = React.useContext(SiteMetadata)
 
   const { node, next, previous } = pageContext
-  const { frontmatter, fields } = node
+  const { frontmatter } = node
 
   React.useEffect(() => {
     setMetadata(prev => ({
@@ -105,9 +101,8 @@ function Article({
                     <td>
                       采用&nbsp;
                       <a
-                        rel="license"
+                        rel="license noopener noreferrer"
                         href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-                        // eslint-disable-next-line react/jsx-no-target-blank
                         target="_blank"
                       >
                         <i className="bi bi-badge-cc" />

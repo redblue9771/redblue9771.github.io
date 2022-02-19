@@ -10,6 +10,8 @@
     ".cache"
   ],
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
     "module": "commonjs",
     "target": "ESNext",
     "jsx": "react-jsx",

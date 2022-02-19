@@ -169,16 +169,18 @@ exports.createPages = async ({ graphql, actions }) => {
   if (err1 || err2 || err3 || err4) {
     console.error(err1, err2, err3, err4)
   }
-
+  console.log(articleList.allMarkdownRemark);
   createPage({
     path: `/articles`,
     component: path.resolve(`./src/templates/articles.tsx`),
     context: {
-      groupBy: {
-        all: articleList.allMarkdownRemark,
-        categories: categoryNode.allMarkdownRemark.group,
-        tags: tagNode.allMarkdownRemark.group,
-        series: seriesNode.allMarkdownRemark.group,
+      articles: {
+        list: articleList.allMarkdownRemark,
+        groupBy: {
+          categories: categoryNode.allMarkdownRemark.group,
+          tags: tagNode.allMarkdownRemark.group,
+          series: seriesNode.allMarkdownRemark.group,
+        }
       },
       // This time the entire product is passed down as context
     },
