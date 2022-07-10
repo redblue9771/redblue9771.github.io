@@ -4,7 +4,7 @@ import React from "react"
 import { Container, Button, ButtonGroup } from "react-bootstrap"
 
 export const query = graphql`
-  query allBook {
+  query queryBooksForLibrary {
     allBook {
       group(field: series) {
         fieldValue
@@ -18,6 +18,7 @@ export const query = graphql`
             author
             categories
             description
+            download
           }
         }
       }
@@ -25,7 +26,7 @@ export const query = graphql`
   }
 `
 
-function Library({ data }: PageProps<Queries.allBookQuery>) {
+function Library({ data }: PageProps<Queries.queryBooksForLibraryQuery>) {
   const { setMetadata } = React.useContext(SiteMetadata)
 
   React.useEffect(() => {
@@ -45,7 +46,15 @@ function Library({ data }: PageProps<Queries.allBookQuery>) {
           <h3 className="text-new">{series}</h3>
           <ul>
             {edges.map(({ node }) => {
-              const { id, name, author, slug, description, keywords } = node
+              const {
+                id,
+                name,
+                author,
+                slug,
+                description,
+                keywords,
+                download,
+              } = node
               return (
                 <li id={id} className="mb-3 " key={name}>
                   <div>
@@ -61,7 +70,7 @@ function Library({ data }: PageProps<Queries.allBookQuery>) {
                   <ButtonGroup>
                     <Button
                       as="a"
-                      href={`${slug}`}
+                      href={(download || slug) ?? "/"}
                       target="_blank"
                       rel="contents noopener noreferrer"
                       variant="outline-primary"

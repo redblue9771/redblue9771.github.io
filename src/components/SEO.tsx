@@ -42,7 +42,7 @@ const SEO = ({ title, description }: ICustomSiteMetadata) => {
       titleTemplate={`%s - ${
         location.pathname === "" || location.pathname === "/"
           ? "其实你知的我是那面"
-          : seo.title
+          : defaultTitle
       }`}
       htmlAttributes={{
         lang: "zh-cmn-Hans",
