@@ -2,26 +2,18 @@ import { Divider } from "@/components"
 import { Link, PageProps } from "gatsby"
 import React from "react"
 import { Col, Container, Row } from "react-bootstrap"
-import {
-  MarkdownHeading,
-  MarkdownRemark,
-  MarkdownRemarkFields,
-  MarkdownRemarkFrontmatter,
-  MarkdownWordCount,
-  Maybe,
-} from "typings/graphql-types"
-import { SiteMetadata } from "./main.layout"
 import "katex/dist/katex.min.css"
 import "prismjs/themes/prism-tomorrow.css"
+import { SiteMetadata } from "./main.layout"
 
 export type MarkdownRemarkFragmentFragment = Pick<
-  MarkdownRemark,
+  Queries.MarkdownRemark,
   "id" | "tableOfContents" | "timeToRead" | "excerpt" | "html"
 > & {
-  fields?: Maybe<Pick<MarkdownRemarkFields, "slug">>
-  frontmatter?: Maybe<
+  fields?: Queries.Maybe<Pick<Queries.MarkdownRemarkFields, "slug">>
+  frontmatter?: Queries.Maybe<
     Pick<
-      MarkdownRemarkFrontmatter,
+      Queries.MarkdownRemarkFrontmatter,
       | "title"
       | "author"
       | "date"
@@ -34,17 +26,19 @@ export type MarkdownRemarkFragmentFragment = Pick<
       | "tags"
     >
   >
-  headings?: Maybe<
-    Array<Maybe<Pick<MarkdownHeading, "id" | "value" | "depth">>>
+  headings?: Queries.Maybe<
+    Array<
+      Queries.Maybe<Pick<Queries.MarkdownHeading, "id" | "value" | "depth">>
+    >
   >
-  wordCount?: Maybe<
-    Pick<MarkdownWordCount, "words" | "sentences" | "paragraphs">
+  wordCount?: Queries.Maybe<
+    Pick<Queries.MarkdownWordCount, "words" | "sentences" | "paragraphs">
   >
 }
 export type ArticleByIdQuery = {
   node: MarkdownRemarkFragmentFragment
-  next?: Maybe<MarkdownRemarkFragmentFragment>
-  previous?: Maybe<MarkdownRemarkFragmentFragment>
+  next?: Queries.Maybe<MarkdownRemarkFragmentFragment>
+  previous?: Queries.Maybe<MarkdownRemarkFragmentFragment>
 }
 
 function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
@@ -54,12 +48,13 @@ function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
   const { frontmatter } = node
 
   React.useEffect(() => {
-    setMetadata(prev => ({
-      ...prev,
-      title: frontmatter?.title,
-      subTitle: frontmatter?.title,
-      description: frontmatter?.description,
-      date: frontmatter?.date,
+    setMetadata(() => ({
+      author: null,
+      siteUrl: null,
+      title: `${frontmatter?.title}`,
+      subTitle: `${frontmatter?.title}`,
+      description: `${frontmatter?.description}`,
+      date: `${frontmatter?.date}`,
     }))
   }, [frontmatter])
 

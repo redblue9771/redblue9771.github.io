@@ -2,23 +2,29 @@ import { SEO } from "@/components"
 import "@/global.scss"
 import { useClientRect } from "@/utils/hooks"
 import React, { Dispatch, SetStateAction } from "react"
-import { SiteSiteMetadata } from "typings/graphql-types"
 import Footer from "../features/layouts/Footer"
 import Header from "../features/layouts/Header"
 import Navbar from "../features/layouts/MainNavBar"
 
-export interface ISiteSiteMetadata extends SiteSiteMetadata {
-  subTitle?: string
-  date?: string
+export type ICustomSiteMetadata = Queries.SiteSiteMetadata & {
+  subTitle: Queries.Maybe<string>
+  date: Queries.Maybe<string>
 }
 
-interface ISiteMetadata {
-  metadata: ISiteSiteMetadata
-  setMetadata: Dispatch<SetStateAction<SiteSiteMetadata>>
+type IPageMetadata = {
+  metadata: ICustomSiteMetadata
+  setMetadata: Dispatch<SetStateAction<ICustomSiteMetadata>>
 }
 
-const defaultContextValue: ISiteMetadata = {
-  metadata: {},
+const defaultContextValue: IPageMetadata = {
+  metadata: {
+    author: null,
+    description: null,
+    siteUrl: null,
+    title: null,
+    subTitle: null,
+    date: null,
+  },
   setMetadata: () => {},
 }
 

@@ -1,7 +1,11 @@
-import { IArticleGroupProps, ISearchParams } from "@/templates/articles"
+import type {
+  IArticleGroupProps,
+  IRouteSearchParams,
+} from "@/templates/articles"
 import { useSearchParams } from "@/utils/hooks"
 import { useLocation } from "@reach/router"
 import { Link } from "gatsby"
+import React from "react"
 import {
   Breadcrumb,
   BreadcrumbItemProps,
@@ -16,7 +20,7 @@ const BreadcrumbItem = (props: BreadcrumbItemProps) => (
 
 function ArticleCategoryNav({ articles }: IArticleGroupProps) {
   const location = useLocation()
-  const search = useSearchParams<ISearchParams>(location.search)
+  const search = useSearchParams<IRouteSearchParams>(location.search)
   const groupByKeys = Object.keys(articles.groupBy)
   return (
     <Container fluid>

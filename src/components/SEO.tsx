@@ -1,28 +1,38 @@
+import type { ICustomSiteMetadata } from "@/templates/main.layout"
+import { useLocation } from "@reach/router"
+import { graphql, useStaticQuery } from "gatsby"
 import React from "react"
 import { Helmet } from "react-helmet"
-import { useLocation } from "@reach/router"
-import { useStaticQuery, graphql } from "gatsby"
-import { SiteSiteMetadata } from "typings/graphql-types"
 
-const SEO = ({ title, description }: SiteSiteMetadata) => {
+const query = graphql`
+  query SEO {
+    site {
+      siteMetadata {
+        title
+        siteUrl
+        description
+        author
+      }
+    }
+  }
+`
+
+const SEO = ({ title, description }: ICustomSiteMetadata) => {
   const { pathname } = useLocation()
-  const { site } = useStaticQuery(query)
+  const { site } = useStaticQuery<Queries.SEOQuery>(query)
   const location = useLocation()
 
   const {
     title: defaultTitle,
-    titleTemplate,
-    defaultDescription,
+    description: defaultDescription,
     siteUrl,
-    defaultImage,
-    twitterUsername,
     author,
-  } = site.siteMetadata
+  } = site?.siteMetadata ?? {}
 
   const seo = {
-    title: title || defaultTitle,
-    description: description || defaultDescription,
-    image: `${siteUrl}${defaultImage}`,
+    title: `${title ?? defaultTitle}`,
+    description: `${description ?? defaultDescription}`,
+    image: `${siteUrl}`,
     url: `${siteUrl}${pathname}`,
   }
 
@@ -32,7 +42,7 @@ const SEO = ({ title, description }: SiteSiteMetadata) => {
       titleTemplate={`%s - ${
         location.pathname === "" || location.pathname === "/"
           ? "其实你知的我是那面"
-          : site.siteMetadata.title
+          : seo.title
       }`}
       htmlAttributes={{
         lang: "zh-cmn-Hans",
@@ -48,9 +58,9 @@ const SEO = ({ title, description }: SiteSiteMetadata) => {
       )}
       {seo.image && <meta property="og:image" content={seo.image} />}
       <meta name="twitter:card" content="summary_large_image" />
-      {twitterUsername && (
+      {/* {twitterUsername && (
         <meta name="twitter:creator" content={twitterUsername} />
-      )}
+      )} */}
       {seo.title && <meta name="twitter:title" content={seo.title} />}
       {seo.description && (
         <meta name="twitter:description" content={seo.description} />
@@ -59,16 +69,5 @@ const SEO = ({ title, description }: SiteSiteMetadata) => {
     </Helmet>
   )
 }
-const query = graphql`
-  query SEO {
-    site {
-      siteMetadata {
-        title
-        siteUrl
-        description
-        author
-      }
-    }
-  }
-`
+
 export default SEO

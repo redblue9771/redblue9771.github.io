@@ -1,9 +1,8 @@
-import { IndexPageQuery } from "@/../typings/graphql-types"
 import { SiteMetadata } from "@/templates/main.layout"
+import type { Repository } from "@/typings/github.schemas"
 import { graphql, Link, PageProps } from "gatsby"
 import React from "react"
 import { Carousel, Col, Container, Figure, Row } from "react-bootstrap"
-import { ViewerHovercardContext } from "typings/schemas"
 
 export const query = graphql`
   query IndexPage {
@@ -39,16 +38,17 @@ export const query = graphql`
   }
 `
 
-const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
+const IndexPage = ({ data }: PageProps<Queries.IndexPageQuery>) => {
   const { allMarkdownRemark, allCarousel } = data
   const { setMetadata } = React.useContext(SiteMetadata)
 
-  const [repo, setRepo] = React.useState<
-    NonNullable<ViewerHovercardContext["viewer"]["repositories"]["nodes"]>
-  >([])
+  const [repositories, setRepositories] = React.useState<Repository[]>([])
 
   React.useEffect(() => {
-    setMetadata(_prev => ({
+    setMetadata(() => ({
+      author: null,
+      siteUrl: null,
+      date: null,
       title: "RedBlue | 赤琦",
       subTitle: "凡所有相，皆是虚妄",
       description: "JUST FOR MAN FASHION NEWISM.",
@@ -84,7 +84,7 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
     })
       .then(res => res.json())
       .then(res => {
-        setRepo(res?.data?.viewer?.repositories?.nodes ?? [])
+        setRepositories(res?.data?.viewer?.repositories?.nodes ?? [])
       })
   }, [])
 
@@ -162,14 +162,14 @@ const IndexPage = ({ data }: PageProps<IndexPageQuery>) => {
                 <dt>
                   <h4>·&nbsp;项目&nbsp;·</h4>
                 </dt>
-                {repo.length === 0 && (
+                {repositories.length === 0 && (
                   <dd>
                     <p className="masked">
                       🏃‍♂️ 从 github.com/redblue9771 拉取中…
                     </p>
                   </dd>
                 )}
-                {repo.map(({ name, description, url }) => (
+                {repositories.map(({ name, description, url }) => (
                   <dd key={name}>
                     <a
                       href={url}

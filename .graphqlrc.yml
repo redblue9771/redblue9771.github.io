@@ -1,6 +1,0 @@
-schema: ./configs/github.graphql
-generates:
-  ./typings/schemas.ts:
-    plugins:
-      - typescript
-      - typescript-operations

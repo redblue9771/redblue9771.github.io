@@ -1,6 +1,10 @@
-const path = require("path")
+import type { GatsbyNode } from "gatsby"
+import { createFilePath } from "gatsby-source-filesystem"
+import path from "path"
 
-exports.onCreateWebpackConfig = ({ _, actions }) => {
+export const onCreateWebpackConfig: GatsbyNode["onCreateWebpackConfig"] = ({
+  actions,
+}) => {
   actions.setWebpackConfig({
     resolve: {
       modules: [path.resolve(__dirname, "src"), "node_modules"],
@@ -9,22 +13,38 @@ exports.onCreateWebpackConfig = ({ _, actions }) => {
   })
 }
 
-exports.onCreateNode = ({ node, getNode, actions }) => {
-  const { createNodeField } = actions
+export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
+  async ({ actions: { createTypes } }) => {
+    createTypes(`
+     type MarkdownRemark implements Node {
+      slug: File @link(from: "fields.slug")
+     }
+   `)
+  }
+
+export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
+  node,
+  getNode,
+  actions: { createNodeField },
+}) => {
   if (node.internal.type === `MarkdownRemark`) {
-    const fileNode = getNode(node.parent)
+    const slug = createFilePath({ node, getNode, trailingSlash: false })
+
     createNodeField({
       node,
       name: `slug`,
-      value: `/articles/${fileNode.name.toLowerCase()}`,
+      value: `/articles${slug.toLowerCase()}`,
     })
   }
 }
 
-exports.createPages = async ({ graphql, actions }) => {
+export const createPages: GatsbyNode["createPages"] = async ({
+  graphql,
+  actions,
+}) => {
   const { createPage } = actions
-  const { data: tagNode, errors: err1 } = await graphql(`
-    query allArticle {
+  const { data: categoryNodes, errors: err1 } = await graphql<Queries.Query>(`
+    query allArticleGroupByCategories {
       allMarkdownRemark(
         filter: { frontmatter: { draft: { ne: true } } }
         sort: { fields: [frontmatter___date], order: DESC }
@@ -52,8 +72,8 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `)
-  const { data: categoryNode, errors: err2 } = await graphql(`
-    query allArticle {
+  const { data: tagNodes, errors: err2 } = await graphql<Queries.Query>(`
+    query allArticleGroupByTags {
       allMarkdownRemark(
         filter: { frontmatter: { draft: { ne: true } } }
         sort: { fields: [frontmatter___date], order: DESC }
@@ -81,8 +101,8 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `)
-  const { data: seriesNode, errors: err3 } = await graphql(`
-    query allArticle {
+  const { data: seriesNodes, errors: err3 } = await graphql<Queries.Query>(`
+    query allArticleGroupBySeries {
       allMarkdownRemark(
         filter: { frontmatter: { draft: { ne: true } } }
         sort: { fields: [frontmatter___date], order: DESC }
@@ -111,8 +131,8 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   `)
 
-  const { data: articleList, errors: err4 } = await graphql(`
-    query articleById1 {
+  const { data: articleList, errors: err4 } = await graphql<Queries.Query>(`
+    query allArticlesWithPublished {
       allMarkdownRemark(
         filter: { frontmatter: { draft: { ne: true } } }
         sort: { fields: frontmatter___date, order: DESC }
@@ -169,27 +189,26 @@ exports.createPages = async ({ graphql, actions }) => {
   if (err1 || err2 || err3 || err4) {
     console.error(err1, err2, err3, err4)
   }
-  console.log(articleList.allMarkdownRemark);
   createPage({
     path: `/articles`,
-    component: path.resolve(`./src/templates/articles.tsx`),
+    component: path.resolve(`src/templates/articles.tsx`),
     context: {
       articles: {
-        list: articleList.allMarkdownRemark,
+        list: articleList?.allMarkdownRemark,
         groupBy: {
-          categories: categoryNode.allMarkdownRemark.group,
-          tags: tagNode.allMarkdownRemark.group,
-          series: seriesNode.allMarkdownRemark.group,
-        }
+          categories: categoryNodes?.allMarkdownRemark.group,
+          tags: tagNodes?.allMarkdownRemark.group,
+          series: seriesNodes?.allMarkdownRemark.group,
+        },
       },
       // This time the entire product is passed down as context
     },
   })
 
-  articleList.allMarkdownRemark.edges.forEach(({ node, next, previous }) => {
+  articleList?.allMarkdownRemark.edges.forEach(({ node, next, previous }) => {
     createPage({
-      path: node.fields.slug,
-      component: path.resolve(`./src/templates/article.tsx`),
+      path: `${node.fields?.slug}`,
+      component: path.resolve(`src/templates/article.tsx`),
       context: {
         node,
         next,

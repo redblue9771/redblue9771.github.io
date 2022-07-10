@@ -1,9 +1,16 @@
-require("dotenv").config({
-  path: `.env.${process.env.NODE_ENV}`,
-})
+import type { GatsbyConfig } from "gatsby"
+import path from "path"
+import { createHttpLink } from "apollo-link-http"
 
-module.exports = {
+type TypeNameFuncArgs = {
+  node: {
+    name: string
+  }
+}
+
+const config: GatsbyConfig = {
   jsxRuntime: "automatic",
+  graphqlTypegen: true,
   siteMetadata: {
     title: `RedBlue | 赤琦`,
     author: `RedBlue`,
@@ -18,34 +25,47 @@ module.exports = {
         trackingId: "UA-123575709-1",
       },
     },
-    `gatsby-plugin-typescript`,
     {
       resolve: `gatsby-plugin-layout`,
       options: {
-        component: require.resolve(`./src/templates/main.layout.tsx`),
+        component: path.resolve(`src/templates/main.layout.tsx`),
       },
     },
     `gatsby-plugin-react-helmet`,
-
     `gatsby-plugin-scroll-reveal`,
     `gatsby-plugin-image`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `assets`,
-        path: `${__dirname}/src/assets`,
+        name: `general`,
+        path: `${__dirname}/src/assets/general`,
       },
     },
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `article`,
+        path: `${__dirname}/src/assets/articles`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: `${__dirname}/static/img`,
+      },
+    },
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
+    {
       resolve: `gatsby-transformer-yaml`,
       options: {
-        typeName: ({ node, object, isArray }) => {
+        typeName: ({ node }: TypeNameFuncArgs) => {
           return node.name
         },
       },
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
+
     {
       resolve: `gatsby-plugin-sass`,
       options: {
@@ -78,16 +98,16 @@ module.exports = {
         icon: `static/logo.svg`, // This path is relative to the root of the site.
       },
     },
-    {
-      resolve: `gatsby-plugin-graphql-codegen`,
-      options: {
-        fileName: `./typings/graphql-types.ts`,
-        documentPaths: [
-          "./src/**/*.{ts,tsx}",
-          "./node_modules/gatsby-*/**/*.js",
-        ],
-      },
-    },
+    // {
+    //   resolve: `gatsby-plugin-graphql-codegen`,
+    //   options: {
+    //     fileName: `./typings/graphql-types.ts`,
+    //     documentPaths: [
+    //       "./src/**/*.{ts,tsx}",
+    //       "./node_modules/gatsby-*/**/*.js",
+    //     ],
+    //   },
+    // },
     `gatsby-plugin-sitemap`,
     {
       resolve: `gatsby-plugin-feed`,
@@ -106,13 +126,17 @@ module.exports = {
         `,
         feeds: [
           {
-            serialize: ({ query: { site, allMarkdownRemark } }) => {
+            serialize: ({
+              query: { site, allMarkdownRemark },
+            }: {
+              query: Queries.Query
+            }) => {
               return allMarkdownRemark.edges.map(edge => ({
                 ...edge.node.frontmatter,
                 description: edge.node.excerpt,
-                date: edge.node.frontmatter.date,
-                url: site.siteMetadata.siteUrl + edge.node.fields.slug,
-                guid: site.siteMetadata.siteUrl + edge.node.fields.slug,
+                date: edge.node.frontmatter?.date,
+                url: `${site?.siteMetadata?.siteUrl}${edge?.node?.fields?.slug}`,
+                guid: `${site?.siteMetadata?.siteUrl}${edge?.node?.fields?.slug}`,
                 custom_elements: [{ "content:encoded": edge.node.html }],
               }))
             },
@@ -143,3 +167,5 @@ module.exports = {
     },
   ],
 }
+
+export default config

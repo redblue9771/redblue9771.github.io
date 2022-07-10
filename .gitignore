@@ -72,3 +72,5 @@ yarn-error.log
 
 #Intellij editor
 .idea
+
+src/gatsby-types.d.ts

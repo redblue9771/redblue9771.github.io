@@ -1,8 +1,9 @@
-import { ISiteSiteMetadata } from "@/templates/main.layout"
+import type { ICustomSiteMetadata } from "@/templates/main.layout"
+import React from "react"
 import { Container } from "react-bootstrap"
 
 interface IMainNavBarProps {
-  context: ISiteSiteMetadata
+  context: ICustomSiteMetadata
 }
 
 const Header = ({ context }: IMainNavBarProps) => {

@@ -2,7 +2,6 @@ import { SiteMetadata } from "@/templates/main.layout"
 import { graphql, PageProps } from "gatsby"
 import React from "react"
 import { Container, Button, ButtonGroup } from "react-bootstrap"
-import { AllBookQuery } from "@/../typings/graphql-types"
 
 export const query = graphql`
   query allBook {
@@ -26,11 +25,14 @@ export const query = graphql`
   }
 `
 
-function Library({ data }: PageProps<AllBookQuery>) {
+function Library({ data }: PageProps<Queries.allBookQuery>) {
   const { setMetadata } = React.useContext(SiteMetadata)
 
   React.useEffect(() => {
     setMetadata(() => ({
+      author: null,
+      siteUrl: null,
+      date: null,
       title: "藏经",
       subTitle: "博采众长",
       description: "君知其难，则自能旁搜博采",

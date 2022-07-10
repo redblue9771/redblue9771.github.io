@@ -2,7 +2,6 @@ import { SiteMetadata } from "@/templates/main.layout"
 import { graphql, Link, PageProps } from "gatsby"
 import React from "react"
 import { Carousel, Container } from "react-bootstrap"
-import { NotFoundPageQuery } from "typings/graphql-types"
 
 export const query = graphql`
   query notFoundPage {
@@ -18,11 +17,15 @@ export const query = graphql`
   }
 `
 
-const NotFoundPage = ({ data }: PageProps<NotFoundPageQuery>) => {
+const NotFoundPage = ({ data }: PageProps<Queries.notFoundPageQuery>) => {
   const { setMetadata } = React.useContext(SiteMetadata)
 
   React.useEffect(() => {
-    setMetadata(prev => ({
+    setMetadata(() => ({
+      author: null,
+      siteUrl: null,
+      title: null,
+      date: null,
       subTitle: "404: Page Not Found!",
       description: "天涯何处无芳草，何必单恋这一页",
     }))
@@ -44,15 +47,15 @@ const NotFoundPage = ({ data }: PageProps<NotFoundPageQuery>) => {
             <Carousel.Item
               key={id}
               as="a"
-              href={link}
+              href={link ?? ""}
               target="_blank"
               rel="noolopp"
             >
               <img
                 className="d-block w-100 showcase-item"
-                alt={title}
-                title={title}
-                src={cover}
+                alt={title ?? ""}
+                title={title ?? ""}
+                src={cover ?? ""}
               />
               <Carousel.Caption className="showcase-item-text">
                 <h4>{title}</h4>

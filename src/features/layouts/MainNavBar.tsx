@@ -1,9 +1,9 @@
-import { ISiteSiteMetadata } from "@/templates/main.layout"
+import type { ICustomSiteMetadata } from "@/templates/main.layout"
+import { useLocation } from "@reach/router"
 import clsx from "clsx"
 import { graphql, Link, useStaticQuery } from "gatsby"
 import React from "react"
 import { Container, Nav, Navbar } from "react-bootstrap"
-import { useLocation } from "@reach/router"
 
 const routes = [
   { title: { cn: "主页" }, path: "/" },
@@ -18,7 +18,7 @@ const routes = [
 ]
 
 interface IMainNavBarProps {
-  context: ISiteSiteMetadata
+  context: ICustomSiteMetadata
   absElementTop: number
 }
 
