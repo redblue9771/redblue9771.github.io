@@ -5,33 +5,29 @@ import { useLocation } from "@reach/router"
 import { Link, PageProps } from "gatsby"
 import React from "react"
 import { Container } from "react-bootstrap"
-import {
-  MarkdownRemarkGroupConnection,
-  SitePageGroupConnection,
-} from "typings/graphql-types"
 import { SiteMetadata } from "./main.layout"
 
-export interface ISearchParams {
-  group?: IArticleGroupByKeys
+export type IRouteSearchParams = {
+  group?: IArticleGroupKeys
   current?: string
   page?: string
   search?: string
 }
 
-type IArticleGroupByKeys = keyof IArticleGroupBy
-
-interface IArticleGroupBy {
-  categories: MarkdownRemarkGroupConnection[]
-  tags: MarkdownRemarkGroupConnection[]
-  series: MarkdownRemarkGroupConnection[]
+type IArticleGroup = {
+  categories: Queries.MarkdownRemarkGroupConnection[]
+  tags: Queries.MarkdownRemarkGroupConnection[]
+  series: Queries.MarkdownRemarkGroupConnection[]
 }
 
-interface IArticles {
-  list: SitePageGroupConnection
-  groupBy: IArticleGroupBy
+type IArticleGroupKeys = keyof IArticleGroup
+
+type IArticles = {
+  list: Queries.SitePageGroupConnection
+  groupBy: IArticleGroup
 }
 
-export interface IArticleGroupProps {
+export type IArticleGroupProps = {
   articles: IArticles
 }
 
@@ -39,17 +35,18 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
   const { articles } = pageContext
   const { setMetadata } = React.useContext(SiteMetadata)
   React.useEffect(() => {
-    setMetadata(prev => ({
-      ...prev,
+    setMetadata(() => ({
+      author: null,
+      siteUrl: null,
+      date: null,
       title: "博文",
       subTitle: "我非生而知之者",
       description: "学而时习之",
-      date: "",
     }))
   }, [])
 
   const location = useLocation()
-  const search = useSearchParams<ISearchParams>(location.search)
+  const search = useSearchParams<IRouteSearchParams>(location.search)
 
   const articleList = React.useMemo(() => {
     const current =

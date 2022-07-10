@@ -1,5 +1,7 @@
+import React from "react"
+
 function Footer() {
-  const currentYear = new Date().getFullYear()
+  const currentYear = React.useMemo(() => new Date().getFullYear(), [])
   return (
     <footer className="footer">
       <div className="footer__wrapper" id="fl">

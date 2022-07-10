@@ -1,21 +1,20 @@
 import { Timeline, TimelineItem } from "@/components"
 import { SiteMetadata } from "@/templates/main.layout"
+import type { Gist, Repository } from "@/typings/github.schemas"
 import React from "react"
 import { Container } from "react-bootstrap"
-import { GistConnection, ViewerHovercardContext } from "typings/schemas"
 
 function Repositories() {
   const { setMetadata } = React.useContext(SiteMetadata)
 
-  const [repo, setRepo] = React.useState<
-    NonNullable<ViewerHovercardContext["viewer"]["repositories"]["nodes"]>
-  >([])
-  const [gist, setGist] = React.useState<NonNullable<GistConnection["nodes"]>>(
-    []
-  )
+  const [repositories, setRepositories] = React.useState<Repository[]>([])
+  const [gists, setGists] = React.useState<Gist[]>([])
 
   React.useEffect(() => {
-    setMetadata(prev => ({
+    setMetadata(() => ({
+      author: null,
+      siteUrl: null,
+      date: null,
       title: "项目",
       subTitle: "吾与徐工孰娴编码之技",
       description: "Talk is cheap. Show me the code.",
@@ -80,8 +79,8 @@ function Repositories() {
     })
       .then(res => res.json())
       .then(res => {
-        setRepo(res?.data?.viewer?.repositories?.nodes ?? [])
-        setGist(res?.data?.viewer?.gists?.nodes ?? [])
+        setRepositories(res?.data?.viewer?.repositories?.nodes ?? [])
+        setGists(res?.data?.viewer?.gists?.nodes ?? [])
       })
   }, [])
 
@@ -97,7 +96,7 @@ function Repositories() {
         </a>
       </h3>
       <Timeline>
-        {repo.length === 0 && (
+        {repositories.length === 0 && (
           <TimelineItem
             header={
               <h5>
@@ -109,21 +108,17 @@ function Repositories() {
             point={<i className="bi bi-cpu" />}
           />
         )}
-        {repo.map(
+        {repositories.map(
           ({
             id,
             name,
             description,
-            createdAt,
-            pushedAt,
             updatedAt,
-            url,
             forkCount,
             stargazerCount: starCount,
             commitComments,
             licenseInfo,
             primaryLanguage,
-            homepageUrl,
           }) => (
             <TimelineItem
               key={id}
@@ -194,13 +189,13 @@ function Repositories() {
       </h3>
 
       <ul>
-        {gist.map(({ id, description, updatedAt, url }) => (
+        {gists.map(({ id, description, updatedAt, url }) => (
           <li key={id}>
             <a
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              title={description}
+              title={description ?? ""}
             >
               {new Date(updatedAt).toLocaleDateString()} - {description}
             </a>
