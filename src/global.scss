@@ -8,10 +8,20 @@ $max-width: 1024px;
 
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
+@import "/static/fonts/redblue-embed.css";
+
+:root {
+  --bs-body-font-size: 16px;
+  --bs-body-line-height: 1.618em;
+}
 
 html,
 body {
   min-height: 100vh;
+}
+
+.slogan {
+  font-family: "redblue", var(--bs-body-font-family);
 }
 
 a {
@@ -50,20 +60,29 @@ a {
       overflow: hidden;
 
       &__title {
+        &--art {
+          font-family: "redblue", var(--bs-body-font-family);
+        }
         font-size: 5em;
         background-clip: text;
         -webkit-text-fill-color: transparent;
         background-image: linear-gradient(
           to right top,
           #92fe9d 0%,
-          #00c9ff 100%
+          #fff 50%,
+          #92fe9d 100%
         );
+
+        transition: all 0.68s;
         @media (max-width: 767.98px) {
           font-size: 3.2rem;
         }
         @media (max-width: 575.98px) {
           font-size: 3.2rem;
         }
+      }
+      &__sub-title {
+        font-weight: normal;
       }
     }
   }
@@ -97,6 +116,9 @@ a {
 
       & p {
         margin-bottom: 0.6rem;
+      }
+      & .slogan {
+        font-size: 20px;
       }
     }
   }
@@ -150,6 +172,7 @@ a {
 
 .navbar {
   transition: all 0.5s;
+
   .navbar-brand {
     max-width: calc(100% - 3rem);
   }
@@ -274,6 +297,10 @@ article img {
   max-width: 100%;
 }
 
+article p {
+  margin-bottom: 1.382em;
+}
+
 main {
   word-break: break-all;
   text-align: justify;
@@ -285,7 +312,7 @@ article h3,
 article h4,
 article h5,
 article h6 {
-  margin: 0.8em 0 0.4em;
+  margin: 0.8em 0 0.382em;
 }
 
 .article-aside {
