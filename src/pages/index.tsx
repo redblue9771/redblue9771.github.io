@@ -122,7 +122,7 @@ const IndexPage = ({ data }: PageProps<Queries.IndexPageQuery>) => {
         <Row className="index-module-1 text-center text-white">
           <Col sm={12}>
             <h2>I'm RedBlue.</h2>
-            <h3>你好，我是赤琦。</h3>
+            <h3 className="slogan">你好，我是赤琦。</h3>
           </Col>
           <Container
             as={Row}

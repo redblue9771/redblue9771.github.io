@@ -35,7 +35,7 @@ const query = graphql`
   }
 `
 function MainNavBar({ absElementTop, context }: IMainNavBarProps) {
-  const [isTopArea, setIsTopArea] = React.useState(false)
+  const [isOverTop, setIsOverTop] = React.useState(false)
   const [toggleBar, setToggleBar] = React.useState(false)
   const { site } = useStaticQuery(query)
   const location = useLocation()
@@ -43,46 +43,54 @@ function MainNavBar({ absElementTop, context }: IMainNavBarProps) {
   const handleScroll = React.useCallback(() => {
     requestAnimationFrame(() => {
       if (window.pageYOffset > absElementTop / 2) {
-        if (!isTopArea) {
-          setIsTopArea(true)
+        if (!isOverTop) {
+          setIsOverTop(true)
         }
-      } else if (isTopArea) {
-        setIsTopArea(false)
+      } else if (isOverTop) {
+        setIsOverTop(false)
       }
     })
-  }, [isTopArea, absElementTop])
+  }, [isOverTop, absElementTop])
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     document.addEventListener("scroll", handleScroll)
     return () => {
       document.removeEventListener("scroll", handleScroll)
     }
   }, [handleScroll])
 
-  const handleToggle = () => {
-    setToggleBar(!toggleBar)
+  const handleToggle = e => {
+    setToggleBar(e)
   }
+
+  React.useLayoutEffect(() => {
+    if (location.pathname) {
+      setToggleBar(false)
+    }
+  }, [location.pathname])
 
   return (
     <Navbar
       collapseOnSelect
       expand="lg"
       fixed="top"
+      expanded={toggleBar}
+      onToggle={handleToggle}
       className={clsx(
         "navbar",
         "text-light",
-        (isTopArea || toggleBar) && "navScroll"
+        (isOverTop || toggleBar) && "navScroll"
       )}
     >
       <Container fluid="lg" className={clsx("gx-4", toggleBar && "showBar")}>
-        <Navbar.Brand as={Link} to="/" className="text-truncate text-reset">
-          {isTopArea ? context.subTitle : site.siteMetadata.title}
+        <Navbar.Brand
+          as={Link}
+          to="/"
+          className={clsx("text-truncate text-reset", !isOverTop && "slogan")}
+        >
+          {isOverTop ? context.subTitle : site.siteMetadata.title}
         </Navbar.Brand>
-        <Navbar.Toggle
-          aria-controls="navbarScroll"
-          onClick={handleToggle}
-          as="div"
-        />
+        <Navbar.Toggle aria-controls="navbarScroll" as="div" />
         <Navbar.Collapse id="navbarScroll" className="flex-grow-0">
           <Nav navbarScroll>
             {routes.map(({ title, path, external }) =>
