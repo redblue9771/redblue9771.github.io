@@ -65,45 +65,47 @@ function ArticleCategoryNav({ articles }: IArticleGroupProps) {
           </Breadcrumb>
         </Col>
       </Row>
-      <Row className="justify-content-end flex-nowrap">
-        <Col className="col-auto">
-          <strong>🔖 标签：</strong>
-        </Col>
-        <Col className="col-auto">
-          <Breadcrumb>
-            <BreadcrumbItem
-              linkProps={{
-                to: `?group=${search.group}`,
-              }}
-              active={
-                !search.current ||
-                (search.group &&
-                  articles.groupBy?.[search.group]?.findIndex(
-                    item => item.fieldValue === search.current
-                  ) == -1)
-              }
-            >
-              所有
-            </BreadcrumbItem>
+      {search.group && (
+        <Row className="justify-content-end flex-nowrap">
+          <Col className="col-auto">
+            <strong>🔖 标签：</strong>
+          </Col>
+          <Col className="col-auto">
+            <Breadcrumb>
+              <BreadcrumbItem
+                linkProps={{
+                  to: `?group=${search.group}`,
+                }}
+                active={
+                  !search.current ||
+                  (search.group &&
+                    articles.groupBy?.[search.group]?.findIndex(
+                      item => item.fieldValue === search.current
+                    ) == -1)
+                }
+              >
+                所有
+              </BreadcrumbItem>
 
-            {search.group &&
-              articles.groupBy?.[search.group]?.map(
-                ({ fieldValue, totalCount }, idx) => (
-                  <BreadcrumbItem
-                    key={idx}
-                    title={fieldValue}
-                    linkProps={{
-                      to: `?group=${search.group}&current=${fieldValue}`,
-                    }}
-                    active={search.current === fieldValue}
-                  >
-                    {fieldValue}({totalCount})
-                  </BreadcrumbItem>
-                )
-              )}
-          </Breadcrumb>
-        </Col>
-      </Row>
+              {search.group &&
+                articles.groupBy?.[search.group]?.map(
+                  ({ fieldValue, totalCount }, idx) => (
+                    <BreadcrumbItem
+                      key={idx}
+                      title={fieldValue}
+                      linkProps={{
+                        to: `?group=${search.group}&current=${fieldValue}`,
+                      }}
+                      active={search.current === fieldValue}
+                    >
+                      {fieldValue}({totalCount})
+                    </BreadcrumbItem>
+                  )
+                )}
+            </Breadcrumb>
+          </Col>
+        </Row>
+      )}
     </Container>
   )
 }

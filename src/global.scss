@@ -135,6 +135,9 @@ a {
     max-width: $max-width;
     padding: 0 24px;
     margin: 0 auto;
+    @media (min-width: 767.98px) {
+      padding-bottom: 120px;
+    }
     &-text {
       padding: 0 24px;
       background-clip: text;
