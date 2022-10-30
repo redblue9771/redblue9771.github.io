@@ -5,6 +5,7 @@ import React, { Dispatch, SetStateAction } from "react"
 import Footer from "../features/layouts/Footer"
 import Header from "../features/layouts/Header"
 import Navbar from "../features/layouts/MainNavBar"
+import { Analytics } from "@vercel/analytics/react"
 
 export type ICustomSiteMetadata = Queries.SiteSiteMetadata & {
   subTitle: Queries.Maybe<string>
@@ -37,6 +38,7 @@ function LaunchLayout({ children }: { children: React.ReactNode }) {
   return (
     <React.Fragment>
       <SEO {...metadata} />
+      <Analytics />
       <Navbar absElementTop={rect?.top ?? 0} context={metadata} />
       <Header context={metadata} />
       <main ref={headerRoot}>
