@@ -6,7 +6,7 @@ import { Container, Button, ButtonGroup } from "react-bootstrap"
 export const query = graphql`
   query queryBooksForLibrary {
     allBook {
-      group(field: series) {
+      group(field: { series: SELECT }) {
         fieldValue
         edges {
           node {

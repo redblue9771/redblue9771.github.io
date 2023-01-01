@@ -47,10 +47,10 @@ export const createPages: GatsbyNode["createPages"] = async ({
     query allArticleGroupByCategories {
       allMarkdownRemark(
         filter: { frontmatter: { draft: { ne: true } } }
-        sort: { fields: [frontmatter___date], order: DESC }
+        sort: { frontmatter: { date: DESC } }
       ) {
         totalCount
-        group(field: frontmatter___categories) {
+        group(field: { frontmatter: { categories: SELECT } }) {
           fieldValue
           totalCount
           nodes {
@@ -76,10 +76,10 @@ export const createPages: GatsbyNode["createPages"] = async ({
     query allArticleGroupByTags {
       allMarkdownRemark(
         filter: { frontmatter: { draft: { ne: true } } }
-        sort: { fields: [frontmatter___date], order: DESC }
+        sort: { frontmatter: { date: DESC } }
       ) {
         totalCount
-        group(field: frontmatter___tags) {
+        group(field: { frontmatter: { tags: SELECT } }) {
           fieldValue
           totalCount
           nodes {
@@ -105,10 +105,10 @@ export const createPages: GatsbyNode["createPages"] = async ({
     query allArticleGroupBySeries {
       allMarkdownRemark(
         filter: { frontmatter: { draft: { ne: true } } }
-        sort: { fields: [frontmatter___date], order: DESC }
+        sort: { frontmatter: { date: DESC } }
       ) {
         totalCount
-        group(field: frontmatter___series) {
+        group(field: { frontmatter: { series: SELECT } }) {
           fieldValue
           totalCount
           nodes {
@@ -135,7 +135,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
     query allArticlesWithPublished {
       allMarkdownRemark(
         filter: { frontmatter: { draft: { ne: true } } }
-        sort: { fields: frontmatter___date, order: DESC }
+        sort: { frontmatter: { date: DESC } }
       ) {
         totalCount
         edges {
