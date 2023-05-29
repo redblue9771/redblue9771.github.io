@@ -1,6 +1,5 @@
 import type { GatsbyConfig } from "gatsby"
 import path from "path"
-import { createHttpLink } from "apollo-link-http"
 
 type TypeNameFuncArgs = {
   node: {
@@ -141,22 +140,22 @@ const config: GatsbyConfig = {
               }))
             },
             query: `{
-  allMarkdownRemark(sort: {frontmatter: {date: DESC}}) {
-    edges {
-      node {
-        excerpt
-        html
-        fields {
-          slug
-        }
-        frontmatter {
-          title
-          date
-        }
-      }
-    }
-  }
-}`,
+              allMarkdownRemark(sort: {frontmatter: {date: DESC}}) {
+                edges {
+                  node {
+                    excerpt
+                    html
+                    fields {
+                      slug
+                    }
+                    frontmatter {
+                      title
+                      date
+                    }
+                  }
+                }
+              }
+            }`,
             output: "/index.xml",
             title: "RedBlue's RSS Feed",
           },
