@@ -1,11 +1,14 @@
-import { Divider } from "@/components"
+import { Divider, SEO } from "@/components"
+import { useSiteMetadataContext } from "@/features/layouts"
 import { Link, PageProps } from "gatsby"
-import React from "react"
-import { Col, Container, Row } from "react-bootstrap"
+
 import "katex/dist/katex.min.css"
 import "prismjs/themes/prism-tomorrow.css"
-import { SiteMetadata } from "./main.layout"
-
+import { Fragment, useEffect, useRef } from "react"
+import { Col, Container, Row } from "react-bootstrap"
+export const Head = ({ pageContext }) => (
+  <SEO title={pageContext?.node?.frontmatter?.title} />
+)
 export type MarkdownRemarkFragmentFragment = Pick<
   Queries.MarkdownRemark,
   "id" | "tableOfContents" | "timeToRead" | "excerpt" | "html"
@@ -42,12 +45,12 @@ export type ArticleByIdQuery = {
 }
 
 function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
-  const { setMetadata } = React.useContext(SiteMetadata)
+  const { setMetadata } = useSiteMetadataContext()
 
   const { node, next, previous } = pageContext
   const { frontmatter } = node
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMetadata(() => ({
       author: null,
       siteUrl: null,
@@ -58,9 +61,9 @@ function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
     }))
   }, [frontmatter])
 
-  const commentRef = React.useRef<HTMLDivElement>(null)
+  const commentRef = useRef<HTMLDivElement>(null)
 
-  React.useEffect(() => {
+  useEffect(() => {
     const commentScript = document.createElement("script")
     commentScript.async = true
     commentScript.src = "https://utteranc.es/client.js"
@@ -86,12 +89,12 @@ function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
             <tbody>
               <tr>
                 {frontmatter?.original ? (
-                  <React.Fragment>
+                  <Fragment>
                     <td>协议</td>
                     <td>遵照原文使用协议，详情查看原文出处。</td>
-                  </React.Fragment>
+                  </Fragment>
                 ) : (
-                  <React.Fragment>
+                  <Fragment>
                     <td>协议</td>
                     <td>
                       采用&nbsp;
@@ -106,7 +109,7 @@ function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
                       </a>
                       &nbsp;进行许可
                     </td>
-                  </React.Fragment>
+                  </Fragment>
                 )}
               </tr>
               <tr>

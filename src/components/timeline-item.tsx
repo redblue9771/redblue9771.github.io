@@ -1,5 +1,3 @@
-import React from "react"
-
 interface ITimelineItemProps {
   body?: React.ReactNode
   header?: React.ReactNode

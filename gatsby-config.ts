@@ -9,12 +9,14 @@ type TypeNameFuncArgs = {
 
 const config: GatsbyConfig = {
   jsxRuntime: "automatic",
-  graphqlTypegen: true,
+  graphqlTypegen: {
+    generateOnBuild: true,
+  },
   siteMetadata: {
     title: `RedBlue | 赤琦`,
     author: `RedBlue`,
     description: `RedBlue(赤琦)，来自彩云之南的 95 后男孩，偏执的完美主义者，体现在方方面面。爱科技、爱搞机、爱摄影、爱一切美好的事物，追求源于热爱。`,
-    siteUrl: `https://redblue.fun/`,
+    siteUrl: `https://redblue.fun`,
     social: {},
   },
   plugins: [
@@ -24,13 +26,6 @@ const config: GatsbyConfig = {
         trackingId: "UA-123575709-1",
       },
     },
-    {
-      resolve: `gatsby-plugin-layout`,
-      options: {
-        component: path.resolve(`src/templates/main.layout.tsx`),
-      },
-    },
-    `gatsby-plugin-react-helmet`,
     `gatsby-plugin-scroll-reveal`,
     `gatsby-plugin-image`,
     {

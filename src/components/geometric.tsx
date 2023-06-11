@@ -1,7 +1,6 @@
 //@ts-nocheck
-import React from "react"
 
-import "./Geometric.css"
+import "./geometric.css"
 
 const container = ({ children }) => (
   <div className="main-timeline-geo">{children}</div>
