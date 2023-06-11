@@ -1,7 +1,8 @@
-import { SiteMetadata } from "@/templates/main.layout"
+import { SEO } from "@/components"
+import { useSiteMetadataContext } from "@/features/layouts"
 import type { Repository } from "@/typings/github.schemas"
-import { graphql, Link, PageProps } from "gatsby"
-import React from "react"
+import { graphql, PageProps } from "gatsby"
+import { useEffect, useState } from "react"
 import { Carousel, Col, Container, Figure, Row } from "react-bootstrap"
 
 export const query = graphql`
@@ -37,14 +38,16 @@ export const query = graphql`
     }
   }
 `
-
+export const Head = () => (
+  <SEO title="其实你知的我是那面" description="JUST FOR MAN FASHION NEWISM." />
+)
 const IndexPage = ({ data }: PageProps<Queries.IndexPageQuery>) => {
   const { allMarkdownRemark, allCarousel } = data
-  const { setMetadata } = React.useContext(SiteMetadata)
+  const { setMetadata } = useSiteMetadataContext()
 
-  const [repositories, setRepositories] = React.useState<Repository[]>([])
+  const [repositories, setRepositories] = useState<Repository[]>([])
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMetadata(() => ({
       author: null,
       siteUrl: null,
@@ -55,7 +58,7 @@ const IndexPage = ({ data }: PageProps<Queries.IndexPageQuery>) => {
     }))
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetch("https://api.github.com/graphql", {
       method: "POST",
       body: JSON.stringify({
@@ -93,7 +96,7 @@ const IndexPage = ({ data }: PageProps<Queries.IndexPageQuery>) => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Carousel variant="dark" className="showcase">
         {allCarousel.nodes.map(({ id, title, link, cover, description }) => (
           <Carousel.Item key={id} onClick={handlePush(link || "")}>
@@ -136,19 +139,20 @@ const IndexPage = ({ data }: PageProps<Queries.IndexPageQuery>) => {
                 </dt>
                 {allMarkdownRemark?.nodes?.map((node: any) => (
                   <dd key={node.id} className="text-light">
-                    <Link
+                    <a
                       className="d-block text-truncate text-reset text-decoration-none"
-                      to={node?.frontmatter?.slug || node?.fields?.slug || ""}
+                      href={node?.frontmatter?.slug || node?.fields?.slug || ""}
                       title={
                         node?.frontmatter?.description || node.excerpt || ""
                       }
+                      target="_blank"
                     >
                       {node?.frontmatter?.title}
 
                       <small className="d-block text-truncate">
                         {node?.frontmatter?.author} - {node?.frontmatter?.date}
                       </small>
-                    </Link>
+                    </a>
                   </dd>
                 ))}
               </dl>
@@ -230,7 +234,7 @@ const IndexPage = ({ data }: PageProps<Queries.IndexPageQuery>) => {
           </Figure>
         </Container>
       </Container>
-    </React.Fragment>
+    </>
   )
 }
 

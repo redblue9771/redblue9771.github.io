@@ -1,6 +1,5 @@
-import React from "react"
 import "./timeline.min.css"
-function Timeline({ children, ...props }: any) {
+function Timeline({ children, ...props }: React.PropsWithChildren) {
   return (
     <div className="timeline timeline-single-column" {...props}>
       {children}

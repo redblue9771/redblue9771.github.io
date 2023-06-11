@@ -2,10 +2,10 @@ import type {
   IArticleGroupProps,
   IRouteSearchParams,
 } from "@/templates/articles"
-import { useSearchParams } from "@/utils/hooks"
+import { useSearchParams } from "@/hooks"
 import { useLocation } from "@reach/router"
 import { Link } from "gatsby"
-import React from "react"
+
 import {
   Breadcrumb,
   BreadcrumbItemProps,

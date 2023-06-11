@@ -1,14 +1,14 @@
-import type { ICustomSiteMetadata } from "@/templates/main.layout"
+import type { ICustomSiteMetadata } from "@/features/layouts"
 import { useMatch } from "@reach/router"
 import clsx from "clsx"
-import React from "react"
+
 import { Container } from "react-bootstrap"
 
 interface IMainNavBarProps {
   context: ICustomSiteMetadata
 }
 
-const Header = ({ context }: IMainNavBarProps) => {
+export const Header = ({ context }: IMainNavBarProps) => {
   const articlePage = useMatch("/articles/:articleName")
 
   return (
@@ -39,5 +39,3 @@ const Header = ({ context }: IMainNavBarProps) => {
     </header>
   )
 }
-
-export default Header

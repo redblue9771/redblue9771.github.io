@@ -2,6 +2,7 @@
 $primary: #448aff;
 $primary-light: #2196f3;
 $secondary: #f44336;
+$secondary-light: #e86442;
 
 $shadow: rgba(0, 0, 0, 0.5);
 $max-width: 1024px;
@@ -52,7 +53,7 @@ a {
   margin-bottom: 1rem;
   z-index: 1;
   &__wrapper {
-    background: linear-gradient(to bottom, #448aff, #44aaff, $primary);
+    background: linear-gradient(to bottom, $primary, $primary-light, $primary);
 
     &__content {
       margin: 0 auto;
@@ -64,16 +65,31 @@ a {
           font-family: "redblue", var(--bs-body-font-family);
         }
         font-size: 5em;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-image: linear-gradient(
-          to right top,
-          #92fe9d 0%,
-          #fff 50%,
-          #92fe9d 100%
-        );
+        // background-clip: text;
+        // -webkit-text-fill-color: transparent;
+        // background-image: linear-gradient(
+        //   to right top,
+        //   #92fe9d 0%,
+        //   #fff 50%,
+        //   #92fe9d 100%
+        // );
 
         transition: all 0.68s;
+
+        background-size: 400% 400%;
+        background-image: linear-gradient(
+          45deg,
+          #ff0000,
+          #ff8000,
+          #fff200,
+          #51ff00,
+          #00d0ff,
+          #9000ff,
+          #ff008c
+        );
+        background-clip: text;
+        color: transparent;
+        animation: navbar-brand-text-color-gradient 20s ease alternate infinite;
         @media (max-width: 767.98px) {
           font-size: 3.2rem;
         }
@@ -110,7 +126,12 @@ a {
   }
 
   &__wrapper {
-    background: linear-gradient(to bottom, #f44336, #ff5555, $secondary);
+    background: linear-gradient(
+      to bottom,
+      $secondary,
+      $secondary-light,
+      $secondary
+    );
     &__content {
       padding: 2rem 1rem;
 
@@ -175,9 +196,25 @@ a {
 
 .navbar {
   transition: all 0.5s;
-
+  --bs-navbar-color: rgba(255, 255, 255, 1);
+  --bs-navbar-hover-color: rgba(255, 255, 255, 0.75);
+  --bs-navbar-disabled-color: rgba(255, 255, 255, 0.55);
   .navbar-brand {
     max-width: calc(100% - 3rem);
+    background-size: 400% 400%;
+    background-image: linear-gradient(
+      45deg,
+      #ff0000,
+      #ff8000,
+      #fff200,
+      #51ff00,
+      #00d0ff,
+      #9000ff,
+      #ff008c
+    );
+    background-clip: text;
+    color: transparent;
+    animation: navbar-brand-text-color-gradient 20s ease alternate infinite;
   }
   .navbar-toggler {
     position: relative;
@@ -360,5 +397,17 @@ article h6 {
   }
   100% {
     background-position: -100% 0;
+  }
+}
+
+@keyframes navbar-brand-text-color-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }

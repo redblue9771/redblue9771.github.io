@@ -41,6 +41,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
 export const createPages: GatsbyNode["createPages"] = async ({
   graphql,
   actions,
+  reporter,
 }) => {
   const { createPage } = actions
   const { data: categoryNodes, errors: err1 } = await graphql<Queries.Query>(`
@@ -187,8 +188,10 @@ export const createPages: GatsbyNode["createPages"] = async ({
   `)
 
   if (err1 || err2 || err3 || err4) {
-    console.error(err1, err2, err3, err4)
+    reporter.panicOnBuild(`Error while running GraphQL query.`)
+    return
   }
+
   createPage({
     path: `/articles`,
     component: path.resolve(`src/templates/articles.tsx`),

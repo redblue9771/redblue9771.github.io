@@ -1,8 +1,9 @@
-import { SiteMetadata } from "@/templates/main.layout"
+import { SEO } from "@/components"
+import { useSiteMetadataContext } from "@/features/layouts"
 import { graphql, Link, PageProps } from "gatsby"
-import React from "react"
+import { useEffect } from "react"
 import { Carousel, Container } from "react-bootstrap"
-
+export const Head = () => <SEO title="404" />
 export const query = graphql`
   query notFoundPage {
     allCarousel(filter: { for: { eq: "homePage" } }) {
@@ -18,9 +19,9 @@ export const query = graphql`
 `
 
 const NotFoundPage = ({ data }: PageProps<Queries.notFoundPageQuery>) => {
-  const { setMetadata } = React.useContext(SiteMetadata)
+  const { setMetadata } = useSiteMetadataContext()
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMetadata(() => ({
       author: null,
       siteUrl: null,

@@ -1,8 +1,10 @@
-import { SiteMetadata } from "@/templates/main.layout"
+import { SEO } from "@/components"
+import { useSiteMetadataContext } from "@/features/layouts"
 import { graphql, PageProps } from "gatsby"
-import React from "react"
-import { Container, Button, ButtonGroup } from "react-bootstrap"
+import { Fragment, useEffect } from "react"
 
+import { Button, ButtonGroup, Container } from "react-bootstrap"
+export const Head = () => <SEO title="藏经" />
 export const query = graphql`
   query queryBooksForLibrary {
     allBook {
@@ -27,9 +29,9 @@ export const query = graphql`
 `
 
 function Library({ data }: PageProps<Queries.queryBooksForLibraryQuery>) {
-  const { setMetadata } = React.useContext(SiteMetadata)
+  const { setMetadata } = useSiteMetadataContext()
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMetadata(() => ({
       author: null,
       siteUrl: null,
@@ -42,7 +44,7 @@ function Library({ data }: PageProps<Queries.queryBooksForLibraryQuery>) {
   return (
     <Container fluid="lg" className="mx-auto">
       {data.allBook.group.map(({ fieldValue: series, edges }) => (
-        <React.Fragment key={series}>
+        <Fragment key={series}>
           <h3 className="text-new">{series}</h3>
           <ul>
             {edges.map(({ node }) => {
@@ -91,7 +93,7 @@ function Library({ data }: PageProps<Queries.queryBooksForLibraryQuery>) {
               )
             })}
           </ul>
-        </React.Fragment>
+        </Fragment>
       ))}
     </Container>
   )

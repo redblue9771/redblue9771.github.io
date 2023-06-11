@@ -1,16 +1,18 @@
-import { Timeline, TimelineItem } from "@/components"
-import { SiteMetadata } from "@/templates/main.layout"
+import { SEO, Timeline, TimelineItem } from "@/components"
+import { useSiteMetadataContext } from "@/features/layouts"
+
 import type { Gist, Repository } from "@/typings/github.schemas"
-import React from "react"
+import { Fragment, useEffect, useState } from "react"
+
 import { Container } from "react-bootstrap"
-
+export const Head = () => <SEO title="项目" />
 function Repositories() {
-  const { setMetadata } = React.useContext(SiteMetadata)
+  const { setMetadata } = useSiteMetadataContext()
 
-  const [repositories, setRepositories] = React.useState<Repository[]>([])
-  const [gists, setGists] = React.useState<Gist[]>([])
+  const [repositories, setRepositories] = useState<Repository[]>([])
+  const [gists, setGists] = useState<Gist[]>([])
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMetadata(() => ({
       author: null,
       siteUrl: null,
@@ -21,7 +23,7 @@ function Repositories() {
     }))
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetch("https://api.github.com/graphql", {
       method: "POST",
       body: JSON.stringify({
@@ -123,7 +125,7 @@ function Repositories() {
             <TimelineItem
               key={id}
               header={
-                <React.Fragment>
+                <Fragment>
                   <h5 className="d-inline-block">{name}</h5>
                   <div>
                     <small>
@@ -150,10 +152,10 @@ function Repositories() {
                       )}
                     </small>
                   </div>
-                </React.Fragment>
+                </Fragment>
               }
               body={
-                <React.Fragment>
+                <Fragment>
                   <p>{description}</p>
                   {commitComments?.nodes?.[0] && (
                     <small className="d-block">
@@ -162,7 +164,7 @@ function Repositories() {
                       {commitComments?.nodes?.[0]?.commit?.author?.name}
                     </small>
                   )}
-                </React.Fragment>
+                </Fragment>
               }
               footer={
                 <p>

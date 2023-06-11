@@ -1,12 +1,12 @@
-import React from "react"
+import { useMemo } from "react"
 
-function Footer() {
-  const currentYear = React.useMemo(() => new Date().getFullYear(), [])
+export const Footer = () => {
+  const currentYear = useMemo(() => new Date().getFullYear(), [])
   return (
     <footer className="footer">
       <div className="footer__wrapper" id="fl">
         <div className="footer__wrapper__content text-white text-center">
-          <p>版权所有 &copy; 2017 - {currentYear} 赤琦</p>
+          <p>版权所有 &copy; 2017 - {currentYear} 赤琦。保留所有权利。</p>
           <p>
             Copyright &copy; 2017 - {currentYear} RedBlue. All Rights Reserved.
           </p>

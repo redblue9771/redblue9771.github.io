@@ -1,12 +1,13 @@
-import { TimeLine } from "@/components"
+import { SEO, TimeLine } from "@/components"
+import { useSiteMetadataContext } from "@/features/layouts"
 import { ArticleCategoryNav } from "@/features/sections"
-import { useSearchParams } from "@/utils/hooks"
+import { useSearchParams } from "@/hooks"
 import { useLocation } from "@reach/router"
-import { Link, PageProps } from "gatsby"
-import React from "react"
-import { Container } from "react-bootstrap"
-import { SiteMetadata } from "./main.layout"
+import { PageProps } from "gatsby"
+import { useEffect, useMemo } from "react"
 
+import { Container } from "react-bootstrap"
+export const Head = () => <SEO title="博文" />
 export type IRouteSearchParams = {
   group?: IArticleGroupKeys
   current?: string
@@ -33,8 +34,8 @@ export type IArticleGroupProps = {
 
 function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
   const { articles } = pageContext
-  const { setMetadata } = React.useContext(SiteMetadata)
-  React.useEffect(() => {
+  const { setMetadata } = useSiteMetadataContext()
+  useEffect(() => {
     setMetadata(() => ({
       author: null,
       siteUrl: null,
@@ -48,7 +49,7 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
   const location = useLocation()
   const search = useSearchParams<IRouteSearchParams>(location.search)
 
-  const articleList = React.useMemo(() => {
+  const articleList = useMemo(() => {
     const current =
       search.group &&
       articles.groupBy?.[search.group]?.find(
@@ -71,9 +72,10 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
             }`}
             title={node.frontmatter.title || node.frontmatter.slug}
             description={node.frontmatter.description || node.excerpt}
-            to={node.frontmatter.slug || node.fields.slug}
+            href={node.frontmatter.slug || node.fields.slug}
             key={node.id}
-            component={Link}
+            component="a"
+            target="_blank"
           />
         ))}
       </TimeLine.Container>
