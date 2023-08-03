@@ -22,6 +22,7 @@ function ArticleCategoryNav({ articles }: IArticleGroupProps) {
   const location = useLocation()
   const search = useSearchParams<IRouteSearchParams>(location.search)
   const groupByKeys = Object.keys(articles.groupBy)
+
   return (
     <Container fluid>
       <Row className="justify-content-end flex-nowrap">
@@ -74,13 +75,13 @@ function ArticleCategoryNav({ articles }: IArticleGroupProps) {
             <Breadcrumb>
               <BreadcrumbItem
                 linkProps={{
-                  to: `?group=${search.group}`,
+                  to: `?group=${encodeURIComponent(search.group)}`,
                 }}
                 active={
                   !search.current ||
                   (search.group &&
                     articles.groupBy?.[search.group]?.findIndex(
-                      item => item.fieldValue === search.current
+                      item => item.fieldValue === search.current,
                     ) == -1)
                 }
               >
@@ -94,13 +95,15 @@ function ArticleCategoryNav({ articles }: IArticleGroupProps) {
                       key={idx}
                       title={fieldValue}
                       linkProps={{
-                        to: `?group=${search.group}&current=${fieldValue}`,
+                        to: `?group=${encodeURIComponent(
+                          search.group,
+                        )}&current=${encodeURIComponent(fieldValue)}`,
                       }}
                       active={search.current === fieldValue}
                     >
                       {fieldValue}({totalCount})
                     </BreadcrumbItem>
-                  )
+                  ),
                 )}
             </Breadcrumb>
           </Col>

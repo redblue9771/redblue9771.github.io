@@ -99,12 +99,12 @@ const IndexPage = ({ data }: PageProps<Queries.IndexPageQuery>) => {
     <>
       <Carousel variant="dark" className="showcase">
         {allCarousel.nodes.map(({ id, title, link, cover, description }) => (
-          <Carousel.Item key={id} onClick={handlePush(link || "")}>
+          <Carousel.Item key={id} onClick={handlePush(link ?? "")}>
             <img
               className="d-block w-100 showcase-item"
-              alt={title || ""}
-              title={title || ""}
-              src={cover || ""}
+              alt={title ?? ""}
+              title={title ?? ""}
+              src={cover ?? ""}
             />
             <Carousel.Caption className="showcase-item-text">
               <h4>{title}</h4>

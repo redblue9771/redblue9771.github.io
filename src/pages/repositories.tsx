@@ -97,7 +97,7 @@ function Repositories() {
           💻 Repositories
         </a>
       </h3>
-      <Timeline>
+      {/* <Timeline>
         {repositories.length === 0 && (
           <TimelineItem
             header={
@@ -176,10 +176,61 @@ function Repositories() {
               }
               point={<i className="bi bi-cpu" />}
             />
+          ),
+        )}
+      </Timeline> */}
+      <div className="git-repo-list">
+        {repositories.map(
+          ({
+            id,
+            name,
+            description,
+            updatedAt,
+            forkCount,
+            stargazerCount: starCount,
+            commitComments,
+            licenseInfo,
+            url,
+            primaryLanguage,
+          }) => (
+            <a
+              className="git-repo-list__item"
+              key={id}
+              href={url}
+              target="_blank"
+            >
+              <h5 className="text-truncate">
+                <i className="bi bi-git" />
+                {name}
+              </h5>
+              <p className="text-truncate">{description || "-"}</p>
+
+              <span>
+                <i className="bi bi-star-half" />
+                {starCount}
+              </span>
+              <span>
+                <i className="bi bi-diagram-2" />
+                {forkCount}
+              </span>
+              {/* {licenseInfo && (
+                <span>
+                  <i className="bi bi-book-half" />
+                  {licenseInfo.name}
+                </span>
+              )} */}
+              <span>
+                <i className="bi bi-activity" />
+                {new Date(updatedAt).toLocaleDateString()}
+              </span>
+              <span>
+                <i className="bi bi-code-slash" />
+                {primaryLanguage ? primaryLanguage.name : ""}
+              </span>
+            </a>
           )
         )}
-      </Timeline>
-
+      </div>
       <h3>
         <a
           href="https://gist.github.com/redblue9771"

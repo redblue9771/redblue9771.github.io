@@ -1,5 +1,4 @@
 import type { GatsbyConfig } from "gatsby"
-import path from "path"
 
 type TypeNameFuncArgs = {
   node: {
