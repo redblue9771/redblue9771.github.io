@@ -88,7 +88,7 @@ const config: GatsbyConfig = {
         background_color: `#448aff`,
         theme_color: `#2196f3`,
         display: `standalone`,
-        icon: `static/logo.svg`, // This path is relative to the root of the site.
+        icon: `static/favicon.ico`, // This path is relative to the root of the site.
       },
     },
     // {
