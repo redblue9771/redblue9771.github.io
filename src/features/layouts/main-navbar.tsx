@@ -43,11 +43,10 @@ export const MainNavbar = ({ absElementTop, context }: IMainNavBarProps) => {
 
   const handleScroll = useCallback(() => {
     requestAnimationFrame(() => {
-      if (window.pageYOffset > absElementTop / 2) {
-        if (!isOverTop) {
-          setIsOverTop(true)
-        }
-      } else if (isOverTop) {
+      const isScrolledPastHalf = window.pageYOffset > absElementTop / 2
+      if (isScrolledPastHalf && !isOverTop) {
+        setIsOverTop(true)
+      } else if (!isScrolledPastHalf && isOverTop) {
         setIsOverTop(false)
       }
     })
@@ -65,9 +64,7 @@ export const MainNavbar = ({ absElementTop, context }: IMainNavBarProps) => {
   }
 
   useLayoutEffect(() => {
-    if (location.pathname) {
-      setToggleBar(false)
-    }
+    setToggleBar(location.pathname ? false : true)
   }, [location.pathname])
 
   return (
@@ -78,36 +75,31 @@ export const MainNavbar = ({ absElementTop, context }: IMainNavBarProps) => {
       fixed="top"
       expanded={toggleBar}
       onToggle={handleToggle}
-      className={clsx("navbar", (isOverTop || toggleBar) && "navScroll")}
+      className={`navbar ${isOverTop || toggleBar ? "navScroll" : ""}`}
     >
-      <Container fluid="lg" className={clsx("gx-4", toggleBar && "showBar")}>
+      <Container fluid="lg" className={`gx-4 ${toggleBar ? "showBar" : ""}`}>
         <Navbar.Brand
           as={Link}
           to="/"
-          className={clsx("text-truncate", !isOverTop && "slogan")}
+          className={`text-truncate ${!isOverTop ? "slogan" : ""}`}
         >
           {isOverTop ? context.subTitle : site.siteMetadata.title}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" as="div" />
         <Navbar.Collapse id="navbarScroll" className="flex-grow-0">
           <Nav navbarScroll>
-            {routes.map(({ title, path, external }) =>
-              external ? (
-                <Nav.Link key={path} href={path} className="text-center">
-                  &nbsp;/ {title.cn} /&nbsp;
-                </Nav.Link>
-              ) : (
-                <Nav.Link
-                  key={path}
-                  as={Link}
-                  to={path || "/404/"}
-                  className="text-center"
-                  disabled={location.pathname === path}
-                >
-                  &nbsp;/ {title.cn} /&nbsp;
-                </Nav.Link>
-              )
-            )}
+            {routes.map(({ title, path, external }) => (
+              <Nav.Link
+                key={path}
+                href={external ? path : undefined}
+                as={external ? undefined : Link}
+                to={path || "/404/"}
+                className="text-center"
+                disabled={location.pathname === path}
+              >
+                &nbsp;/ {title.cn} /&nbsp;
+              </Nav.Link>
+            ))}
           </Nav>
         </Navbar.Collapse>
       </Container>

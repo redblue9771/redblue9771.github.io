@@ -1,9 +1,10 @@
 export const useSearchParams = (search: string) => {
-  const _search = new URLSearchParams(search)
+  const searchParams = new URLSearchParams(search)
   const result: any = {}
-  _search.forEach((val, key) => {
+
+  for (const [key, val] of searchParams.entries()) {
     result[key] = val
-  })
+  }
 
   return result
 }

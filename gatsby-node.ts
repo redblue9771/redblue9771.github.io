@@ -44,150 +44,104 @@ export const createPages: GatsbyNode["createPages"] = async ({
   reporter,
 }) => {
   const { createPage } = actions
-  const { data: categoryNodes, errors: err1 } = await graphql<Queries.Query>(`
-    query allArticleGroupByCategories {
-      allMarkdownRemark(
-        filter: { frontmatter: { draft: { ne: true } } }
-        sort: { frontmatter: { date: DESC } }
-      ) {
-        totalCount
-        group(field: { frontmatter: { categories: SELECT } }) {
-          fieldValue
-          totalCount
-          nodes {
-            fields {
-              slug
-            }
-            frontmatter {
-              date(formatString: "MMMM DD, YYYY")
-              title
-              description
-              slug
-              draft
-              author
-            }
-            id
-            excerpt(truncate: true, pruneLength: 150)
-          }
-        }
-      }
-    }
-  `)
-  const { data: tagNodes, errors: err2 } = await graphql<Queries.Query>(`
-    query allArticleGroupByTags {
-      allMarkdownRemark(
-        filter: { frontmatter: { draft: { ne: true } } }
-        sort: { frontmatter: { date: DESC } }
-      ) {
-        totalCount
-        group(field: { frontmatter: { tags: SELECT } }) {
-          fieldValue
-          totalCount
-          nodes {
-            fields {
-              slug
-            }
-            frontmatter {
-              date(formatString: "MMMM DD, YYYY")
-              title
-              description
-              slug
-              draft
-              author
-            }
-            id
-            excerpt(truncate: true, pruneLength: 150)
-          }
-        }
-      }
-    }
-  `)
-  const { data: seriesNodes, errors: err3 } = await graphql<Queries.Query>(`
-    query allArticleGroupBySeries {
-      allMarkdownRemark(
-        filter: { frontmatter: { draft: { ne: true } } }
-        sort: { frontmatter: { date: DESC } }
-      ) {
-        totalCount
-        group(field: { frontmatter: { series: SELECT } }) {
-          fieldValue
-          totalCount
-          nodes {
-            fields {
-              slug
-            }
-            frontmatter {
-              date(formatString: "MMMM DD, YYYY")
-              title
-              description
-              slug
-              draft
-              author
-            }
-            id
-            excerpt(truncate: true, pruneLength: 150)
-          }
-        }
-      }
-    }
-  `)
 
-  const { data: articleList, errors: err4 } = await graphql<Queries.Query>(`
-    query allArticlesWithPublished {
-      allMarkdownRemark(
-        filter: { frontmatter: { draft: { ne: true } } }
-        sort: { frontmatter: { date: DESC } }
-      ) {
-        totalCount
-        edges {
-          node {
-            ...MarkdownRemarkFragment
-          }
-          next {
-            ...MarkdownRemarkFragment
-          }
-          previous {
-            ...MarkdownRemarkFragment
+  const getArticlesByGroup = async (groupField: string) => {
+    const { data, errors } = await graphql<Queries.Query>(`
+      query {
+        allMarkdownRemark(
+          filter: { frontmatter: { draft: { ne: true } } }
+          sort: { frontmatter: { date: DESC } }
+        ) {
+          totalCount
+          group(field: { frontmatter: { ${groupField}: SELECT } }) {
+            fieldValue
+            totalCount
+            nodes {
+              fields {
+                slug
+              }
+              frontmatter {
+                date(formatString: "MMMM DD, YYYY")
+                title
+                description
+                slug
+                draft
+                author
+              }
+              id
+              excerpt(truncate: true, pruneLength: 150)
+            }
           }
         }
       }
-    }
+    `)
 
-    fragment MarkdownRemarkFragment on MarkdownRemark {
-      id
-      tableOfContents
-      timeToRead
-      excerpt(pruneLength: 150, truncate: true)
-      fields {
-        slug
+    return { data, errors }
+  }
+
+  const { data: categoryNodes, errors: categoryErrors } =
+    await getArticlesByGroup("categories")
+  const { data: tagNodes, errors: tagErrors } = await getArticlesByGroup("tags")
+  const { data: seriesNodes, errors: seriesErrors } =
+    await getArticlesByGroup("series")
+
+  const { data: articleList, errors: articleErrors } =
+    await graphql<Queries.Query>(`
+      query {
+        allMarkdownRemark(
+          filter: { frontmatter: { draft: { ne: true } } }
+          sort: { frontmatter: { date: DESC } }
+        ) {
+          totalCount
+          edges {
+            node {
+              ...MarkdownRemarkFragment
+            }
+            next {
+              ...MarkdownRemarkFragment
+            }
+            previous {
+              ...MarkdownRemarkFragment
+            }
+          }
+        }
       }
-      frontmatter {
-        title
-        author
-        date(formatString: "MMMM DD, YYYY")
-        original
-        description
-        draft
-        slug
-        categories
-        series
-        tags
-      }
-      headings {
+
+      fragment MarkdownRemarkFragment on MarkdownRemark {
         id
-        value
-        depth
+        tableOfContents
+        timeToRead
+        excerpt(pruneLength: 150, truncate: true)
+        fields {
+          slug
+        }
+        frontmatter {
+          title
+          author
+          date(formatString: "MMMM DD, YYYY")
+          original
+          description
+          draft
+          slug
+          categories
+          series
+          tags
+        }
+        headings {
+          id
+          value
+          depth
+        }
+        wordCount {
+          words
+          sentences
+          paragraphs
+        }
+        html
       }
-      wordCount {
-        words
-        sentences
-        paragraphs
-      }
-      html
-    }
-  `)
+    `)
 
-  if (err1 || err2 || err3 || err4) {
+  if (categoryErrors || tagErrors || seriesErrors || articleErrors) {
     reporter.panicOnBuild(`Error while running GraphQL query.`)
     return
   }
@@ -204,7 +158,6 @@ export const createPages: GatsbyNode["createPages"] = async ({
           series: seriesNodes?.allMarkdownRemark.group,
         },
       },
-      // This time the entire product is passed down as context
     },
   })
 
@@ -216,7 +169,6 @@ export const createPages: GatsbyNode["createPages"] = async ({
         node,
         next,
         previous,
-        // This time the entire product is passed down as context
       },
     })
   })
