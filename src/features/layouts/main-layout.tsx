@@ -7,6 +7,7 @@ import {
 import "@/global.scss"
 import { useClientRect } from "@/hooks"
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 export const MainLayout = ({ children }: React.PropsWithChildren) => {
   const [rect, headerRoot] = useClientRect()
@@ -19,6 +20,7 @@ export const MainLayout = ({ children }: React.PropsWithChildren) => {
       <Header context={metadata} />
       <main ref={headerRoot}>{children}</main>
       <Footer />
+      <SpeedInsights />
     </>
   )
 }
