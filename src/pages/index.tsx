@@ -39,7 +39,7 @@ export const query = graphql`
   }
 `
 export const Head = () => (
-  <SEO title="其实你知的我是那面" description="JUST FOR MAN FASHION NEWISM." />
+  <SEO title="其实你知的我是那面" description="New Youth, New Vision." />
 )
 const IndexPage = ({ data }: PageProps<Queries.IndexPageQuery>) => {
   const { allMarkdownRemark, allCarousel } = data
@@ -54,7 +54,7 @@ const IndexPage = ({ data }: PageProps<Queries.IndexPageQuery>) => {
       date: null,
       title: "RedBlue | 赤琦",
       subTitle: "凡所有相，皆是虚妄",
-      description: "JUST FOR MAN FASHION NEWISM.",
+      description: "New Youth, New Vision.",
     }))
   }, [])
 

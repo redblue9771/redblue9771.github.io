@@ -6,8 +6,8 @@ import "katex/dist/katex.min.css"
 import "prismjs/themes/prism-tomorrow.css"
 import { Fragment, useEffect, useRef } from "react"
 import { Col, Container, Row } from "react-bootstrap"
-export const Head = ({ pageContext }) => (
-  <SEO title={pageContext?.node?.frontmatter?.title} />
+export const Head = ({ pageContext }: PageProps<null, ArticleByIdQuery>) => (
+  <SEO title={pageContext?.node?.frontmatter?.title ?? ""} />
 )
 export type MarkdownRemarkFragmentFragment = Pick<
   Queries.MarkdownRemark,
@@ -54,10 +54,10 @@ function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
     setMetadata(() => ({
       author: null,
       siteUrl: null,
-      title: `${frontmatter?.title}`,
-      subTitle: `${frontmatter?.title}`,
-      description: `${frontmatter?.description}`,
-      date: `${frontmatter?.date}`,
+      title: frontmatter?.title ?? "",
+      subTitle: frontmatter?.title ?? "",
+      description: frontmatter?.description ?? "",
+      date: frontmatter?.date ?? "",
     }))
   }, [frontmatter])
 
