@@ -1,26 +1,26 @@
 - name: 基于微服务架构的云端数据监控系统
   series: [2020本科毕业设计]
   categories: [毕业设计]
-  author: 高阳
+  author: 赤琦
   slug: /docs/2020-iot.pdf
-  description: 福建工程学院本科毕业设计「2020」
+  description: 2020「福建理工大学」本科毕业设计
   keywords: [MicroServices, Firebase, Serverless, BaaS, FaaS]
 
 - name: 基于微服务架构的云端数据监控系统答辩 PowerPoint
   series: [2020本科毕业设计]
   categories: [毕业设计]
-  author: 高阳
+  author: 赤琦
   slug: /docs/2020-iot-ppt.pdf
   download: /docs/2020-iot-ppt.pptx
-  description: 福建工程学院本科毕业设计「2020」
+  description: 2020「福建理工大学」本科毕业设计
   keywords: [MicroServices, Firebase, Serverless, BaaS, FaaS]
 
 - name: 基于 J2EE 的 OJ 系统的设计与实现
   series: [2020本科毕业设计]
   categories: [毕业设计]
-  author: 朱建华
+  author: ^_^
   slug: /docs/2016-oj.pdf
-  description: 福建工程学院本科毕业设计「2016」
+  description: 2016「福建理工大学」本科毕业设计
   keywords: [J2EE, Online Judge]
 
 - name: Fuchsia 简介
