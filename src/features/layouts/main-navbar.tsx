@@ -43,7 +43,7 @@ export const MainNavbar = ({ absElementTop, context }: IMainNavBarProps) => {
 
   const handleScroll = useCallback(() => {
     requestAnimationFrame(() => {
-      const isScrolledPastHalf = window.pageYOffset > absElementTop / 2
+      const isScrolledPastHalf = window.scrollY > absElementTop / 2
       if (isScrolledPastHalf && !isOverTop) {
         setIsOverTop(true)
       } else if (!isScrolledPastHalf && isOverTop) {

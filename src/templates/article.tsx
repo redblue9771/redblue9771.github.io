@@ -142,6 +142,17 @@ function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
                   <td>{frontmatter?.tags?.join("、")}</td>
                 </tr>
               )}
+              <tr>
+                <td>推荐</td>
+                <td>
+                  <a
+                    href="https://go.invitevp.com/#/register?code=kJRst0sa"
+                    target="_blank"
+                  >
+                    【无推广】自用两年多，流量无过期时间，有试用流量，稳定性价比机场！👈
+                  </a>
+                </td>
+              </tr>
             </tbody>
           </table>
         </address>

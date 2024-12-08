@@ -25,11 +25,11 @@ export const Footer = () => {
             </a>
             丨
             <a
-              href="mailto:***REMOVED***"
+              href="https://go.invitevp.com/#/register?code=kJRst0sa"
               target="_blank"
               className="text-light"
             >
-              <i className="bi bi-at" /> E-mail
+              <i className="bi bi-airplane-engines" /> 自用 VPN
             </a>
           </p>
           <p className="slogan">复兴中华 - 新中国、新时代、新青年 - 中华复兴</p>
