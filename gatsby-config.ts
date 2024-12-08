@@ -1,5 +1,11 @@
 import type { GatsbyConfig } from "gatsby"
+import * as  dotenv from 'dotenv';
 
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+
+console.log(process.env.NODE_ENV)
 type TypeNameFuncArgs = {
   node: {
     name: string
@@ -18,11 +24,12 @@ const config: GatsbyConfig = {
     siteUrl: `https://redblue.fun`,
     social: {},
   },
+  trailingSlash: "never",
   plugins: [
     {
       resolve: "gatsby-plugin-google-analytics",
       options: {
-        trackingId: "UA-123575709-1",
+        trackingId: process.env.GATSBY_GOOGLE_ANALYTICS_ID,
       },
     },
     `gatsby-plugin-scroll-reveal`,
@@ -91,16 +98,6 @@ const config: GatsbyConfig = {
         icon: `static/logo.svg`, // This path is relative to the root of the site.
       },
     },
-    // {
-    //   resolve: `gatsby-plugin-graphql-codegen`,
-    //   options: {
-    //     fileName: `./typings/graphql-types.ts`,
-    //     documentPaths: [
-    //       "./src/**/*.{ts,tsx}",
-    //       "./node_modules/gatsby-*/**/*.js",
-    //     ],
-    //   },
-    // },
     `gatsby-plugin-sitemap`,
     {
       resolve: `gatsby-plugin-feed`,

@@ -1,6 +1,5 @@
 import type { ICustomSiteMetadata } from "@/features/layouts"
 import { useLocation } from "@reach/router"
-import clsx from "clsx"
 import { graphql, Link, useStaticQuery } from "gatsby"
 import { useCallback, useLayoutEffect, useState } from "react"
 
@@ -8,12 +7,12 @@ import { Container, Nav, Navbar } from "react-bootstrap"
 
 const routes = [
   { title: { cn: "主页" }, path: "/" },
-  { title: { cn: "博文" }, path: "/articles/" },
-  { title: { cn: "藏经" }, path: "/library/" },
-  { title: { cn: "项目" }, path: "/repositories/" },
+  { title: { cn: "博文" }, path: "/articles" },
+  { title: { cn: "藏经" }, path: "/library" },
+  { title: { cn: "项目" }, path: "/repositories" },
   {
     title: { cn: "状态" },
-    path: "https://status.redblue.fun/",
+    path: "https://status.redblue.fun",
     external: true,
   },
 ]
@@ -93,7 +92,7 @@ export const MainNavbar = ({ absElementTop, context }: IMainNavBarProps) => {
                 key={path}
                 href={external ? path : undefined}
                 as={external ? undefined : Link}
-                to={path || "/404/"}
+                to={path || "/404"}
                 className="text-center"
                 disabled={location.pathname === path}
               >
