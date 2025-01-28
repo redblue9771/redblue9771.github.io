@@ -1,11 +1,11 @@
 import { SEO } from "@/components"
-import { useSiteMetadataContext } from "@/features/layouts"
+import { useHeaderMetadataContext } from "@/features/layouts"
 import { graphql, Link, PageProps } from "gatsby"
 import { useEffect } from "react"
 import { Carousel, Container } from "react-bootstrap"
 export const Head = () => <SEO title="404" />
 export const query = graphql`
-  query notFoundPage {
+  query notFoundPage($_pathname: String) {
     allCarousel(filter: { for: { eq: "homePage" } }) {
       nodes {
         id
@@ -15,21 +15,21 @@ export const query = graphql`
         title
       }
     }
+    publicPage(route: { path: { eq: $_pathname } }) {
+      title
+      subTitle
+      description
+    }
   }
 `
 
-const NotFoundPage = ({ data }: PageProps<Queries.notFoundPageQuery>) => {
-  const { setMetadata } = useSiteMetadataContext()
-
+const NotFoundPage = ({
+  data: { allCarousel, publicPage },
+}: PageProps<Queries.notFoundPageQuery>) => {
+  const { setHeaderMetadata } = useHeaderMetadataContext()
+  console.log({ publicPage })
   useEffect(() => {
-    setMetadata(() => ({
-      author: null,
-      siteUrl: null,
-      title: null,
-      date: null,
-      subTitle: "404: Page Not Found!",
-      description: "天涯何处无芳草，何必单恋这一页",
-    }))
+    setHeaderMetadata(publicPage)
   }, [])
 
   return (
@@ -43,28 +43,26 @@ const NotFoundPage = ({ data }: PageProps<Queries.notFoundPageQuery>) => {
         </h4>
       </div>
       <Carousel variant="dark">
-        {data.allCarousel.nodes.map(
-          ({ id, title, link, cover, description }) => (
-            <Carousel.Item
-              key={id}
-              as="a"
-              href={link ?? ""}
-              target="_blank"
-              rel="noolopp"
-            >
-              <img
-                className="d-block w-100 showcase-item"
-                alt={title ?? ""}
-                title={title ?? ""}
-                src={cover ?? ""}
-              />
-              <Carousel.Caption className="showcase-item-text">
-                <h4>{title}</h4>
-                <p>{description}</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-          )
-        )}
+        {allCarousel.nodes.map(({ id, title, link, cover, description }) => (
+          <Carousel.Item
+            key={id}
+            as="a"
+            href={link ?? ""}
+            target="_blank"
+            rel="noolopp"
+          >
+            <img
+              className="d-block w-100 showcase-item"
+              alt={title ?? ""}
+              title={title ?? ""}
+              src={cover ?? ""}
+            />
+            <Carousel.Caption className="showcase-item-text">
+              <h4>{title}</h4>
+              <p>{description}</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+        ))}
       </Carousel>
     </Container>
   )

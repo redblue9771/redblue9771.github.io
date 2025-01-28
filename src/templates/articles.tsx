@@ -1,13 +1,22 @@
 import { SEO, TimeLine } from "@/components"
-import { useSiteMetadataContext } from "@/features/layouts"
+import { useHeaderMetadataContext } from "@/features/layouts"
 import { ArticleCategoryNav } from "@/features/sections"
 import { useSearchParams } from "@/hooks"
 import { useLocation } from "@reach/router"
-import { PageProps } from "gatsby"
+import { graphql, PageProps } from "gatsby"
 import { useEffect, useMemo } from "react"
 
 import { Container } from "react-bootstrap"
 export const Head = () => <SEO title="博文" />
+export const query = graphql`
+  query Article($_pathname: String) {
+    publicPage(route: { path: { eq: $_pathname } }) {
+      title
+      subTitle
+      description
+    }
+  }
+`
 export type IRouteSearchParams = {
   group?: IArticleGroupKeys
   current?: string
@@ -32,19 +41,11 @@ export type IArticleGroupProps = {
   articles: IArticles
 }
 
-function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
+function Articles({
+  pageContext,
+  data: { publicPage },
+}: PageProps<null, IArticleGroupProps>) {
   const { articles } = pageContext
-  const { setMetadata } = useSiteMetadataContext()
-  useEffect(() => {
-    setMetadata(() => ({
-      author: null,
-      siteUrl: null,
-      date: null,
-      title: "博文",
-      subTitle: "我非生而知之者",
-      description: "学而时习之",
-    }))
-  }, [])
 
   const location = useLocation()
   const search = useSearchParams<IRouteSearchParams>(location.search)
@@ -53,13 +54,19 @@ function Articles({ pageContext }: PageProps<null, IArticleGroupProps>) {
     const current =
       search.group &&
       articles.groupBy?.[search.group]?.find(
-        item => item.fieldValue === search.current
+        item => item.fieldValue === search.current,
       )
     if (current) {
       return current.nodes
     }
     return articles.list?.edges?.map(item => item.node)
   }, [articles, search])
+  const { setHeaderMetadata } = useHeaderMetadataContext()
+
+  console.log({ pageContext })
+  useEffect(() => {
+    setHeaderMetadata(publicPage)
+  })
 
   return (
     <Container fluid="lg" className="text-dark">

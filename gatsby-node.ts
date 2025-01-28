@@ -150,6 +150,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
     path: `/articles`,
     component: path.resolve(`src/templates/articles.tsx`),
     context: {
+      _pathname: `/articles`,
       articles: {
         list: articleList?.allMarkdownRemark,
         groupBy: {
@@ -166,10 +167,24 @@ export const createPages: GatsbyNode["createPages"] = async ({
       path: `${node.fields?.slug}`,
       component: path.resolve(`src/templates/article.tsx`),
       context: {
+        _pathname: `${node.fields?.slug}`,
         node,
         next,
         previous,
       },
     })
+  })
+}
+
+export const onCreatePage: GatsbyNode[
+  'onCreatePage'
+] = ({ page, actions }) => {
+  const { createPage, deletePage } = actions
+  deletePage(page)
+  createPage({
+    ...page, context: {
+      ...page.context,
+      _pathname: page.path
+    }
   })
 }

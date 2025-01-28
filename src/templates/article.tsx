@@ -1,5 +1,5 @@
 import { Divider, SEO } from "@/components"
-import { useSiteMetadataContext } from "@/features/layouts"
+import { useHeaderMetadataContext } from "@/features/layouts"
 import { Link, PageProps } from "gatsby"
 
 import "katex/dist/katex.min.css"
@@ -45,7 +45,7 @@ export type ArticleByIdQuery = {
 }
 
 function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
-  const { setMetadata } = useSiteMetadataContext()
+  const { setHeaderMetadata: setMetadata } = useHeaderMetadataContext()
 
   const { node, next, previous } = pageContext
   const { frontmatter } = node
@@ -142,17 +142,6 @@ function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
                   <td>{frontmatter?.tags?.join("、")}</td>
                 </tr>
               )}
-              <tr>
-                <td>推荐</td>
-                <td>
-                  <a
-                    href="https://go.invitevp.com/#/register?code=kJRst0sa"
-                    target="_blank"
-                  >
-                    【无推广】自用两年多，流量无过期时间，有试用流量，稳定性价比机场！👈
-                  </a>
-                </td>
-              </tr>
             </tbody>
           </table>
         </address>

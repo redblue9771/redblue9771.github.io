@@ -1,0 +1,65 @@
+- title: 凡所有相，皆是虚妄
+  subTitle: New Youth, New Vision.
+  siteTitle: 其实你知的我是那面
+  description: ""
+  _hidden: false
+  route:
+    title:
+      cn: 主页
+    path: /
+    _external: false
+
+- title: 我非生而知之者
+  subTitle: 学而时习之
+  siteTitle: 博文
+  description: ""
+  _hidden: false
+  route:
+    title:
+      cn: 博文
+    path: /articles
+    _external: false
+
+- title: 博采众长
+  subTitle: 君知其难，则自能旁搜博采
+  siteTitle: 藏经
+  description: ""
+  _hidden: false
+  route:
+    title:
+      cn: 藏经
+    path: /library
+    _external: false
+
+- title: 吾与徐工孰娴编码之技
+  subTitle: Talk is cheap. Show me the code.
+  siteTitle: 项目
+  description: ""
+  _hidden: false
+  route:
+    title:
+      cn: 项目
+    path: /repositories
+    _external: false
+
+- title:
+  subTitle:
+  siteTitle: 
+  description: ""
+  _hidden: false
+  route:
+    title:
+      cn: 状态
+    path: https://status.redblue.fun
+    _external: true
+    
+- title: 天涯何处无芳草，何必单恋这一页
+  subTitle: "404: Page Not Found!"
+  siteTitle: "404"
+  description: ""
+  _hidden: true
+  route:
+    title:
+      cn: "404"
+    path: /404
+    _external: false

@@ -1,12 +1,12 @@
 import { SEO } from "@/components"
-import { useSiteMetadataContext } from "@/features/layouts"
+import { useHeaderMetadataContext } from "@/features/layouts"
 import type { Repository } from "@/typings/github.schemas"
 import { graphql, PageProps } from "gatsby"
 import { useEffect, useState } from "react"
 import { Carousel, Col, Container, Figure, Row } from "react-bootstrap"
 
 export const query = graphql`
-  query IndexPage {
+  query IndexPage($_pathname: String) {
     allCarousel(filter: { for: { eq: "homePage" } }) {
       nodes {
         id
@@ -36,29 +36,34 @@ export const query = graphql`
         excerpt(pruneLength: 100, truncate: true)
       }
     }
+    publicPage(route: { path: { eq: $_pathname } }) {
+      title
+      subTitle
+      description
+    }
   }
 `
-export const Head = () => (
-  <SEO title="其实你知的我是那面" description="New Youth, New Vision." />
-)
-const IndexPage = ({ data }: PageProps<Queries.IndexPageQuery>) => {
-  const { allMarkdownRemark, allCarousel } = data
-  const { setMetadata } = useSiteMetadataContext()
+export const Head = ({ data, pageContext }) => {
+  const { publicPage } = data
+  console.log({ publicPage })
 
+  return (
+    <>
+      <SEO title="其实你知的我是那面" description="New Youth, New Vision." />
+    </>
+  )
+}
+const IndexPage = ({
+  data,
+  pageContext,
+}: PageProps<Queries.IndexPageQuery>) => {
+  const { allMarkdownRemark, allCarousel, publicPage } = data
   const [repositories, setRepositories] = useState<Repository[]>([])
+  console.log({ pageContext })
+  const { setHeaderMetadata } = useHeaderMetadataContext()
 
   useEffect(() => {
-    setMetadata(() => ({
-      author: null,
-      siteUrl: null,
-      date: null,
-      title: "RedBlue | 赤琦",
-      subTitle: "凡所有相，皆是虚妄",
-      description: "New Youth, New Vision.",
-    }))
-  }, [])
-
-  useEffect(() => {
+    setHeaderMetadata(publicPage)
     fetch("https://api.github.com/graphql", {
       method: "POST",
       body: JSON.stringify({

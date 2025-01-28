@@ -1,12 +1,12 @@
 import { SEO } from "@/components"
-import { useSiteMetadataContext } from "@/features/layouts"
+import { useHeaderMetadataContext } from "@/features/layouts"
 import { graphql, PageProps } from "gatsby"
 import { Fragment, useEffect } from "react"
 
 import { Button, ButtonGroup, Container } from "react-bootstrap"
 export const Head = () => <SEO title="藏经" />
 export const query = graphql`
-  query queryBooksForLibrary {
+  query queryLibrary($_pathname: String) {
     allBook {
       group(field: { series: SELECT }) {
         fieldValue
@@ -25,25 +25,28 @@ export const query = graphql`
         }
       }
     }
+    publicPage(route: { path: { eq: $_pathname } }) {
+      title
+      subTitle
+      description
+    }
   }
 `
 
-function Library({ data }: PageProps<Queries.queryBooksForLibraryQuery>) {
-  const { setMetadata } = useSiteMetadataContext()
+function Library({
+  data: { allBook, publicPage },
+  pageContext,
+}: PageProps<Queries.queryLibraryQuery>) {
+  const { setHeaderMetadata } = useHeaderMetadataContext()
+  console.log({ publicPage, pageContext })
 
   useEffect(() => {
-    setMetadata(() => ({
-      author: null,
-      siteUrl: null,
-      date: null,
-      title: "藏经",
-      subTitle: "博采众长",
-      description: "君知其难，则自能旁搜博采",
-    }))
+    setHeaderMetadata(publicPage)
   }, [])
+
   return (
     <Container fluid="lg" className="mx-auto">
-      {data.allBook.group.map(({ fieldValue: series, edges }) => (
+      {allBook.group.map(({ fieldValue: series, edges }) => (
         <Fragment key={series}>
           <h3 className="text-new">{series}</h3>
           <ul>

@@ -1,26 +1,30 @@
-import { SEO, Timeline, TimelineItem } from "@/components"
-import { useSiteMetadataContext } from "@/features/layouts"
-
+import { SEO } from "@/components"
+import { useHeaderMetadataContext } from "@/features/layouts"
 import type { Gist, Repository } from "@/typings/github.schemas"
-import { Fragment, useEffect, useState } from "react"
+import { graphql } from "gatsby"
+import { useEffect, useState } from "react"
 
 import { Container } from "react-bootstrap"
 export const Head = () => <SEO title="项目" />
-function Repositories() {
-  const { setMetadata } = useSiteMetadataContext()
+
+export const query = graphql`
+  query queryRepositories($_pathname: String) {
+    publicPage(route: { path: { eq: $_pathname } }) {
+      title
+      subTitle
+      description
+    }
+  }
+`
+
+function Repositories({ data: { publicPage } }) {
+  const { setHeaderMetadata } = useHeaderMetadataContext()
 
   const [repositories, setRepositories] = useState<Repository[]>([])
   const [gists, setGists] = useState<Gist[]>([])
 
   useEffect(() => {
-    setMetadata(() => ({
-      author: null,
-      siteUrl: null,
-      date: null,
-      title: "项目",
-      subTitle: "吾与徐工孰娴编码之技",
-      description: "Talk is cheap. Show me the code.",
-    }))
+    setHeaderMetadata(publicPage)
   }, [])
 
   useEffect(() => {
@@ -228,7 +232,7 @@ function Repositories() {
                 {primaryLanguage ? primaryLanguage.name : ""}
               </span>
             </a>
-          )
+          ),
         )}
       </div>
       <h3>

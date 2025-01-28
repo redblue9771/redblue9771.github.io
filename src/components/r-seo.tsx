@@ -1,4 +1,4 @@
-import { useSiteMetadataContext } from "@/features/layouts"
+import { useHeaderMetadataContext } from "@/features/layouts"
 import { useSiteMetadata } from "@/hooks"
 
 type ISEOProps = React.PropsWithChildren<{

@@ -1,11 +1,10 @@
 import type { GatsbyConfig } from "gatsby"
-import * as  dotenv from 'dotenv';
+import * as dotenv from "dotenv"
 
 dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
-console.log(process.env.NODE_ENV)
 type TypeNameFuncArgs = {
   node: {
     name: string
@@ -23,13 +22,18 @@ const config: GatsbyConfig = {
     description: `RedBlue(赤琦)，来自彩云之南的 95 后男孩，偏执的完美主义者，体现在方方面面。爱科技、爱搞机、爱摄影、爱一切美好的事物，追求源于热爱。`,
     siteUrl: `https://redblue.fun`,
     social: {},
+    copyright: {
+      startYear: 2017,
+      endYear: "now",
+      holder: "赤琦",
+    },
   },
   trailingSlash: "never",
   plugins: [
     {
       resolve: "gatsby-plugin-google-analytics",
       options: {
-        trackingId: process.env.GATSBY_GOOGLE_ANALYTICS_ID,
+        trackingId: process.env.GATSBY_GOOGLE_ANALYTICS_ID || "none",
       },
     },
     `gatsby-plugin-scroll-reveal`,

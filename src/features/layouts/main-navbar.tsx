@@ -1,29 +1,19 @@
-import type { ICustomSiteMetadata } from "@/features/layouts"
+import {
+  useHeaderMetadataContext,
+  type IHeaderMetadata,
+} from "@/features/layouts"
 import { useLocation } from "@reach/router"
 import { graphql, Link, useStaticQuery } from "gatsby"
 import { useCallback, useLayoutEffect, useState } from "react"
 
 import { Container, Nav, Navbar } from "react-bootstrap"
 
-const routes = [
-  { title: { cn: "主页" }, path: "/" },
-  { title: { cn: "博文" }, path: "/articles" },
-  { title: { cn: "藏经" }, path: "/library" },
-  { title: { cn: "项目" }, path: "/repositories" },
-  {
-    title: { cn: "状态" },
-    path: "https://status.redblue.fun",
-    external: true,
-  },
-]
-
 interface IMainNavBarProps {
-  context: ICustomSiteMetadata
   absElementTop: number
 }
 
 const query = graphql`
-  query siteMeta {
+  query MetadataForNavbar {
     site {
       siteMetadata {
         title
@@ -32,13 +22,26 @@ const query = graphql`
         author
       }
     }
+    allPublicPage(filter: { _hidden: { eq: false } }) {
+      nodes {
+        id
+        route {
+          title {
+            cn
+          }
+          path
+          _external
+        }
+      }
+    }
   }
 `
-export const MainNavbar = ({ absElementTop, context }: IMainNavBarProps) => {
+export const MainNavbar = ({ absElementTop }: IMainNavBarProps) => {
   const [isOverTop, setIsOverTop] = useState(false)
   const [toggleBar, setToggleBar] = useState(false)
-  const { site } = useStaticQuery(query)
+  const { site, allPublicPage } = useStaticQuery(query)
   const location = useLocation()
+  const { headerMetadata } = useHeaderMetadataContext()
 
   const handleScroll = useCallback(() => {
     requestAnimationFrame(() => {
@@ -82,23 +85,33 @@ export const MainNavbar = ({ absElementTop, context }: IMainNavBarProps) => {
           to="/"
           className={`text-truncate ${!isOverTop ? "slogan" : ""}`}
         >
-          {isOverTop ? context.subTitle : site.siteMetadata.title}
+          {isOverTop ? headerMetadata.subTitle : site.siteMetadata.title}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" as="div" />
         <Navbar.Collapse id="navbarScroll" className="flex-grow-0">
           <Nav navbarScroll>
-            {routes.map(({ title, path, external }) => (
-              <Nav.Link
-                key={path}
-                href={external ? path : undefined}
-                as={external ? undefined : Link}
-                to={path || "/404"}
-                className="text-center"
-                disabled={location.pathname === path}
-              >
-                &nbsp;/ {title.cn} /&nbsp;
-              </Nav.Link>
-            ))}
+            {allPublicPage.nodes.map(({ id, route }) =>
+              route._external ? (
+                <Nav.Link
+                  key={id}
+                  href={route.path}
+                  className="text-center"
+                  disabled={location.pathname === route.path}
+                >
+                  &nbsp;/ {route.title.cn} /&nbsp;
+                </Nav.Link>
+              ) : (
+                <Nav.Link
+                  key={id}
+                  as={Link}
+                  to={route.path || "/404"}
+                  className="text-center"
+                  disabled={location.pathname === route.path}
+                >
+                  &nbsp;/ {route.title.cn} /&nbsp;
+                </Nav.Link>
+              ),
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

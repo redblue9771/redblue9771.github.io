@@ -1,19 +1,14 @@
-import type { ICustomSiteMetadata } from "@/features/layouts"
+import { useHeaderMetadataContext } from "@/features/layouts"
 import { useMatch } from "@reach/router"
 import clsx from "clsx"
-
 import { Container } from "react-bootstrap"
 
-interface IMainNavBarProps {
-  context: ICustomSiteMetadata
-}
-
-export const Header = ({ context }: IMainNavBarProps) => {
+export const Header = () => {
   const articlePage = useMatch("/articles/:articleName")
+  const { headerMetadata } = useHeaderMetadataContext()
 
   return (
     <header id="head" className="header" data-sal="fade">
-      {/* {renderTitle()} */}
       <div className="header__wrapper">
         <Container className="header__wrapper__content" fluid="lg">
           <h1
@@ -22,16 +17,16 @@ export const Header = ({ context }: IMainNavBarProps) => {
               !articlePage && "header__wrapper__content__title--art",
             ])}
           >
-            {context.subTitle}
+            {headerMetadata.title}
           </h1>
-          {context.description && (
+          {headerMetadata.subTitle && (
             <h2 className="header__wrapper__content__sub-title">
-              {context.description}
+              {headerMetadata.subTitle}
             </h2>
           )}
-          {context.date && (
+          {headerMetadata.description && (
             <h3 className="header__wrapper__content__sub-title">
-              {context.date}
+              {headerMetadata.description}
             </h3>
           )}
         </Container>

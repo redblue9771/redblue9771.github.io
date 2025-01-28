@@ -6,9 +6,9 @@ export const Footer = () => {
     <footer className="footer">
       <div className="footer__wrapper" id="fl">
         <div className="footer__wrapper__content text-white text-center">
-          <p>版权所有 &copy; 2017 - {currentYear} 赤琦。保留所有权利。</p>
           <p>
-            Copyright &copy; 2017 - {currentYear} RedBlue. All Rights Reserved.
+            版权所有 &copy; 2017-{currentYear} 赤琦（redblue.fun）
+            保留所有权利。All Rights Reserved.
           </p>
           <p>
             <a href="/index.xml" target="_blank" className="text-light">

@@ -6,47 +6,42 @@ import {
   useState,
 } from "react"
 
-export type ICustomSiteMetadata = Queries.SiteSiteMetadata & {
+export type IHeaderMetadata = {
+  title: Queries.Maybe<string>
   subTitle: Queries.Maybe<string>
-  date: Queries.Maybe<string>
+  description: Queries.Maybe<string>
 }
 
-type IPageMetadata = {
-  metadata: ICustomSiteMetadata
-  setMetadata: Dispatch<SetStateAction<ICustomSiteMetadata>>
+type IHeaderMetadataDispatcher = {
+  headerMetadata: IHeaderMetadata
+  setHeaderMetadata: Dispatch<SetStateAction<IHeaderMetadata>>
 }
 
-const defaultContextValue: IPageMetadata = {
-  metadata: {
-    author: null,
-    description: null,
-    siteUrl: null,
+const defaultHeaderContextValue: IHeaderMetadataDispatcher = {
+  headerMetadata: {
     title: null,
     subTitle: null,
-    date: null,
+    description: null,
   },
-  setMetadata: () => {},
+  setHeaderMetadata: () => {},
 }
-const SiteMetadataContext = createContext(defaultContextValue)
+const HeaderMetaDataContext = createContext(defaultHeaderContextValue)
 
 export const AppProviders: (
-  T: React.PropsWithChildren
+  T: React.PropsWithChildren,
 ) => React.JSX.Element = ({ children }) => {
-  const [metadata, setMetadata] = useState(defaultContextValue.metadata)
+  const [headerMetadata, setHeaderMetadata] = useState(
+    defaultHeaderContextValue.headerMetadata,
+  )
   return (
-    <>
-      <SiteMetadataContext.Provider
-        value={{
-          metadata,
-          setMetadata,
-        }}
-      >
-        {children}
-      </SiteMetadataContext.Provider>
-    </>
+    <HeaderMetaDataContext.Provider
+      value={{ headerMetadata, setHeaderMetadata }}
+    >
+      {children}
+    </HeaderMetaDataContext.Provider>
   )
 }
 
-export const useSiteMetadataContext = () => {
-  return useContext(SiteMetadataContext)
+export const useHeaderMetadataContext = () => {
+  return useContext(HeaderMetaDataContext)
 }
