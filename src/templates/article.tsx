@@ -135,7 +135,41 @@ function Article({
             </tbody>
           </Table>
         </address> */}
-
+        <address>
+          {frontmatter?.original ? (
+            <div>
+              <small className="text-muted">转自：</small>
+              <a
+                href={frontmatter.original}
+                target="_blank"
+                rel="noopener noreferrer copyright"
+                title={frontmatter.original}
+              >
+                {frontmatter.author}
+              </a>
+            </div>
+          ) : (
+            <div>
+              <a
+                rel="license noopener noreferrer"
+                href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+                target="_blank"
+                title="知识共享署名 - 非商业性使用 - 相同方式共享4.0国际许可协议"
+              >
+                <i className="bi bi-cc-circle" /> 赤琦
+              </a>{" "}
+              <small className="text-muted">原创于</small>{" "}
+              <time dateTime="YYYY-MM-DD">{frontmatter.date}</time>
+            </div>
+          )}
+          <div>
+            <small className="text-muted">全文</small>{" "}
+            {markdownRemark.wordCount.words}{" "}
+            <small className="text-muted">字，阅完预估</small>{" "}
+            {markdownRemark.timeToRead}{" "}
+            <small className="text-muted">分钟</small>
+          </div>
+        </address>
         <Divider>📖 正文</Divider>
         <article
           dangerouslySetInnerHTML={{
@@ -149,41 +183,6 @@ function Article({
       </Col>
       <Col xs={12} lg={3}>
         <aside className="article-aside sticky-md-top">
-          <address>
-            {frontmatter?.original ? (
-              <div>
-                <small className="text-muted">转自：</small>
-                <a
-                  href={frontmatter.original}
-                  target="_blank"
-                  rel="noopener noreferrer copyright"
-                  title={frontmatter.original}
-                >
-                  {frontmatter.author}
-                </a>
-              </div>
-            ) : (
-              <div>
-                <a
-                  rel="license noopener noreferrer"
-                  href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-                  target="_blank"
-                  title="知识共享署名 - 非商业性使用 - 相同方式共享4.0国际许可协议"
-                >
-                  <i className="bi bi-cc-circle" /> 赤琦
-                </a>{" "}
-                <small className="text-muted">原创于</small>{" "}
-                <time dateTime="YYYY-MM-DD">{frontmatter.date}</time>
-              </div>
-            )}
-            <div>
-              <small className="text-muted">全文</small>{" "}
-              {markdownRemark.wordCount.words}{" "}
-              <small className="text-muted">字，阅完预估</small>{" "}
-              {markdownRemark.timeToRead}{" "}
-              <small className="text-muted">分钟</small>
-            </div>
-          </address>
           <Divider>📚 目录</Divider>
           <nav
             className="tableOfContents"
