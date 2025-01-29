@@ -43,10 +43,7 @@ export const query = graphql`
     }
   }
 `
-export const Head = ({ data, pageContext }) => {
-  const { publicPage } = data
-  console.log({ publicPage })
-
+export const Head = ({ data: { publicPage } }) => {
   return (
     <>
       <SEO title="其实你知的我是那面" description="New Youth, New Vision." />
@@ -59,11 +56,10 @@ const IndexPage = ({
 }: PageProps<Queries.IndexPageQuery>) => {
   const { allMarkdownRemark, allCarousel, publicPage } = data
   const [repositories, setRepositories] = useState<Repository[]>([])
-  console.log({ pageContext })
   const { setHeaderMetadata } = useHeaderMetadataContext()
 
   useEffect(() => {
-    setHeaderMetadata(publicPage)
+    setHeaderMetadata(() => publicPage)
     fetch("https://api.github.com/graphql", {
       method: "POST",
       body: JSON.stringify({

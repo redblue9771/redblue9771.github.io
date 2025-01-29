@@ -1,65 +1,55 @@
 import { Divider, SEO } from "@/components"
 import { useHeaderMetadataContext } from "@/features/layouts"
-import { Link, PageProps } from "gatsby"
+import { graphql, Link, PageProps } from "gatsby"
 
 import "katex/dist/katex.min.css"
 import "prismjs/themes/prism-tomorrow.css"
 import { Fragment, useEffect, useRef } from "react"
-import { Col, Container, Row } from "react-bootstrap"
-export const Head = ({ pageContext }: PageProps<null, ArticleByIdQuery>) => (
-  <SEO title={pageContext?.node?.frontmatter?.title ?? ""} />
+import { Col, Container, Row, Table } from "react-bootstrap"
+export const Head = ({ data: { markdownRemark } }: PageProps) => (
+  <SEO title={markdownRemark.frontmatter?.title ?? ""} />
 )
-export type MarkdownRemarkFragmentFragment = Pick<
-  Queries.MarkdownRemark,
-  "id" | "tableOfContents" | "timeToRead" | "excerpt" | "html"
-> & {
-  fields?: Queries.Maybe<Pick<Queries.MarkdownRemarkFields, "slug">>
-  frontmatter?: Queries.Maybe<
-    Pick<
-      Queries.MarkdownRemarkFrontmatter,
-      | "title"
-      | "author"
-      | "date"
-      | "original"
-      | "description"
-      | "draft"
-      | "slug"
-      | "categories"
-      | "series"
-      | "tags"
-    >
-  >
-  headings?: Queries.Maybe<
-    Array<
-      Queries.Maybe<Pick<Queries.MarkdownHeading, "id" | "value" | "depth">>
-    >
-  >
-  wordCount?: Queries.Maybe<
-    Pick<Queries.MarkdownWordCount, "words" | "sentences" | "paragraphs">
-  >
-}
-export type ArticleByIdQuery = {
-  node: MarkdownRemarkFragmentFragment
-  next?: Queries.Maybe<MarkdownRemarkFragmentFragment>
-  previous?: Queries.Maybe<MarkdownRemarkFragmentFragment>
-}
 
-function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
-  const { setHeaderMetadata: setMetadata } = useHeaderMetadataContext()
+export const query = graphql`
+  query ArticleById($articleId: String!) {
+    markdownRemark(id: { eq: $articleId }) {
+      frontmatter {
+        author
+        date(formatString: "yyyy-MM-DD")
+        description
+        series
+        tags
+        title
+        original
+      }
+      html
+      id
+      tableOfContents
+      timeToRead
+      wordCount {
+        words
+      }
+    }
+  }
+`
 
-  const { node, next, previous } = pageContext
-  const { frontmatter } = node
+function Article({
+  pageContext,
+  location,
+  data: { markdownRemark },
+}: PageProps) {
+  const { setHeaderMetadata } = useHeaderMetadataContext()
 
+  const { next, previous } = pageContext
+  const { frontmatter } = markdownRemark
+  console.log({ markdownRemark })
   useEffect(() => {
-    setMetadata(() => ({
-      author: null,
-      siteUrl: null,
+    setHeaderMetadata(() => ({
       title: frontmatter?.title ?? "",
-      subTitle: frontmatter?.title ?? "",
-      description: frontmatter?.description ?? "",
-      date: frontmatter?.date ?? "",
+      subTitle: frontmatter?.description ?? "",
+      description: frontmatter?.date ?? "",
     }))
-  }, [frontmatter])
+  }, [])
 
   const commentRef = useRef<HTMLDivElement>(null)
 
@@ -84,8 +74,8 @@ function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
   return (
     <Container fluid="lg" as={Row} className="mx-auto px-1">
       <Col xs={12} lg={9}>
-        <address>
-          <table className="copyright">
+        {/* <address>
+          <Table striped bordered hover size="sm">
             <tbody>
               <tr>
                 {frontmatter?.original ? (
@@ -143,13 +133,13 @@ function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
                 </tr>
               )}
             </tbody>
-          </table>
-        </address>
+          </Table>
+        </address> */}
 
         <Divider>📖 正文</Divider>
         <article
           dangerouslySetInnerHTML={{
-            __html: node?.html ?? "ERR: HTML Render Error!",
+            __html: markdownRemark?.html ?? "ERR: HTML Render Error!",
           }}
           style={{ overflow: "hidden" }}
         />
@@ -159,11 +149,47 @@ function Article({ pageContext, location }: PageProps<null, ArticleByIdQuery>) {
       </Col>
       <Col xs={12} lg={3}>
         <aside className="article-aside sticky-md-top">
+          <address>
+            {frontmatter?.original ? (
+              <div>
+                <small className="text-muted">转自：</small>
+                <a
+                  href={frontmatter.original}
+                  target="_blank"
+                  rel="noopener noreferrer copyright"
+                  title={frontmatter.original}
+                >
+                  {frontmatter.author}
+                </a>
+              </div>
+            ) : (
+              <div>
+                <a
+                  rel="license noopener noreferrer"
+                  href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+                  target="_blank"
+                  title="知识共享署名 - 非商业性使用 - 相同方式共享4.0国际许可协议"
+                >
+                  <i className="bi bi-cc-circle" /> 赤琦
+                </a>{" "}
+                <small className="text-muted">原创于</small>{" "}
+                <time dateTime="YYYY-MM-DD">{frontmatter.date}</time>
+              </div>
+            )}
+            <div>
+              <small className="text-muted">全文</small>{" "}
+              {markdownRemark.wordCount.words}{" "}
+              <small className="text-muted">字，阅完预估</small>{" "}
+              {markdownRemark.timeToRead}{" "}
+              <small className="text-muted">分钟</small>
+            </div>
+          </address>
           <Divider>📚 目录</Divider>
           <nav
             className="tableOfContents"
             dangerouslySetInnerHTML={{
-              __html: node?.tableOfContents ?? "ERR: HTML Render Error!",
+              __html:
+                markdownRemark?.tableOfContents ?? "ERR: HTML Render Error!",
             }}
           />
           <Divider>🧐 更多</Divider>

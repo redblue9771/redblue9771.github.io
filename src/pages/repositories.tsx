@@ -24,7 +24,7 @@ function Repositories({ data: { publicPage } }) {
   const [gists, setGists] = useState<Gist[]>([])
 
   useEffect(() => {
-    setHeaderMetadata(publicPage)
+    setHeaderMetadata(() => publicPage)
   }, [])
 
   useEffect(() => {

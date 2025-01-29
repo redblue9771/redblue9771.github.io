@@ -15,6 +15,27 @@ export const query = graphql`
       subTitle
       description
     }
+    allMarkdownRemark(
+      filter: { frontmatter: { draft: { ne: true } } }
+      sort: { frontmatter: { date: DESC } }
+    ) {
+      nodes {
+        id
+        frontmatter {
+          title
+          author
+          date(formatString: "yyyy-MM-DD")
+        }
+        timeToRead
+        fields {
+          slug
+        }
+        excerpt(truncate: true)
+        wordCount {
+          words
+        }
+      }
+    }
   }
 `
 export type IRouteSearchParams = {
@@ -43,38 +64,37 @@ export type IArticleGroupProps = {
 
 function Articles({
   pageContext,
-  data: { publicPage },
+  data: { publicPage, allMarkdownRemark },
 }: PageProps<null, IArticleGroupProps>) {
   const { articles } = pageContext
 
   const location = useLocation()
   const search = useSearchParams<IRouteSearchParams>(location.search)
 
-  const articleList = useMemo(() => {
-    const current =
-      search.group &&
-      articles.groupBy?.[search.group]?.find(
-        item => item.fieldValue === search.current,
-      )
-    if (current) {
-      return current.nodes
-    }
-    return articles.list?.edges?.map(item => item.node)
-  }, [articles, search])
+  // const articleList = useMemo(() => {
+  //   const current =
+  //     search.group &&
+  //     articles.groupBy?.[search.group]?.find(
+  //       item => item.fieldValue === search.current,
+  //     )
+  //   if (current) {
+  //     return current.nodes
+  //   }
+  //   return articles.list?.edges?.map(item => item.node)
+  // }, [articles, search])
   const { setHeaderMetadata } = useHeaderMetadataContext()
 
-  console.log({ pageContext })
   useEffect(() => {
-    setHeaderMetadata(publicPage)
+    setHeaderMetadata(() => publicPage)
   })
 
   return (
     <Container fluid="lg" className="text-dark">
-      <ArticleCategoryNav articles={articles} />
+      {/* <ArticleCategoryNav articles={allMarkdownRemark.nodes} /> */}
       <TimeLine.Container>
-        {articleList?.map((node: any) => (
+        {allMarkdownRemark.nodes?.map((node: any) => (
           <TimeLine.Item
-            date={`${node.frontmatter.author} - ${
+            date={`${node.frontmatter.author} ${
               node.frontmatter.date || new Date().toLocaleDateString()
             }`}
             title={node.frontmatter.title || node.frontmatter.slug}

@@ -27,9 +27,8 @@ const NotFoundPage = ({
   data: { allCarousel, publicPage },
 }: PageProps<Queries.notFoundPageQuery>) => {
   const { setHeaderMetadata } = useHeaderMetadataContext()
-  console.log({ publicPage })
   useEffect(() => {
-    setHeaderMetadata(publicPage)
+    setHeaderMetadata(() => publicPage)
   }, [])
 
   return (

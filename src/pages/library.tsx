@@ -38,10 +38,9 @@ function Library({
   pageContext,
 }: PageProps<Queries.queryLibraryQuery>) {
   const { setHeaderMetadata } = useHeaderMetadataContext()
-  console.log({ publicPage, pageContext })
 
   useEffect(() => {
-    setHeaderMetadata(publicPage)
+    setHeaderMetadata(() => publicPage)
   }, [])
 
   return (

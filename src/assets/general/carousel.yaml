@@ -1,7 +1,7 @@
-- title: 中国大学MOOC
-  link: https://www.icourse163.org
-  cover: /img/slider-1.png
-  description: 即便错过心仪的大学，也不要错过中国大学MOOC，让每一个有提升愿望的用户能够学到中国知名高校的课程
+- title: 学习强国
+  link: https://www.xuexi.cn
+  cover: /img/slider-5.png
+  description: 提供海量、免费的图文和音视频学习资源，涵盖了政治、经济、文化、军事、外交以及文艺、哲学、历史、法律、科技等各个领域的学习资源，包括文章、期刊、古籍、公开课、歌曲、戏曲、影视、图书等多种形式。
   for: homePage
 
 - title: Info Q
@@ -10,16 +10,16 @@
   description: 促进软件开发领域知识与创新的传播
   for: homePage
 
-- title: 故宫博物馆
-  link: https://www.dpm.org.cn
-  cover: /img/slider-0.png
-  description: 每个中国人的宝藏，故宫博物院绝无仅有的独特藏品，是世界上规模最大、保存最完整的紫禁城木结构宫殿建筑群
-  for: homePage
-
 - title: 號外 City Magazine
   link: http://www.cityhowwhy.com.hk
   cover: /img/slider-4.jpeg
   description: A Hong Kong Heritage That Is Ahead Of Its Time
+  for: homePage
+
+- title: 故宫博物馆
+  link: https://www.dpm.org.cn
+  cover: /img/slider-0.png
+  description: 每个中国人的宝藏，故宫博物院绝无仅有的独特藏品，是世界上规模最大、保存最完整的紫禁城木结构宫殿建筑群
   for: homePage
 
 - title: NOWNESS

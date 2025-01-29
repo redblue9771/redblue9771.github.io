@@ -85,7 +85,7 @@ export const MainNavbar = ({ absElementTop }: IMainNavBarProps) => {
           to="/"
           className={`text-truncate ${!isOverTop ? "slogan" : ""}`}
         >
-          {isOverTop ? headerMetadata.subTitle : site.siteMetadata.title}
+          {isOverTop ? headerMetadata.title : site.siteMetadata.title}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" as="div" />
         <Navbar.Collapse id="navbarScroll" className="flex-grow-0">

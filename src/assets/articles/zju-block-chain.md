@@ -9,7 +9,7 @@ tags:
   - 新基建
   - 区块链
   - 数字经济
-title: 区块链技术简介
+title: 「区块链」技术简介
 categories:
   - knowledge
 ---

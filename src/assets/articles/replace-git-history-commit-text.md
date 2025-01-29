@@ -3,7 +3,7 @@ author: 赤琦
 date: 2024-12-08
 tags:
   - Git
-title: 快速隐藏 Git 仓库历史提交中的隐私信息
+title: 快速隐藏 Git 仓库历史提交中的「隐私信息」
 categories:
   - develop
 ---

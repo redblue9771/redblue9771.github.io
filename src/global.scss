@@ -95,6 +95,7 @@ a {
         }
       }
       &__sub-title {
+        font-family: "Times New Roman";
         font-weight: normal;
         @include media-breakpoint-down(md) {
           font-size: 1.2em;
@@ -264,7 +265,7 @@ a {
 }
 
 .index-module-1 {
-  background: url(/img/bg-1.webp) 50% no-repeat;
+  background: url(/img/index-bg.jpeg) 50% no-repeat;
   background-size: cover;
   background-attachment: fixed;
   margin-bottom: 6rem;
