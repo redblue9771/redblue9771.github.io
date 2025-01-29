@@ -85,7 +85,16 @@ export const MainNavbar = ({ absElementTop }: IMainNavBarProps) => {
           to="/"
           className={`text-truncate ${!isOverTop ? "slogan" : ""}`}
         >
-          {isOverTop ? headerMetadata.title : site.siteMetadata.title}
+          {isOverTop ? (
+            headerMetadata.title
+          ) : (
+            <img
+              src="/redblue.svg"
+              height="20"
+              className="d-inline-block "
+              alt="赤琦"
+            />
+          )}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" as="div" />
         <Navbar.Collapse id="navbarScroll" className="flex-grow-0">
