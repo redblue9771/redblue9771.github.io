@@ -139,14 +139,18 @@ function Article({
           {frontmatter?.original ? (
             <div>
               <small className="text-muted">转自：</small>
-              <a
-                href={frontmatter.original}
-                target="_blank"
-                rel="noopener noreferrer copyright"
-                title={frontmatter.original}
-              >
-                {frontmatter.author}
-              </a>
+              {frontmatter?.original.startsWith("http") ? (
+                <a
+                  href={frontmatter.original}
+                  target="_blank"
+                  rel="noopener noreferrer copyright"
+                  title={frontmatter.original}
+                >
+                  {frontmatter.author}
+                </a>
+              ) : (
+                frontmatter.author
+              )}
             </div>
           ) : (
             <div>
@@ -157,16 +161,16 @@ function Article({
                 title="知识共享署名 - 非商业性使用 - 相同方式共享4.0国际许可协议"
               >
                 <i className="bi bi-cc-circle" /> 赤琦
-              </a>{" "}
-              <small className="text-muted">原创于</small>{" "}
+              </a>
+              <small className="text-muted">原创于</small>
               <time dateTime="YYYY-MM-DD">{frontmatter.date}</time>
             </div>
           )}
           <div>
-            <small className="text-muted">全文</small>{" "}
-            {markdownRemark.wordCount.words}{" "}
-            <small className="text-muted">字，阅完预估</small>{" "}
-            {markdownRemark.timeToRead}{" "}
+            <small className="text-muted">全文</small>
+            {markdownRemark.wordCount.words}
+            <small className="text-muted">字，阅完预估</small>
+            {markdownRemark.timeToRead}
             <small className="text-muted">分钟</small>
           </div>
         </address>
