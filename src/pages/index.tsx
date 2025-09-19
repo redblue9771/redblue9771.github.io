@@ -1,6 +1,6 @@
 import { SEO } from "@/components"
 import { useHeaderMetadataContext } from "@/features/layouts"
-import type { Repository } from "@/typings/github.schemas"
+import type { Repository } from "@/github.schema.types.generated"
 import { graphql, PageProps } from "gatsby"
 import { useEffect, useState } from "react"
 import { Carousel, Col, Container, Figure, Row } from "react-bootstrap"

@@ -1,6 +1,6 @@
 import { SEO } from "@/components"
 import { useHeaderMetadataContext } from "@/features/layouts"
-import type { Gist, Repository } from "@/typings/github.schemas"
+import type { Gist, Repository } from "@/github.schema.types.generated"
 import { graphql } from "gatsby"
 import { useEffect, useState } from "react"
 
