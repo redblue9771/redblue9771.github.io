@@ -150,7 +150,7 @@ const IndexPage = ({
                     >
                       {node?.frontmatter?.title}
 
-                      <small className="d-block text-truncate">
+                      <small className="d-block text-truncate text-white-50">
                         {node?.frontmatter?.author} - {node?.frontmatter?.date}
                       </small>
                     </a>
@@ -197,29 +197,36 @@ const IndexPage = ({
                   <h4>·&nbsp;关于&nbsp;·</h4>
                 </dt>
                 <dd>
-                  <p>
-                    🙋‍♂️ 赤琦：赤红色的美玉
-                    <br />✨ RedBlue：据赤红，琦蓝而译
-                  </p>
+                  <p>赤红 · 琦蓝</p>
                 </dd>
                 <dd>
-                  <p>👨‍💻 Location：红河</p>
+                  <p>Base in 滇南中心城市</p>
                 </dd>
                 <dd>
-                  <p>🎓 专业：物联网工程</p>
+                  <p>榕城：福建理工大学 · FJUTer</p>
                 </dd>
                 <dd>
-                  <p>
-                    ⚛️ 简介：来自彩云之南的 95
-                    后男孩，偏执的完美主义者，体现在方方面面。
-                    <br />
-                    爱科技、爱搞机、爱摄影、爱一切美好的事物，追求源于热爱。
-                  </p>
+                  <p>Studding at FreeCodeCamp</p>
+                </dd>
+                <dd>
+                  <p>偏执的完美主义者，追求源于热爱</p>
+                </dd>
+                <dd>
+                  <p>Make work. Make right. Make Fast.</p>
                 </dd>
               </dl>
             </Col>
           </Container>
         </Row>
+        {/* <div className="circles">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <span></span>
+        </div> */}
         <Container
           as={Row}
           fluid="lg"

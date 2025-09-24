@@ -1,8 +1,11 @@
 //Here you can customize bootstrap
-$primary: #448aff;
-$primary-light: #2196f3;
+$primary: #0052d4;
+// $primary: #448aff;
+$primary-light: #448aff;
+// $primary-light: #2196f3;
 $secondary: #f44336;
 $secondary-light: #e86442;
+// $secondary-light: #e86442;
 
 $shadow: rgba(0, 0, 0, 0.5);
 $max-width: 1024px;
@@ -53,8 +56,8 @@ a {
   margin-bottom: 1rem;
   z-index: 1;
   &__wrapper {
-    background: linear-gradient(to bottom, $primary, $primary-light, $primary);
-
+    // background: linear-gradient(to bottom, $primary, $primary-light, $primary);
+    background-color: $primary;
     &__content {
       margin: 0 auto;
       padding: 5rem 0 1rem;
@@ -95,7 +98,7 @@ a {
         }
       }
       &__sub-title {
-        font-family: "Times New Roman";
+        // font-family: "Times New Roman";
         font-weight: normal;
         @include media-breakpoint-down(md) {
           font-size: 1.2em;
@@ -127,12 +130,13 @@ a {
   }
 
   &__wrapper {
-    background: linear-gradient(
-      to bottom,
-      $secondary,
-      $secondary-light,
-      $secondary
-    );
+    // background: linear-gradient(
+    //   to bottom,
+    //   $secondary,
+    //   $secondary-light,
+    //   $secondary
+    // );
+    background-color: $secondary;
     &__content {
       padding: 2rem 1rem;
 
@@ -283,26 +287,26 @@ a {
       background-color: #fff;
       // filter: drop-shadow(0 0 6px #f2f2f2);
       padding: 1rem 1.4rem;
-      background-image: url(/img/undraw_developer_activity.svg);
+      // background-image: url(/img/undraw_developer_activity.svg);
       transition: filter 0.3s;
       &:hover {
         filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.3));
         z-index: 99;
       }
-      dl {
-        background-color: rgba(255, 255, 255, 0.618);
-      }
+      // dl {
+      //   background-color: rgba(255, 255, 255, 0.618);
+      // }
       &:first-child,
       &:last-child {
-        background-color: $primary-light;
+        background-color: $primary;
         // filter: none;
-        background-image: url(/img/undraw_profile.svg);
-        & dl {
-          background-color: rgba(33, 150, 243, 0.618);
-        }
+        // background-image: url(/img/undraw_profile.svg);
+        // & dl {
+        //   background-color: rgba(33, 150, 243, 0.618);
+        // }
       }
       &:first-child {
-        background-image: url(/img/undraw_annotation.svg);
+        // background-image: url(/img/undraw_annotation.svg);
       }
     }
   }
@@ -458,5 +462,54 @@ main {
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+$width: 50vmin;
+.circles {
+  width: $width;
+  height: $width;
+  position: relative;
+  perspective: 50000px;
+  color: #61dafb;
+
+  span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    width: 18.4%;
+    height: 18.4%;
+    border-radius: 100%;
+    background: currentColor;
+  }
+
+  div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-left: $width / 25 solid;
+    border-top: $width / 25 solid transparent;
+    border-radius: 100%;
+
+    @for $i from 1 through 6 {
+      // ✅ 改为 6
+      &:nth-child(#{$i}) {
+        animation: anim-#{$i} 4s linear infinite;
+      }
+    }
+  }
+}
+
+@for $i from 1 through 6 {
+  // ✅ 改为 6
+  @keyframes anim-#{$i} {
+    from {
+      transform: rotateZ(360deg / 6 * $i) // ✅ 360/6 = 60°，均匀分布
+        rotateX(66deg) rotateZ(0deg);
+    }
+    to {
+      transform: rotateZ(360deg / 6 * $i) rotateX(66deg) rotateZ(360deg);
+    }
   }
 }
