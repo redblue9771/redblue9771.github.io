@@ -1,50 +1,40 @@
-<p align="center">
-  <a href="https://www.gatsbyjs.com">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-   Gatsby Bootstrap 5 starter
-</h1>
+# RedBlue | 赤琦
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/2496959d-1507-4717-8fd6-846282c3a409/deploy-status)](https://app.netlify.com/sites/gatsby-bootstrap-5/deploys)
-![dependancies](https://img.shields.io/david/r-ichard/gatsby-starter-bootstrap-5)
+个人网站，使用 Astro 静态生成、React/TypeScript 交互组件和 Tailwind CSS 构建。文章正文保存在 `src/assets/articles/`，页面、轮播和藏书等结构化数据保存在 `src/assets/general/`。
 
-Minimal bootstrap 5 and Gatsby configuration with SCSS support. 
+## 环境要求
 
-Demo here : https://gatsby-bootstrap-5.netlify.app
+- Node.js `>=22.23.4`
+- npm
 
-## 📋 Available options
+## 本地开发
 
-- You can theme bootstrap via `src/components/layout.scss`
-
-## 🚀 How to install
-
-Use the Gatsby CLI to create a new site. 
-
-```shell
-# create a new Gatsby site using the default starter
-gatsby new gatsby-starter-bootstrap-5 https://github.com/r-ichard/gatsby-starter-bootstrap-5
+```sh
+npm install
+npm run dev
 ```
 
+Astro 开发服务器默认运行在 <http://localhost:4321>。
 
-## ✏️ How to develop locally
+## 检查与构建
 
-1.  Navigate into your new site’s directory and start it up.
+```sh
+npm run check
+npm run build
+npm run preview
+```
 
-    ```shell
-    cd gatsby-starter-bootstrap-5/
-    gatsby develop
-    ```
+静态站点默认输出到 `dist/`。`npm run gh` 会构建并使用 `gh-pages` 发布该目录。
 
-1.  **Open the source code and start editing!**
+如需启用 Google Analytics，可设置 `PUBLIC_GOOGLE_ANALYTICS_ID`；旧的 `GATSBY_GOOGLE_ANALYTICS_ID` 环境变量仍可用于构建时兼容。
 
-    Your site is now running at `http://localhost:8000`!
+## 内容路由
 
-    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.com/tutorial/part-five/#introducing-graphiql)._
+- `/`：主页
+- `/articles`：博文列表
+- `/articles/<markdown 文件名>`：文章详情
+- `/library`：藏经
+- `/repositories`：GitHub 项目和 Gist
+- `/index.xml`：RSS
 
-    Open the `gatsby-starter-bootstrap-5` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
-
-## 💡 How to contribute 
-
-Any feedback is welcome and helpful.
+文章 URL 根据 Markdown 文件名的小写形式生成；草稿 (`draft: true`) 不进入公开列表、页面或 RSS。Astro 内容集合会在构建时校验文章 frontmatter 和 YAML 数据。

@@ -1,0 +1,238 @@
+---
+import { getCollection, render } from "astro:content"
+import type { ArticleEntry } from "../../lib/articles"
+import ArticleToc from "../../components/article-toc.astro"
+import Divider from "../../components/divider"
+import SiteLayout from "../../layouts/SiteLayout.astro"
+import {
+  articleExcerpt,
+  formatArticleDate,
+  sortArticles,
+} from "../../lib/articles"
+
+interface Props {
+  article: ArticleEntry
+  previous?: ArticleEntry
+  next?: ArticleEntry
+}
+
+export async function getStaticPaths() {
+  const articles = sortArticles(
+    await getCollection("articles", ({ data }) => !data.draft),
+  )
+  return articles.map((article, index) => ({
+    params: { slug: article.id },
+    props: {
+      article,
+      previous: articles[index + 1],
+      next: articles[index - 1],
+    },
+  }))
+}
+
+const { article, previous, next } = Astro.props
+const { Content, headings } = await render(article)
+type TocItem = (typeof headings)[number] & { children: TocItem[] }
+const tocItems: TocItem[] = []
+const headingStack: TocItem[] = []
+for (const heading of headings.filter(
+  ({ depth }) => depth >= 2 && depth <= 6,
+)) {
+  const item: TocItem = { ...heading, children: [] }
+  while (headingStack.at(-1) && headingStack.at(-1)!.depth >= item.depth) {
+    headingStack.pop()
+  }
+  const parent = headingStack.at(-1)
+  if (parent) parent.children.push(item)
+  else tocItems.push(item)
+  headingStack.push(item)
+}
+const date = article.data.date
+const body = article.body ?? ""
+const hanCount = (body.match(/\p{Script=Han}/gu) ?? []).length
+const latinWordCount = (
+  body.replace(/\p{Script=Han}/gu, "").match(/[\p{L}\p{N}]+/gu) ?? []
+).length
+const wordCount = hanCount + latinWordCount
+const minutesToRead = Math.max(
+  1,
+  Math.round((latinWordCount + hanCount * 0.56) / 265),
+)
+const description = article.data.description || articleExcerpt(article, 300)
+---
+
+<SiteLayout
+  title={article.data.title}
+  description={description}
+  heading={article.data.title}
+  subtitle={article.data.description ?? undefined}
+  headerDescription={formatArticleDate(date)}
+>
+  <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_15rem]">
+    <article class="min-w-0">
+      <div class="mb-6 space-y-2 text-sm text-slate-600 dark:text-slate-300">
+        {article.data.original ? (
+          <p>
+            <span class="text-slate-500 dark:text-slate-400">转自：</span>
+            {article.data.original.startsWith("http") ? (
+              <a
+                href={article.data.original}
+                target="_blank"
+                rel="noopener noreferrer copyright"
+              >
+                {article.data.author || article.data.original}
+              </a>
+            ) : (
+              article.data.author || article.data.original
+            )}
+          </p>
+        ) : (
+          <p>
+            <a
+              rel="license noopener noreferrer"
+              href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+              target="_blank"
+              title="知识共享署名 - 非商业性使用 - 相同方式共享4.0国际许可协议"
+            >
+              ◉ 赤琦
+            </a>
+            <span class="ml-2">原创于</span>
+            {date && (
+              <time class="ml-1" datetime={date.toISOString()}>
+                {formatArticleDate(date)}
+              </time>
+            )}
+          </p>
+        )}
+        <p>
+          <span class="text-slate-500 dark:text-slate-400">全文</span>{" "}
+          {wordCount}
+          <span class="text-slate-500 dark:text-slate-400"> 字，阅完预估 </span>
+          {minutesToRead}
+          <span class="text-slate-500 dark:text-slate-400"> 分钟</span>
+          {article.data.tags?.length ? (
+            <span class="ml-3">标签：{article.data.tags.join("、")}</span>
+          ) : null}
+        </p>
+      </div>
+
+      <Divider>📖 正文</Divider>
+      <div class="prose prose-slate max-w-none dark:prose-invert prose-a:break-all prose-img:mx-auto prose-img:rounded-lg prose-pre:overflow-x-auto">
+        <Content />
+      </div>
+      <p class="my-8 text-center">（完）</p>
+
+      <Divider>🙋 评论</Divider>
+      <div id="utterances-comments" class="comment min-h-12"></div>
+    </article>
+
+    <aside class="self-start lg:sticky lg:top-20">
+      <Divider>📚 目录</Divider>
+      <nav
+        aria-label="文章目录"
+        class="mb-8 max-h-[calc(100vh-6rem)] overflow-y-auto text-sm"
+      >
+        {tocItems.length > 0 ? (
+          <ArticleToc items={tocItems} />
+        ) : (
+          <p class="text-slate-500 dark:text-slate-400">本文暂无目录。</p>
+        )}
+      </nav>
+      <Divider>🧐 更多</Divider>
+      <div class="space-y-4 text-sm">
+        {previous && (
+          <p>
+            <span class="text-slate-500 dark:text-slate-400">上一篇：</span>
+            <a class="block" href={`/articles/${previous.id}`} rel="prev">
+              {previous.data.title}
+            </a>
+          </p>
+        )}
+        {next && (
+          <p>
+            <span class="text-slate-500 dark:text-slate-400">下一篇：</span>
+            <a class="block" href={`/articles/${next.id}`} rel="next">
+              {next.data.title}
+            </a>
+          </p>
+        )}
+      </div>
+    </aside>
+  </div>
+</SiteLayout>
+
+<script>
+  const commentRoot = document.querySelector<HTMLDivElement>(
+    "#utterances-comments",
+  )
+  const tocEntries = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"),
+  )
+    .map(link => ({
+      link,
+      heading: document.getElementById(decodeURIComponent(link.hash.slice(1))),
+    }))
+    .filter(
+      (entry): entry is { link: HTMLAnchorElement; heading: HTMLElement } =>
+        entry.heading instanceof HTMLElement,
+    )
+  let tocFrame = 0
+  const updateActiveHeading = () => {
+    tocFrame = 0
+    if (tocEntries.length === 0) return
+    const atPageEnd =
+      window.scrollY + window.innerHeight >=
+      document.documentElement.scrollHeight - 2
+    const activeEntry = atPageEnd
+      ? tocEntries[tocEntries.length - 1]
+      : (tocEntries
+          .filter(({ heading }) => heading.getBoundingClientRect().top <= 140)
+          .at(-1) ?? tocEntries[0])
+    for (const { link } of tocEntries) {
+      const active = link === activeEntry.link
+      if (active) link.setAttribute("aria-current", "location")
+      else link.removeAttribute("aria-current")
+      link.classList.toggle("border-primary", active)
+      link.classList.toggle("font-semibold", active)
+      link.classList.toggle("text-primary", active)
+      link.classList.toggle("dark:text-blue-300", active)
+    }
+  }
+  const scheduleTocUpdate = () => {
+    if (!tocFrame) tocFrame = window.requestAnimationFrame(updateActiveHeading)
+  }
+  window.addEventListener("scroll", scheduleTocUpdate, { passive: true })
+  window.addEventListener("resize", scheduleTocUpdate)
+  updateActiveHeading()
+
+  if (commentRoot && !commentRoot.querySelector("script")) {
+    const utterances = document.createElement("script")
+    utterances.src = "https://utteranc.es/client.js"
+    utterances.async = true
+    utterances.setAttribute("repo", "redblue9771/comments-for-redblue")
+    utterances.setAttribute("issue-term", "url")
+    utterances.setAttribute("id", "utterances")
+    utterances.setAttribute(
+      "theme",
+      document.documentElement.classList.contains("dark")
+        ? "github-dark"
+        : "github-light",
+    )
+    utterances.setAttribute("crossorigin", "anonymous")
+    utterances.setAttribute("label", "comment")
+    commentRoot.appendChild(utterances)
+  }
+  window.addEventListener("themechange", () => {
+    const frame =
+      commentRoot?.querySelector<HTMLIFrameElement>(".utterances-frame")
+    frame?.contentWindow?.postMessage(
+      {
+        type: "set-theme",
+        theme: document.documentElement.classList.contains("dark")
+          ? "github-dark"
+          : "github-light",
+      },
+      "https://utteranc.es",
+    )
+  })
+</script>

@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content"
+import ArticleTimeline, {
+  type ArticleListItem,
+} from "../../components/article-timeline"
+import SiteLayout from "../../layouts/SiteLayout.astro"
+import {
+  articleExcerpt,
+  formatArticleDate,
+  sortArticles,
+} from "../../lib/articles"
+
+const [pageEntries, articleEntries] = await Promise.all([
+  getCollection("pages"),
+  getCollection("articles", ({ data }) => !data.draft),
+])
+const page = pageEntries.find(({ data }) => data.route.path === "/articles")
+if (!page) throw new Error("Missing articles page metadata in publicPage.yaml")
+const articles: ArticleListItem[] = sortArticles(articleEntries).map(
+  article => ({
+    id: article.id,
+    title: article.data.title,
+    author: article.data.author || "赤琦",
+    date: formatArticleDate(article.data.date),
+    href: `/articles/${article.id}`,
+    description: articleExcerpt(article, 140),
+  }),
+)
+---
+
+<SiteLayout
+  title={page.data.siteTitle || "博文"}
+  description={page.data.description || "记录思考、技术与生活。"}
+  heading={page.data.title || "我非生而知之者"}
+  subtitle={page.data.subTitle || "Thinking Different."}
+>
+  <section aria-label="博文列表">
+    <ArticleTimeline articles={articles} />
+  </section>
+</SiteLayout>

@@ -1,0 +1,78 @@
+---
+import { getCollection } from "astro:content"
+import SiteLayout from "../layouts/SiteLayout.astro"
+
+const [pageEntries, books] = await Promise.all([
+  getCollection("pages"),
+  getCollection("books"),
+])
+const page = pageEntries.find(({ data }) => data.route.path === "/library")
+if (!page) throw new Error("Missing library page metadata in publicPage.yaml")
+const groupedBooks = new Map<string, typeof books>()
+for (const book of books) {
+  for (const series of book.data.series?.length ? book.data.series : ["其他"]) {
+    const group = groupedBooks.get(series) ?? []
+    group.push(book)
+    groupedBooks.set(series, group)
+  }
+}
+---
+
+<SiteLayout
+  title={page.data.siteTitle || "藏经"}
+  description={page.data.description || "收藏的书籍、论文与资料。"}
+  heading={page.data.title || "博采众长"}
+  subtitle={page.data.subTitle || "君知其难，则自能旁搜博采"}
+>
+  <div class="space-y-8">
+    {[...groupedBooks.entries()].map(([series, entries], index) => (
+      <section aria-labelledby={`series-${index}`}>
+        <h2
+          id={`series-${index}`}
+          class="mb-2 text-3xl font-normal text-primary dark:text-blue-300"
+        >
+          {series}
+        </h2>
+        <ul class="list-disc pl-8">
+          {entries.map(({ data: book }) => (
+            <li class="mb-3">
+              <h3 class="font-normal">
+                {book.name}
+                {book.author ? ` - ${book.author}` : ""}
+              </h3>
+              {book.description && (
+                <p class="text-slate-600 dark:text-slate-300">
+                  简述：{book.description}
+                </p>
+              )}
+              {book.keywords?.length && (
+                <p class="mb-3 text-slate-600 dark:text-slate-300">
+                  关键词：{book.keywords.join("、")}
+                </p>
+              )}
+              <div class="inline-flex flex-wrap">
+                <a
+                  href={book.download || book.slug}
+                  target="_blank"
+                  rel="contents noopener noreferrer"
+                  download
+                  class="inline-flex rounded-s border border-primary px-3 py-2 text-primary no-underline hover:bg-primary hover:text-white dark:border-blue-300 dark:text-blue-300 dark:hover:text-white"
+                >
+                  📥 下载 / Download
+                </a>
+                <a
+                  href={book.slug}
+                  target="_blank"
+                  rel="contents noopener noreferrer"
+                  class="-ms-px inline-flex rounded-e border border-primary px-3 py-2 text-primary no-underline hover:bg-primary hover:text-white dark:border-blue-300 dark:text-blue-300 dark:hover:text-white"
+                >
+                  📖 阅读 / Read
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</SiteLayout>

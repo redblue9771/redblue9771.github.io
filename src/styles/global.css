@@ -1,0 +1,43 @@
+@import "katex/dist/katex.min.css";
+@import "prism-themes/themes/prism-vsc-dark-plus.css";
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #0052d4;
+  --color-secondary: #d32f2f;
+  --font-slogan: "redblue", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply min-h-screen bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+    font-size: 16px;
+    line-height: 1.618;
+  }
+
+  a {
+    @apply text-primary transition-colors dark:text-blue-300;
+  }
+
+  a:hover {
+    @apply text-secondary dark:text-orange-300;
+  }
+
+  img {
+    @apply max-w-full;
+  }
+}

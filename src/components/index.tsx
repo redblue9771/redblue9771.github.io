@@ -1,5 +1,0 @@
-export { default as TimeLine } from "./geometric"
-export { default as Divider } from "./divider"
-export * from "./r-seo"
-export { default as Timeline } from "./timeline"
-export { default as TimelineItem } from "./timeline-item"

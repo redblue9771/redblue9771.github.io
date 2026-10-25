@@ -1,0 +1,123 @@
+---
+import { getCollection } from "astro:content"
+import HomeCarousel from "../components/home-carousel"
+import { HomeGithubWidget } from "../components/github-widgets"
+import SiteLayout from "../layouts/SiteLayout.astro"
+import { articleExcerpt, sortArticles } from "../lib/articles"
+
+const [pageEntries, carouselEntries, articleEntries] = await Promise.all([
+  getCollection("pages"),
+  getCollection("carousel"),
+  getCollection("articles", ({ data }) => !data.draft),
+])
+const homePage = pageEntries.find(({ data }) => data.route.path === "/")
+if (!homePage) throw new Error("Missing homepage metadata in publicPage.yaml")
+const slides = carouselEntries
+  .filter(({ data }) => data.for === "homePage")
+  .map(({ data }) => data)
+const latestArticles = sortArticles(articleEntries).slice(0, 5)
+const formatHomeArticleDate = (date?: Date) =>
+  date
+    ? new Intl.DateTimeFormat("en-US", {
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+        timeZone: "UTC",
+      })
+        .format(date)
+        .replace(", ", ",")
+    : ""
+---
+
+<SiteLayout
+  title={homePage.data.siteTitle || "其实你知的我是那面"}
+  description="New Youth, New Vision."
+  heading={homePage.data.title || "凡所有相，皆是虚妄"}
+  subtitle={homePage.data.subTitle || "New Youth, New Vision."}
+  fullWidth
+>
+  <HomeCarousel client:load slides={slides} />
+
+  <img
+    src="/img/gopher_head.png"
+    alt="Go 语言吉祥物"
+    class="mx-auto w-64 px-3"
+  />
+
+  <section
+    class="mb-24 w-full bg-cover bg-fixed bg-center px-4 pb-12 pt-8 text-white shadow-xl"
+    style="background-image: url('/img/index-bg.jpeg')"
+  >
+    <div class="mx-auto max-w-[1024px] text-center">
+      <h2 class="text-3xl font-semibold">I'm RedBlue.</h2>
+      <p class="font-slogan mt-2 text-2xl">你好，我是赤琦。</p>
+    </div>
+    <div class="mx-auto grid w-full max-w-[1024px] translate-y-16 grid-cols-1 gap-0 md:grid-cols-3">
+      <section
+        class="min-w-0 min-h-[22.25rem] bg-primary px-[1.4rem] py-4"
+        aria-labelledby="latest-articles-title"
+      >
+        <h2
+          id="latest-articles-title"
+          class="mb-4 text-center text-xl font-semibold"
+        >
+          · 博文 ·
+        </h2>
+        {latestArticles.map(article => (
+          <a
+            href={`/articles/${article.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mb-3 block truncate rounded px-2 py-1 text-white no-underline hover:bg-white/10 hover:text-white"
+            title={article.data.description || articleExcerpt(article, 100)}
+          >
+            <span class="block truncate">{article.data.title}</span>
+            <small class="block truncate text-white/75">
+              {article.data.author || "赤琦"} -{" "}
+              {formatHomeArticleDate(article.data.date)}
+            </small>
+          </a>
+        ))}
+      </section>
+      <section
+        class="min-w-0 min-h-[22.25rem] bg-white px-[1.4rem] py-4 text-slate-900 dark:bg-slate-800 dark:text-slate-100"
+        aria-labelledby="home-projects-title"
+      >
+        <HomeGithubWidget client:load />
+      </section>
+      <section
+        class="min-w-0 min-h-[22.25rem] bg-primary px-[1.4rem] py-4 text-white"
+        aria-labelledby="about-title"
+      >
+        <h2 id="about-title" class="mb-4 text-center text-xl font-semibold">
+          · 关于 ·
+        </h2>
+        <ul class="space-y-3">
+          <li>赤红 · 琦蓝</li>
+          <li>Base in 滇南中心城市</li>
+          <li>榕城：福建理工大学 · FJUTer</li>
+          <li>Studying at freeCodeCamp</li>
+          <li>偏执的完美主义者，追求源于热爱</li>
+          <li>Make work. Make right. Make fast.</li>
+        </ul>
+      </section>
+    </div>
+  </section>
+
+  <section
+    class="mx-auto max-w-[1024px] text-center"
+    aria-labelledby="coding-stats-title"
+  >
+    <h2 id="coding-stats-title" class="mb-4 text-xl font-semibold">
+      · 编码统计 ·
+    </h2>
+    <object
+      title="编码统计"
+      type="image/svg+xml"
+      data="https://wakatime.com/share/@redblue/31eeb3ce-ba04-46d4-be43-9c09edf88c5c.svg"
+      class="mx-auto min-h-64 w-full max-w-3xl"
+    >
+      <a href="https://wakatime.com/@redblue">查看 WakaTime 编码统计</a>
+    </object>
+  </section>
+</SiteLayout>

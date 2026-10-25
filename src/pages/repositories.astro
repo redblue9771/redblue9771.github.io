@@ -1,0 +1,21 @@
+---
+import { getCollection } from "astro:content"
+import GithubRepositories from "../components/github-widgets"
+import SiteLayout from "../layouts/SiteLayout.astro"
+
+const pages = await getCollection("pages")
+const page = pages.find(({ data }) => data.route.path === "/repositories")
+if (!page)
+  throw new Error("Missing repositories page metadata in publicPage.yaml")
+---
+
+<SiteLayout
+  title={page.data.siteTitle || "项目"}
+  description={
+    page.data.description || "赤琦在 GitHub 上公开的项目与代码片段。"
+  }
+  heading={page.data.title || "吾与徐工孰娴编码之技"}
+  subtitle={page.data.subTitle || "Talk is cheap. Show me the code."}
+>
+  <GithubRepositories client:load />
+</SiteLayout>

@@ -1,0 +1,294 @@
+---
+import Analytics from "@vercel/analytics/astro"
+import SpeedInsights from "@vercel/speed-insights/astro"
+import { getCollection } from "astro:content"
+import "../styles/global.css"
+
+interface Props {
+  title: string
+  description?: string
+  heading?: string
+  subtitle?: string
+  headerDescription?: string
+  fullWidth?: boolean
+}
+
+const {
+  title,
+  description = "RedBlue(赤琦)，来自彩云之南的 95 后男孩，偏执的完美主义者，体现在方方面面。爱科技、爱搞机、爱摄影、爱一切美好的事物，追求源于热爱。",
+  heading = title,
+  subtitle,
+  headerDescription,
+  fullWidth = false,
+} = Astro.props
+const siteTitle = "RedBlue | 赤琦"
+const canonical = new URL(Astro.url.pathname, Astro.site)
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/"
+const isArticle = currentPath.startsWith("/articles/")
+const pages = await getCollection("pages")
+const navItems = pages
+  .filter(({ data }) => !data._hidden && data.route.title.cn)
+  .map(({ data }) => ({
+    label: data.route.title.cn ?? "",
+    path: data.route.path,
+    external: data.route._external ?? false,
+  }))
+const analyticsId =
+  import.meta.env.PUBLIC_GOOGLE_ANALYTICS_ID ??
+  process.env.GATSBY_GOOGLE_ANALYTICS_ID
+---
+
+<!doctype html>
+<html lang="zh-cmn-Hans" class="scroll-smooth">
+  <head>
+    <script is:inline>
+      const savedTheme = localStorage.getItem("theme")
+      const useDarkTheme = savedTheme
+        ? savedTheme === "dark"
+        : window.matchMedia("(prefers-color-scheme: dark)").matches
+      document.documentElement.classList.toggle("dark", useDarkTheme)
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0052d4" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/fonts/redblue-embed.css" />
+    <link rel="canonical" href={canonical} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="RedBlue RSS"
+      href="/index.xml"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:title" content={`${title} - ${siteTitle}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta
+      property="og:image"
+      content={new URL("/redblue-logo.svg", Astro.site)}
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={`${title} - ${siteTitle}`} />
+    <meta name="twitter:description" content={description} />
+    <title>{title} - {siteTitle}</title>
+    {analyticsId && (
+      <>
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`}
+        ></script>
+        <script is:inline define:vars={{ analyticsId }}>
+          window.dataLayer = window.dataLayer || []
+          function gtag() {
+            window.dataLayer.push(arguments)
+          }
+          gtag("js", new Date())
+          gtag("config", analyticsId)
+        </script>
+      </>
+    )}
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <nav
+      id="site-nav"
+      class="fixed inset-x-0 top-0 z-50 text-white transition-colors duration-300"
+      aria-label="主导航"
+    >
+      <div class="mx-auto flex max-w-[1024px] items-center justify-between px-4 py-3">
+        <a
+          href="/"
+          class="max-w-[calc(100%-8rem)] truncate text-white no-underline hover:text-white"
+          aria-label="返回首页"
+        >
+          <span id="nav-brand" data-title={heading} class="font-slogan text-xl">
+            <img src="/redblue.svg" height="20" alt="赤琦" class="h-5 w-auto" />
+          </span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button
+            id="theme-toggle"
+            type="button"
+            class="rounded-full border border-white/60 px-3 py-1 text-sm text-white hover:bg-white/15 hover:text-white"
+            aria-label="切换暗色模式"
+          >
+            <span id="theme-icon" aria-hidden="true">
+              ☾
+            </span>
+            <span class="sr-only">切换颜色主题</span>
+          </button>
+          <button
+            id="menu-toggle"
+            type="button"
+            class="grid size-9 place-items-center rounded border border-white/70 text-xl text-white hover:bg-white/15 min-[992px]:hidden"
+            aria-controls="site-menu"
+            aria-expanded="false"
+            aria-label="打开导航菜单"
+          >
+            <span aria-hidden="true">☰</span>
+          </button>
+        </div>
+        <div
+          id="site-menu"
+          class="absolute inset-x-0 top-full hidden flex-col gap-1 bg-primary px-4 pb-4 shadow-lg min-[992px]:static min-[992px]:flex min-[992px]:flex-row min-[992px]:items-center min-[992px]:gap-1 min-[992px]:bg-transparent min-[992px]:p-0 min-[992px]:shadow-none"
+        >
+          {navItems.map(item => {
+            const active = !item.external && item.path === currentPath
+            return (
+              <a
+                href={item.path}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noopener noreferrer" : undefined}
+                aria-current={active ? "page" : undefined}
+                class:list={[
+                  "rounded px-3 py-2 text-center text-white no-underline transition-colors hover:bg-white/15 hover:text-white",
+                  { "bg-white/15": active },
+                ]}
+              >
+                <span aria-hidden="true">/</span> {item.label}{" "}
+                <span aria-hidden="true">/</span>
+              </a>
+            )
+          })}
+        </div>
+      </div>
+    </nav>
+
+    <header class="relative z-0 mb-4 text-white drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+      <div class="bg-primary">
+        <div class="mx-auto max-w-[1024px] overflow-hidden px-8 pb-4 pt-20 xl:px-0">
+          <h1
+            class:list={[
+              "mb-[0.382em] bg-gradient-to-tr from-[#92fe9d] via-white to-[#92fe9d] bg-clip-text text-[2.8rem] leading-tight text-transparent transition-all duration-700 md:text-[3.2rem] xl:text-[6rem]",
+              { "font-slogan": !isArticle },
+            ]}
+          >
+            {heading}
+          </h1>
+          {subtitle && (
+            <h2 class="text-xl font-normal md:text-2xl">{subtitle}</h2>
+          )}
+          {headerDescription && <p class="mt-2 text-lg">{headerDescription}</p>}
+        </div>
+      </div>
+      <div
+        aria-hidden="true"
+        class="-mt-px h-[8.75vw] bg-primary [clip-path:polygon(0_0,100%_0,100%_0,0_100%)]"
+      ></div>
+    </header>
+
+    <main
+      class:list={[
+        "mx-auto mb-16 w-full flex-1 break-words text-justify",
+        fullWidth ? "px-0" : "max-w-[1024px] px-4",
+      ]}
+    >
+      <slot />
+    </main>
+
+    <footer class="mt-auto drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+      <div
+        aria-hidden="true"
+        class="-mb-px h-[8.75vw] bg-secondary [clip-path:polygon(100%_0,0_100%,100%_100%)]"
+      ></div>
+      <div class="bg-secondary px-4 py-8 text-center text-white">
+        <p class="mb-2">
+          版权所有 &copy; 2017-{new Date().getFullYear()}{" "}
+          赤琦（redblue.fun）保留所有权利。All Rights Reserved.
+        </p>
+        <p class="mb-2">
+          <a href="/index.xml" class="text-white underline hover:text-white">
+            ◉ RSS
+          </a>
+          <span class="mx-2">丨</span>
+          <a
+            href="https://github.com/redblue9771"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-white underline hover:text-white"
+          >
+            ◈ GitHub
+          </a>
+          <span class="mx-2">丨</span>
+          <a
+            href="https://go.invitevp.com/#/register?code=kJRst0sa"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-white underline hover:text-white"
+          >
+            ✈ 自用 VPN
+          </a>
+        </p>
+        <p class="font-slogan text-xl">
+          复兴中华 - 新中国、新时代、新青年 - 中华复兴
+        </p>
+        <p class="mt-2 text-sm">JAMStack丨React.js丨Astro</p>
+      </div>
+    </footer>
+    <Analytics />
+    <SpeedInsights />
+
+    <script>
+      const themeButton =
+        document.querySelector<HTMLButtonElement>("#theme-toggle")
+      const themeIcon = document.querySelector<HTMLSpanElement>("#theme-icon")
+      const menuButton =
+        document.querySelector<HTMLButtonElement>("#menu-toggle")
+      const menu = document.querySelector<HTMLDivElement>("#site-menu")
+      const nav = document.querySelector<HTMLElement>("#site-nav")
+      const brand = document.querySelector<HTMLElement>("#nav-brand")
+
+      const updateThemeIcon = () => {
+        const dark = document.documentElement.classList.contains("dark")
+        if (themeIcon) themeIcon.textContent = dark ? "☀" : "☾"
+        themeButton?.setAttribute(
+          "aria-label",
+          dark ? "切换亮色模式" : "切换暗色模式",
+        )
+      }
+      updateThemeIcon()
+
+      themeButton?.addEventListener("click", () => {
+        const dark = document.documentElement.classList.toggle("dark")
+        localStorage.setItem("theme", dark ? "dark" : "light")
+        updateThemeIcon()
+        window.dispatchEvent(new Event("themechange"))
+      })
+
+      menuButton?.addEventListener("click", () => {
+        const expanded = menuButton.getAttribute("aria-expanded") !== "true"
+        menuButton.setAttribute("aria-expanded", String(expanded))
+        menuButton.setAttribute(
+          "aria-label",
+          expanded ? "关闭导航菜单" : "打开导航菜单",
+        )
+        menu?.classList.toggle("hidden", !expanded)
+        menu?.classList.toggle("flex", expanded)
+      })
+
+      const updateNavigation = () => {
+        const scrolled = window.scrollY > 40
+        nav?.classList.toggle("bg-primary", scrolled)
+        nav?.classList.toggle("shadow-lg", scrolled)
+        if (brand) {
+          brand.classList.toggle("font-slogan", !scrolled)
+          if (scrolled && brand.querySelector("img")) {
+            brand.textContent = brand.dataset.title ?? ""
+          } else if (!scrolled && !brand.querySelector("img")) {
+            const logo = document.createElement("img")
+            logo.src = "/redblue.svg"
+            logo.height = 20
+            logo.alt = "赤琦"
+            logo.className = "h-5 w-auto"
+            brand.replaceChildren(logo)
+          }
+        }
+      }
+      window.addEventListener("scroll", updateNavigation, { passive: true })
+      updateNavigation()
+    </script>
+  </body>
+</html>

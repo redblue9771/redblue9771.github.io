@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content"
+import HomeCarousel from "../components/home-carousel"
+import SiteLayout from "../layouts/SiteLayout.astro"
+
+const slides = (await getCollection("carousel"))
+  .filter(({ data }) => data.for === "homePage")
+  .map(({ data }) => data)
+---
+
+<SiteLayout
+  title="404"
+  description="页面不存在，请返回主页继续浏览。"
+  heading="天涯何处无芳草，何必单恋这一页"
+  subtitle="404: Page Not Found!"
+>
+  <div class="mx-auto max-w-3xl">
+    <img src="/img/404.svg" alt="404 页面不存在" class="mx-auto max-h-80" />
+    <div
+      class="my-8 rounded-lg border border-blue-200 bg-blue-50 p-5 text-center text-blue-950 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100"
+      role="status"
+    >
+      <h2 class="text-xl font-semibold">
+        页面不存在，旧站的页面链接已经改变，请到 <a href="/">主页</a> 中寻找。
+      </h2>
+    </div>
+    <HomeCarousel client:load slides={slides} />
+  </div>
+</SiteLayout>
