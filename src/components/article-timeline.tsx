@@ -34,23 +34,23 @@ export default function ArticleTimeline({ articles }: ArticleTimelineProps) {
         return (
           <li
             key={article.id}
-            className={`group relative block w-1/2 after:absolute after:top-[28px] after:w-[15%] after:border-t after:border-slate-300 after:content-[''] dark:after:border-slate-700 ${even ? "ml-auto after:left-0" : "after:right-0"} max-md:ml-0 max-md:w-full max-md:pl-[73px] max-md:after:left-0 max-md:after:right-auto max-md:after:w-[73px]`}
+            className={`group relative block w-1/2 after:absolute after:top-[28px] after:w-[14%] after:border-t after:border-slate-300 after:content-[''] dark:after:border-slate-700 ${even ? "ml-auto after:left-0" : "after:right-0"} max-md:ml-0 max-md:w-full max-md:pl-[42px] max-md:after:left-0 max-md:after:right-auto max-md:after:w-[32px]`}
           >
             <span
               aria-hidden="true"
-              className={`absolute top-[17px] z-10 size-6 rotate-45 border border-slate-300 bg-white dark:border-slate-600 dark:bg-slate-950 ${even ? "left-[-12px]" : "right-[-12px]"} max-md:right-auto max-md:left-[-12px]`}
+              className={`absolute top-[16px] z-10 size-6 rotate-45 border border-slate-300 bg-white dark:border-slate-600 dark:bg-slate-950 ${even ? "left-[-12px]" : "right-[-12px]"} max-md:right-auto max-md:left-[-12px]`}
             >
-              <span className="absolute left-1/2 top-1/2 size-[15px] -translate-x-1/2 -translate-y-1/2 bg-white transition-colors group-hover:bg-sky-400 dark:bg-slate-950 dark:group-hover:bg-sky-500" />
+              <span className="absolute left-1/2 top-1/2 size-[14px] -translate-x-1/2 -translate-y-1/2 bg-white transition-colors group-hover:bg-sky-400 dark:bg-slate-950 dark:group-hover:bg-sky-500" />
             </span>
             <a
               href={article.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`group relative block w-[85%] border border-transparent px-[30px] py-[18px] no-underline transition-all hover:border-slate-300 dark:hover:border-slate-700 ${even ? "ml-auto text-left" : "text-right"} max-md:ml-0 max-md:w-full max-md:text-left`}
+              className={`group relative block w-[84%] border border-transparent px-[30px] py-[18px] no-underline transition-all hover:border-slate-300 dark:hover:border-slate-700 ${even ? "ml-auto text-left" : "text-right"} max-md:ml-0 max-md:w-full max-md:text-left`}
             >
               <span
                 aria-hidden="true"
-                className={`box-content absolute top-[21px] size-[14px] rotate-45 border border-slate-300 bg-white transition-colors group-hover:border-sky-400 group-hover:bg-sky-400 dark:border-slate-600 dark:bg-slate-950 ${even ? "left-[-7px]" : "right-[-7px]"} max-md:right-auto max-md:left-[-7px]`}
+                className={`box-content absolute top-[20px] size-[14px] rotate-45 border border-slate-300 bg-white transition-colors group-hover:border-sky-400 group-hover:bg-sky-400 dark:border-slate-600 dark:bg-slate-950 ${even ? "left-[-8px]" : "right-[-8px]"} max-md:right-auto max-md:left-[-8px]`}
               />
               <time className="mb-2 block text-[15px] font-semibold text-sky-400 transition-colors group-hover:text-slate-700 dark:text-sky-300 dark:group-hover:text-slate-200">
                 {article.author} {article.date}

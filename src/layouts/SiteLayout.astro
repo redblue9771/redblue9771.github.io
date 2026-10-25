@@ -127,51 +127,54 @@ const footerLinks = siteConfig.social.footerLinks.map(link =>
             />
           </span>
         </a>
-        <div class="flex items-center gap-3">
-          <button
-            id="theme-toggle"
-            type="button"
-            class="rounded-full border border-white/60 px-3 py-1 text-sm text-white hover:bg-white/15 hover:text-white"
-            aria-label="切换暗色模式"
+        <div class="flex">
+          <div
+            id="site-menu"
+            class="absolute inset-x-0 top-full hidden flex-col gap-1 bg-primary px-4 pb-4 shadow-lg min-[992px]:static min-[992px]:flex min-[992px]:flex-row min-[992px]:items-center min-[992px]:gap-1 min-[992px]:bg-transparent min-[992px]:p-0 min-[992px]:shadow-none"
           >
-            <span id="theme-icon" aria-hidden="true">
-              ☾
-            </span>
-            <span class="sr-only">切换颜色主题</span>
-          </button>
-          <button
-            id="menu-toggle"
-            type="button"
-            class="grid size-9 place-items-center rounded border border-white/70 text-xl text-white hover:bg-white/15 min-[992px]:hidden"
-            aria-controls="site-menu"
-            aria-expanded="false"
-            aria-label="打开导航菜单"
-          >
-            <span aria-hidden="true">☰</span>
-          </button>
-        </div>
-        <div
-          id="site-menu"
-          class="absolute inset-x-0 top-full hidden flex-col gap-1 bg-primary px-4 pb-4 shadow-lg min-[992px]:static min-[992px]:flex min-[992px]:flex-row min-[992px]:items-center min-[992px]:gap-1 min-[992px]:bg-transparent min-[992px]:p-0 min-[992px]:shadow-none"
-        >
-          {navItems.map(item => {
-            const active = !item.external && item.path === currentPath
-            return (
-              <a
-                href={item.path}
-                target={item.external ? "_blank" : undefined}
-                rel={item.external ? "noopener noreferrer" : undefined}
-                aria-current={active ? "page" : undefined}
-                class:list={[
-                  "rounded px-3 py-2 text-center text-white no-underline transition-colors hover:bg-white/15 hover:text-white",
-                  { "bg-white/15": active },
-                ]}
-              >
-                <span aria-hidden="true">/</span> {item.label}{" "}
-                <span aria-hidden="true">/</span>
-              </a>
-            )
-          })}
+            {navItems.map(item => {
+              const active = !item.external && item.path === currentPath
+              return (
+                <a
+                  href={item.path}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
+                  aria-current={active ? "page" : undefined}
+                  class:list={[
+                    "rounded px-3 py-2 text-center text-white no-underline transition-colors hover:bg-white/15 hover:text-white",
+                    { "bg-white/15": active },
+                  ]}
+                >
+                  <span aria-hidden="true">/</span> {item.label}{" "}
+                  <span aria-hidden="true">/</span>
+                </a>
+              )
+            })}
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button
+              id="theme-toggle"
+              type="button"
+              class="rounded-full border border-white/60 px-3 py-1 text-sm text-white hover:bg-white/15 hover:text-white"
+              aria-label="切换暗色模式"
+            >
+              <span id="theme-icon" aria-hidden="true">
+                ☾
+              </span>
+              <span class="sr-only">切换颜色主题</span>
+            </button>
+            <button
+              id="menu-toggle"
+              type="button"
+              class="grid size-9 place-items-center rounded border border-white/70 text-xl text-white hover:bg-white/15 min-[992px]:hidden"
+              aria-controls="site-menu"
+              aria-expanded="false"
+              aria-label="打开导航菜单"
+            >
+              <span aria-hidden="true">☰</span>
+            </button>
+          </div>
         </div>
       </div>
     </nav>

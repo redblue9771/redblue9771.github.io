@@ -101,7 +101,10 @@ export function HomeGithubWidget({
 }) {
   const { repositories, loading, error } = useGithubData(username)
   return (
-    <section aria-labelledby="home-projects-title">
+    <section
+      class="min-w-0 min-h-[22.25rem] bg-white px-[1.4rem] py-4 text-slate-900 dark:bg-slate-800 dark:text-slate-100 text-center"
+      aria-labelledby="home-projects-title"
+    >
       <h2 id="home-projects-title" className="mb-4 text-xl font-semibold">
         {title}
       </h2>
@@ -115,18 +118,19 @@ export function HomeGithubWidget({
             href={repository.html_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="mb-3 block rounded p-2 text-white no-underline hover:bg-white/10 hover:text-white"
+            className="mb-3 block rounded px-2 py-1 text-gray no-underline hover:bg-gray/10 hover:text-gray"
+            //mb-3 block truncate rounded px-2 py-1 text-white no-underline hover:bg-white/10 hover:text-white
           >
             <span className="block truncate font-medium">
               {repository.name}
             </span>
-            <span className="block truncate text-sm text-white/75">
+            <span className="block truncate text-sm text-gray/75">
               {repository.description || "No Description"}
             </span>
           </a>
         ))}
       {!loading && !error && repositories.length === 0 && (
-        <p className="text-white/80">没有找到公开项目。</p>
+        <p className="text-gray/80">没有找到公开项目。</p>
       )}
     </section>
   )

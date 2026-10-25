@@ -50,16 +50,25 @@ for (const heading of headings.filter(
   headingStack.push(item)
 }
 const date = article.data.date
-const body = article.body ?? ""
-const hanCount = (body.match(/\p{Script=Han}/gu) ?? []).length
-const latinWordCount = (
-  body.replace(/\p{Script=Han}/gu, "").match(/[\p{L}\p{N}]+/gu) ?? []
-).length
-const wordCount = hanCount + latinWordCount
-const minutesToRead = Math.max(
-  1,
-  Math.round((latinWordCount + hanCount * 0.56) / 265),
-)
+const body = article.body ?? "";
+const hanReg = /\p{Script=Han}/gu;
+const jpKrReg = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/gu;
+const latinWordReg = /[\p{L}\p{N}]+/gu;
+
+let cleanBody = body.replace(jpKrReg, "");
+const hanCount = (cleanBody.match(hanReg) ?? []).length;
+const latinBody = cleanBody.replace(hanReg, "");
+const latinWordCount = (latinBody.match(latinWordReg) ?? []).length;
+
+const wordCount = hanCount + latinWordCount;
+
+const SPEED_HAN = 300;    // 中文：300字/分钟
+const SPEED_LATIN = 220;  // 外文：220词/分钟
+const timeHan = hanCount / SPEED_HAN;
+const timeLatin = latinWordCount / SPEED_LATIN;
+
+const minutesToRead = Math.max(1, Math.round(timeHan + timeLatin));
+
 const description = article.data.description || articleExcerpt(article, 300)
 ---
 

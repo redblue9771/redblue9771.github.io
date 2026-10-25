@@ -61,12 +61,12 @@ const formatHomeArticleDate = (date?: Date) =>
     </div>
     <div class="mx-auto grid w-full max-w-[1024px] translate-y-16 grid-cols-1 gap-0 md:grid-cols-3">
       <section
-        class="min-w-0 min-h-[22.25rem] bg-primary px-[1.4rem] py-4"
+        class="min-w-0 min-h-[22.25rem] bg-primary px-[1.4rem] py-4 text-center"
         aria-labelledby="latest-articles-title"
       >
         <h2
           id="latest-articles-title"
-          class="mb-4 text-center text-xl font-semibold"
+          class="mb-4 text-xl font-semibold"
         >
           {siteConfig.profile.latestArticlesTitle}
         </h2>
@@ -86,21 +86,16 @@ const formatHomeArticleDate = (date?: Date) =>
           </a>
         ))}
       </section>
-      <section
-        class="min-w-0 min-h-[22.25rem] bg-white px-[1.4rem] py-4 text-slate-900 dark:bg-slate-800 dark:text-slate-100"
-        aria-labelledby="home-projects-title"
-      >
         <HomeGithubWidget
           client:load
           username={integrations.githubUsername}
           title={siteConfig.profile.projectsTitle}
         />
-      </section>
       <section
-        class="min-w-0 min-h-[22.25rem] bg-primary px-[1.4rem] py-4 text-white"
+        class="min-w-0 min-h-[22.25rem] bg-primary px-[1.4rem] py-4 text-white text-center"
         aria-labelledby="about-title"
       >
-        <h2 id="about-title" class="mb-4 text-center text-xl font-semibold">
+        <h2 id="about-title" class="mb-4 text-xl font-semibold">
           {siteConfig.profile.aboutTitle}
         </h2>
         <ul class="space-y-3">
