@@ -102,7 +102,7 @@ export function HomeGithubWidget({
   const { repositories, loading, error } = useGithubData(username)
   return (
     <section
-      class="min-w-0 min-h-[22.25rem] bg-white px-[1.4rem] py-4 text-slate-900 dark:bg-slate-800 dark:text-slate-100 text-center"
+      className="min-w-0 min-h-[22.25rem] bg-white px-[1.4rem] py-4 text-slate-900 dark:bg-slate-800 dark:text-slate-100 text-center"
       aria-labelledby="home-projects-title"
     >
       <h2 id="home-projects-title" className="mb-4 text-xl font-semibold">
