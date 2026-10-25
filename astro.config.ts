@@ -8,11 +8,11 @@ import rehypeSlug from "rehype-slug"
 import remarkMath from "remark-math"
 import { unified } from "@astrojs/markdown-remark"
 import { defineConfig } from "astro/config"
+import { siteConfig } from "./config/site"
 
 export default defineConfig({
-  site: "https://redblue.fun",
+  site: siteConfig.site.url,
   trailingSlash: "never",
-  publicDir: "./static",
   integrations: [react(), sitemap()],
   markdown: {
     processor: unified({

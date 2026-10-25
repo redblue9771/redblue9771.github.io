@@ -24,7 +24,7 @@ interface GithubData {
   gists: Gist[]
 }
 
-function useGithubData() {
+function useGithubData(username: string) {
   const [data, setData] = useState<GithubData>({ repositories: [], gists: [] })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>()
@@ -35,12 +35,13 @@ function useGithubData() {
       try {
         const [repositoriesResponse, gistsResponse] = await Promise.all([
           fetch(
-            "https://api.github.com/users/redblue9771/repos?type=owner&sort=updated&per_page=100",
+            `https://api.github.com/users/${encodeURIComponent(username)}/repos?type=owner&sort=updated&per_page=100`,
             { signal: controller.signal },
           ),
-          fetch("https://api.github.com/users/redblue9771/gists?per_page=100", {
-            signal: controller.signal,
-          }),
+          fetch(
+            `https://api.github.com/users/${encodeURIComponent(username)}/gists?per_page=100`,
+            { signal: controller.signal },
+          ),
         ])
         if (!repositoriesResponse.ok || !gistsResponse.ok) {
           const response = !repositoriesResponse.ok
@@ -67,7 +68,7 @@ function useGithubData() {
     }
     void load()
     return () => controller.abort()
-  }, [])
+  }, [username])
 
   return { ...data, loading, error }
 }
@@ -91,12 +92,18 @@ function ErrorMessage({ message }: { message: string }) {
   )
 }
 
-export function HomeGithubWidget() {
-  const { repositories, loading, error } = useGithubData()
+export function HomeGithubWidget({
+  username,
+  title,
+}: {
+  username: string
+  title: string
+}) {
+  const { repositories, loading, error } = useGithubData(username)
   return (
     <section aria-labelledby="home-projects-title">
       <h2 id="home-projects-title" className="mb-4 text-xl font-semibold">
-        · 项目 ·
+        {title}
       </h2>
       {loading && <LoadingMessage />}
       {error && <ErrorMessage message={error} />}
@@ -125,14 +132,14 @@ export function HomeGithubWidget() {
   )
 }
 
-export default function GithubRepositories() {
-  const { repositories, gists, loading, error } = useGithubData()
+export default function GithubRepositories({ username }: { username: string }) {
+  const { repositories, gists, loading, error } = useGithubData(username)
   return (
     <>
       <section aria-labelledby="repositories-title">
         <h2 id="repositories-title" className="mb-4 text-2xl font-semibold">
           <a
-            href="https://github.com/redblue9771"
+            href={`https://github.com/${encodeURIComponent(username)}`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -171,7 +178,7 @@ export default function GithubRepositories() {
       <section aria-labelledby="gists-title" className="mt-10">
         <h2 id="gists-title" className="mb-3 text-2xl font-semibold">
           <a
-            href="https://gist.github.com/redblue9771"
+            href={`https://gist.github.com/${encodeURIComponent(username)}`}
             target="_blank"
             rel="noopener noreferrer"
           >

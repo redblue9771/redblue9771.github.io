@@ -1,14 +1,16 @@
 ---
 import { getCollection, render } from "astro:content"
-import type { ArticleEntry } from "../../lib/articles"
+import { integrations } from "../../../config/integrations"
+import { siteConfig } from "../../../config/site"
 import ArticleToc from "../../components/article-toc.astro"
 import Divider from "../../components/divider"
 import SiteLayout from "../../layouts/SiteLayout.astro"
 import {
+  type ArticleEntry,
   articleExcerpt,
   formatArticleDate,
   sortArticles,
-} from "../../lib/articles"
+} from "../../articles"
 
 interface Props {
   article: ArticleEntry
@@ -90,11 +92,11 @@ const description = article.data.description || articleExcerpt(article, 300)
           <p>
             <a
               rel="license noopener noreferrer"
-              href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+              href={siteConfig.article.licenseUrl}
               target="_blank"
               title="知识共享署名 - 非商业性使用 - 相同方式共享4.0国际许可协议"
             >
-              ◉ 赤琦
+              ◉ {siteConfig.brand.name}
             </a>
             <span class="ml-2">原创于</span>
             {date && (
@@ -122,8 +124,18 @@ const description = article.data.description || articleExcerpt(article, 300)
       </div>
       <p class="my-8 text-center">（完）</p>
 
-      <Divider>🙋 评论</Divider>
-      <div id="utterances-comments" class="comment min-h-12"></div>
+      {integrations.utterances.repository && (
+        <>
+          <Divider>🙋 评论</Divider>
+          <div
+            id="utterances-comments"
+            class="comment min-h-12"
+            data-repository={integrations.utterances.repository}
+            data-issue-term={integrations.utterances.issueTerm}
+            data-label={integrations.utterances.label}
+          ></div>
+        </>
+      )}
     </article>
 
     <aside class="self-start lg:sticky lg:top-20">
@@ -205,12 +217,20 @@ const description = article.data.description || articleExcerpt(article, 300)
   window.addEventListener("resize", scheduleTocUpdate)
   updateActiveHeading()
 
-  if (commentRoot && !commentRoot.querySelector("script")) {
+  const commentRepository = commentRoot?.dataset.repository
+  if (
+    commentRoot &&
+    commentRepository &&
+    !commentRoot.querySelector("script")
+  ) {
     const utterances = document.createElement("script")
     utterances.src = "https://utteranc.es/client.js"
     utterances.async = true
-    utterances.setAttribute("repo", "redblue9771/comments-for-redblue")
-    utterances.setAttribute("issue-term", "url")
+    utterances.setAttribute("repo", commentRepository)
+    utterances.setAttribute(
+      "issue-term",
+      commentRoot.dataset.issueTerm ?? "url",
+    )
     utterances.setAttribute("id", "utterances")
     utterances.setAttribute(
       "theme",
@@ -219,7 +239,9 @@ const description = article.data.description || articleExcerpt(article, 300)
         : "github-light",
     )
     utterances.setAttribute("crossorigin", "anonymous")
-    utterances.setAttribute("label", "comment")
+    if (commentRoot.dataset.label) {
+      utterances.setAttribute("label", commentRoot.dataset.label)
+    }
     commentRoot.appendChild(utterances)
   }
   window.addEventListener("themechange", () => {

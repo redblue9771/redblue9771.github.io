@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content"
+import { siteConfig } from "../../config/site"
 import SiteLayout from "../layouts/SiteLayout.astro"
 
 const [pageEntries, books] = await Promise.all([
@@ -19,10 +20,12 @@ for (const book of books) {
 ---
 
 <SiteLayout
-  title={page.data.siteTitle || "藏经"}
-  description={page.data.description || "收藏的书籍、论文与资料。"}
-  heading={page.data.title || "博采众长"}
-  subtitle={page.data.subTitle || "君知其难，则自能旁搜博采"}
+  title={
+    page.data.siteTitle || page.data.route.title.cn || siteConfig.site.name
+  }
+  description={page.data.description || siteConfig.site.description}
+  heading={page.data.title || page.data.route.title.cn || siteConfig.site.name}
+  subtitle={page.data.subTitle || undefined}
 >
   <div class="space-y-8">
     {[...groupedBooks.entries()].map(([series, entries], index) => (

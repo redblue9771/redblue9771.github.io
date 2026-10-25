@@ -1,7 +1,7 @@
 - title: 凡所有相，皆是虚妄
   subTitle: New Youth, New Vision.
   siteTitle: 其实你知的我是那面
-  description: ""
+  description: New Youth, New Vision.
   _hidden: false
   route:
     title:
@@ -12,7 +12,7 @@
 - title: 我非生而知之者
   subTitle: Thinking Different.
   siteTitle: 博文
-  description: ""
+  description: 记录思考、技术与生活。
   _hidden: false
   route:
     title:
@@ -23,7 +23,7 @@
 - title: 博采众长
   subTitle: 君知其难，则自能旁搜博采
   siteTitle: 藏经
-  description: ""
+  description: 收藏的书籍、论文与资料。
   _hidden: false
   route:
     title:
@@ -34,7 +34,7 @@
 - title: 吾与徐工孰娴编码之技
   subTitle: Talk is cheap. Show me the code.
   siteTitle: 项目
-  description: ""
+  description: 赤琦在 GitHub 上公开的项目与代码片段。
   _hidden: false
   route:
     title:
@@ -44,19 +44,19 @@
 
 - title:
   subTitle:
-  siteTitle: 
-  description: ""
+  siteTitle:
+  description: 站点服务状态。
   _hidden: false
   route:
     title:
       cn: 状态
     path: https://status.redblue.fun
     _external: true
-    
+
 - title: 天涯何处无芳草，何必单恋这一页
   subTitle: "404: Page Not Found!"
   siteTitle: "404"
-  description: ""
+  description: 页面不存在，请返回主页继续浏览。
   _hidden: true
   route:
     title:

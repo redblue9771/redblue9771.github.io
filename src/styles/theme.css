@@ -1,0 +1,15 @@
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #0052d4;
+  --color-secondary: #d32f2f;
+  --font-slogan: "redblue", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}

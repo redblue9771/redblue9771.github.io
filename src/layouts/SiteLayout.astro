@@ -2,6 +2,8 @@
 import Analytics from "@vercel/analytics/astro"
 import SpeedInsights from "@vercel/speed-insights/astro"
 import { getCollection } from "astro:content"
+import { integrations } from "../../config/integrations"
+import { siteConfig } from "../../config/site"
 import "../styles/global.css"
 
 interface Props {
@@ -15,13 +17,13 @@ interface Props {
 
 const {
   title,
-  description = "RedBlue(赤琦)，来自彩云之南的 95 后男孩，偏执的完美主义者，体现在方方面面。爱科技、爱搞机、爱摄影、爱一切美好的事物，追求源于热爱。",
+  description = siteConfig.site.description,
   heading = title,
   subtitle,
   headerDescription,
   fullWidth = false,
 } = Astro.props
-const siteTitle = "RedBlue | 赤琦"
+const siteTitle = siteConfig.site.name
 const canonical = new URL(Astro.url.pathname, Astro.site)
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/"
 const isArticle = currentPath.startsWith("/articles/")
@@ -33,13 +35,19 @@ const navItems = pages
     path: data.route.path,
     external: data.route._external ?? false,
   }))
-const analyticsId =
-  import.meta.env.PUBLIC_GOOGLE_ANALYTICS_ID ??
-  process.env.GATSBY_GOOGLE_ANALYTICS_ID
+const analyticsId = integrations.googleAnalyticsId
+const footerLinks = siteConfig.social.footerLinks.map(link =>
+  link.label === "GitHub"
+    ? {
+        ...link,
+        href: `https://github.com/${encodeURIComponent(integrations.githubUsername)}`,
+      }
+    : link,
+)
 ---
 
 <!doctype html>
-<html lang="zh-cmn-Hans" class="scroll-smooth">
+<html lang={siteConfig.site.language} class="scroll-smooth">
   <head>
     <script is:inline>
       const savedTheme = localStorage.getItem("theme")
@@ -52,14 +60,14 @@ const analyticsId =
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0052d4" />
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="/fonts/redblue-embed.css" />
+    <meta name="theme-color" content={siteConfig.brand.themeColor} />
+    <link rel="icon" href={siteConfig.brand.favicon} />
+    <link rel="stylesheet" href={siteConfig.brand.fontStylesheet} />
     <link rel="canonical" href={canonical} />
     <link
       rel="alternate"
       type="application/rss+xml"
-      title="RedBlue RSS"
+      title={`${siteConfig.site.name} RSS`}
       href="/index.xml"
     />
     <meta property="og:type" content="website" />
@@ -69,7 +77,7 @@ const analyticsId =
     <meta property="og:url" content={canonical} />
     <meta
       property="og:image"
-      content={new URL("/redblue-logo.svg", Astro.site)}
+      content={new URL(siteConfig.brand.openGraphImage, Astro.site)}
     />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={`${title} - ${siteTitle}`} />
@@ -104,8 +112,19 @@ const analyticsId =
           class="max-w-[calc(100%-8rem)] truncate text-white no-underline hover:text-white"
           aria-label="返回首页"
         >
-          <span id="nav-brand" data-title={heading} class="font-slogan text-xl">
-            <img src="/redblue.svg" height="20" alt="赤琦" class="h-5 w-auto" />
+          <span
+            id="nav-brand"
+            data-title={heading}
+            data-logo={siteConfig.brand.logo}
+            data-logo-alt={siteConfig.brand.logoAlt}
+            class="font-slogan text-xl"
+          >
+            <img
+              src={siteConfig.brand.logo}
+              height="20"
+              alt={siteConfig.brand.logoAlt}
+              class="h-5 w-auto"
+            />
           </span>
         </a>
         <div class="flex items-center gap-3">
@@ -196,40 +215,34 @@ const analyticsId =
       ></div>
       <div class="bg-secondary px-4 py-8 text-center text-white">
         <p class="mb-2">
-          版权所有 &copy; 2017-{new Date().getFullYear()}{" "}
-          赤琦（redblue.fun）保留所有权利。All Rights Reserved.
+          版权所有 &copy; {siteConfig.brand.copyrightStartYear}-
+          {new Date().getFullYear()} {siteConfig.brand.name}（
+          {new URL(siteConfig.site.url).hostname}）{siteConfig.brand.copyright}
         </p>
         <p class="mb-2">
           <a href="/index.xml" class="text-white underline hover:text-white">
             ◉ RSS
           </a>
-          <span class="mx-2">丨</span>
-          <a
-            href="https://github.com/redblue9771"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-white underline hover:text-white"
-          >
-            ◈ GitHub
-          </a>
-          <span class="mx-2">丨</span>
-          <a
-            href="https://go.invitevp.com/#/register?code=kJRst0sa"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-white underline hover:text-white"
-          >
-            ✈ 自用 VPN
-          </a>
+          {footerLinks.map(link => (
+            <>
+              <span class="mx-2">丨</span>
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-white underline hover:text-white"
+              >
+                {link.icon} {link.label}
+              </a>
+            </>
+          ))}
         </p>
-        <p class="font-slogan text-xl">
-          复兴中华 - 新中国、新时代、新青年 - 中华复兴
-        </p>
-        <p class="mt-2 text-sm">JAMStack丨React.js丨Astro</p>
+        <p class="font-slogan text-xl">{siteConfig.brand.slogan}</p>
+        <p class="mt-2 text-sm">{siteConfig.brand.technologies}</p>
       </div>
     </footer>
-    <Analytics />
-    <SpeedInsights />
+    {integrations.vercelAnalytics && <Analytics />}
+    {integrations.vercelSpeedInsights && <SpeedInsights />}
 
     <script>
       const themeButton =
@@ -279,9 +292,9 @@ const analyticsId =
             brand.textContent = brand.dataset.title ?? ""
           } else if (!scrolled && !brand.querySelector("img")) {
             const logo = document.createElement("img")
-            logo.src = "/redblue.svg"
+            logo.src = brand.dataset.logo ?? ""
             logo.height = 20
-            logo.alt = "赤琦"
+            logo.alt = brand.dataset.logoAlt ?? ""
             logo.className = "h-5 w-auto"
             brand.replaceChildren(logo)
           }

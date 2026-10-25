@@ -24,7 +24,7 @@ const parseYamlList = (text: string) => {
 const articles = defineCollection({
   loader: glob({
     pattern: "**/*.md",
-    base: "./src/assets/articles",
+    base: "./content/articles",
     generateId: ({ entry }) => entry.replace(/\.md$/i, "").toLowerCase(),
   }),
   schema: z.object({
@@ -42,7 +42,7 @@ const articles = defineCollection({
 })
 
 const pages = defineCollection({
-  loader: file("./src/assets/general/publicPage.yaml", {
+  loader: file("./content/data/publicPage.yaml", {
     parser: parseYamlList,
   }),
   schema: z.object({
@@ -60,7 +60,7 @@ const pages = defineCollection({
 })
 
 const carousel = defineCollection({
-  loader: file("./src/assets/general/carousel.yaml", { parser: parseYamlList }),
+  loader: file("./content/data/carousel.yaml", { parser: parseYamlList }),
   schema: z.object({
     title: z.string(),
     link: z.string().optional(),
@@ -71,7 +71,7 @@ const carousel = defineCollection({
 })
 
 const books = defineCollection({
-  loader: file("./src/assets/general/book.yaml", { parser: parseYamlList }),
+  loader: file("./content/data/book.yaml", { parser: parseYamlList }),
   schema: z.object({
     name: z.string(),
     author: z.string().nullable().optional(),

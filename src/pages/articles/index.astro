@@ -3,12 +3,9 @@ import { getCollection } from "astro:content"
 import ArticleTimeline, {
   type ArticleListItem,
 } from "../../components/article-timeline"
+import { siteConfig } from "../../../config/site"
 import SiteLayout from "../../layouts/SiteLayout.astro"
-import {
-  articleExcerpt,
-  formatArticleDate,
-  sortArticles,
-} from "../../lib/articles"
+import { articleExcerpt, formatArticleDate, sortArticles } from "../../articles"
 
 const [pageEntries, articleEntries] = await Promise.all([
   getCollection("pages"),
@@ -20,7 +17,7 @@ const articles: ArticleListItem[] = sortArticles(articleEntries).map(
   article => ({
     id: article.id,
     title: article.data.title,
-    author: article.data.author || "赤琦",
+    author: article.data.author || siteConfig.brand.name,
     date: formatArticleDate(article.data.date),
     href: `/articles/${article.id}`,
     description: articleExcerpt(article, 140),
@@ -29,10 +26,12 @@ const articles: ArticleListItem[] = sortArticles(articleEntries).map(
 ---
 
 <SiteLayout
-  title={page.data.siteTitle || "博文"}
-  description={page.data.description || "记录思考、技术与生活。"}
-  heading={page.data.title || "我非生而知之者"}
-  subtitle={page.data.subTitle || "Thinking Different."}
+  title={
+    page.data.siteTitle || page.data.route.title.cn || siteConfig.site.name
+  }
+  description={page.data.description || siteConfig.site.description}
+  heading={page.data.title || page.data.route.title.cn || siteConfig.site.name}
+  subtitle={page.data.subTitle || undefined}
 >
   <section aria-label="博文列表">
     <ArticleTimeline articles={articles} />

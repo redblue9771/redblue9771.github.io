@@ -1,7 +1,8 @@
 import rss from "@astrojs/rss"
 import type { APIRoute } from "astro"
 import { getCollection } from "astro:content"
-import { articleExcerpt, sortArticles } from "../lib/articles"
+import { siteConfig } from "../../config/site"
+import { articleExcerpt, sortArticles } from "../articles"
 
 export const GET: APIRoute = async ({ site }) => {
   if (!site)
@@ -11,8 +12,8 @@ export const GET: APIRoute = async ({ site }) => {
     await getCollection("articles", ({ data }) => !data.draft),
   )
   return rss({
-    title: "RedBlue's RSS Feed",
-    description: "RedBlue（赤琦）的博文",
+    title: `${siteConfig.site.name} RSS Feed`,
+    description: `${siteConfig.brand.name}的博文`,
     site,
     items: articles.map(article => ({
       title: article.data.title,

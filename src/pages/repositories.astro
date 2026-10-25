@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content"
 import GithubRepositories from "../components/github-widgets"
+import { integrations } from "../../config/integrations"
+import { siteConfig } from "../../config/site"
 import SiteLayout from "../layouts/SiteLayout.astro"
 
 const pages = await getCollection("pages")
@@ -10,12 +12,12 @@ if (!page)
 ---
 
 <SiteLayout
-  title={page.data.siteTitle || "项目"}
-  description={
-    page.data.description || "赤琦在 GitHub 上公开的项目与代码片段。"
+  title={
+    page.data.siteTitle || page.data.route.title.cn || siteConfig.site.name
   }
-  heading={page.data.title || "吾与徐工孰娴编码之技"}
-  subtitle={page.data.subTitle || "Talk is cheap. Show me the code."}
+  description={page.data.description || siteConfig.site.description}
+  heading={page.data.title || page.data.route.title.cn || siteConfig.site.name}
+  subtitle={page.data.subTitle || undefined}
 >
-  <GithubRepositories client:load />
+  <GithubRepositories client:load username={integrations.githubUsername} />
 </SiteLayout>
